@@ -6,6 +6,8 @@ namespace GasHub.Services.Abstractions
 {
     public interface ICompanyClientServices : IClientRepository<Company>
     {
-        // Extand Uncommon Service
+        // Extand Uncommon Service   
+
+
     }
 }
