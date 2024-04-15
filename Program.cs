@@ -1,7 +1,11 @@
+using GasHub.Services.Abstractions;
+using GasHub.Services.Implemettions;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddScoped<IUnitOfWorkClientServices, UnitOfWorkClientServices>();
 builder.Services.AddHttpClient("GasHubClient", client =>
 {
     client.BaseAddress = new Uri("https://localhost:7128/api/");
@@ -21,6 +25,6 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Default}/{action=Index}/{id?}");
+    pattern: "{controller=Company}/{action=Index}/{id?}");
 
 app.Run();
