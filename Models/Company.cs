@@ -7,10 +7,10 @@
         public string? Contactperson { get; set; }
         public string? ContactPerNum { get; set; }
         public string? ContactNumber { get; set; }
-        public string? CreatedBy { get; set; }
-        public string? UpdatedBy { get; set; }
-        public bool? IsActive { get; set; }
-        public DateTime? DeactivatedDate { get; set; }
+        public string? CreatedBy { get; set; } = "Masum";
+        public string? UpdatedBy { get; set; } = "Masum";
+        public bool? IsActive { get; set; } = true;
+        public DateTime? DeactivatedDate { get; set; }= DateTime.Now;
         public string? DeactiveBy { get; set; }
         public string? BIN { get; set; }
     }
