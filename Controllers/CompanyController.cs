@@ -24,10 +24,10 @@ namespace GasHub.Controllers
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> Create(Company customer)
+        public async Task<IActionResult> Create(Company company)
         {
-            bool result = await _unitOfWorkClientServices.companyClientServices.AddAsync(customer, "Company/Create");
-            return result ? RedirectToAction("Index") : RedirectToAction("Error");
+            bool result = await _unitOfWorkClientServices.companyClientServices.AddAsync(company, "Company/Create");
+            return result ? RedirectToAction("Index") : View(default);
         }
         [HttpGet]
         public async Task<IActionResult> Details(Guid id)
@@ -49,6 +49,12 @@ namespace GasHub.Controllers
         }
         [HttpGet]
         public async Task<IActionResult> Delete(Guid id)
+        {
+            var customer = await _unitOfWorkClientServices.companyClientServices.GetByIdAsync(id, "Company/getCompany");
+            return View(customer);
+        }
+        [HttpPost,ActionName("Delete")]
+        public async Task<IActionResult> DeleteCompany(Guid id)
         {
             await _unitOfWorkClientServices.companyClientServices.DeleteAsync(id, "Company/DeleteCompany");
             return RedirectToAction("Index");

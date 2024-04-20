@@ -4,79 +4,123 @@
     ViewData["Title"] = "Edit";
 }
 
-<h1>Edit</h1>
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>Edit Company </h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                    <li class="breadcrumb-item active">Edit Company</li>
+                </ol>
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
 
-<h4>Company</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Id" class="control-label"></label>
-                <input asp-for="Id" class="form-control" />
-                <span asp-validation-for="Id" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Contactperson" class="control-label"></label>
-                <input asp-for="Contactperson" class="form-control" />
-                <span asp-validation-for="Contactperson" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ContactPerNum" class="control-label"></label>
-                <input asp-for="ContactPerNum" class="form-control" />
-                <span asp-validation-for="ContactPerNum" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ContactNumber" class="control-label"></label>
-                <input asp-for="ContactNumber" class="form-control" />
-                <span asp-validation-for="ContactNumber" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CreatedBy" class="control-label"></label>
-                <input asp-for="CreatedBy" class="form-control" />
-                <span asp-validation-for="CreatedBy" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="UpdatedBy" class="control-label"></label>
-                <input asp-for="UpdatedBy" class="form-control" />
-                <span asp-validation-for="UpdatedBy" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="IsActive" class="control-label"></label>
-                <input asp-for="IsActive" class="form-control" />
-                <span asp-validation-for="IsActive" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DeactivatedDate" class="control-label"></label>
-                <input asp-for="DeactivatedDate" class="form-control" />
-                <span asp-validation-for="DeactivatedDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DeactiveBy" class="control-label"></label>
-                <input asp-for="DeactiveBy" class="form-control" />
-                <span asp-validation-for="DeactiveBy" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="BIN" class="control-label"></label>
-                <input asp-for="BIN" class="form-control" />
-                <span asp-validation-for="BIN" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
-</div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <!-- left column -->
+            <div class="col-md-12">
+                <!-- general form elements -->
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <h3 class="card-title">Edit Company</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <!-- form start -->
+                    <form asp-action="Edit">
+                        <div class="card-body">
+                            <a asp-action="Index" class="btn btn-success my-2"> <i class="fa fa-list"></i> Back to Company List</a>
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group" hidden="true">
+                                        <label asp-for="Id" class="control-label"></label>
+                                        <input asp-for="Id" class="form-control" />
+                                        <span asp-validation-for="Id" class="text-danger"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label asp-for="Name" class="control-label"></label>
+                                        <input asp-for="Name" class="form-control" />
+                                        <span asp-validation-for="Name" class="text-danger"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label asp-for="Contactperson" class="control-label"></label>
+                                        <input asp-for="Contactperson" class="form-control" />
+                                        <span asp-validation-for="Contactperson" class="text-danger"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label asp-for="ContactPerNum" class="control-label"></label>
+                                        <input asp-for="ContactPerNum" class="form-control" />
+                                        <span asp-validation-for="ContactPerNum" class="text-danger"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label asp-for="ContactNumber" class="control-label"></label>
+                                        <input asp-for="ContactNumber" class="form-control" />
+                                        <span asp-validation-for="ContactNumber" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="CreatedBy" class="control-label"></label>
+                                        <input asp-for="CreatedBy" class="form-control" />
+                                        <span asp-validation-for="CreatedBy" class="text-danger"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label asp-for="UpdatedBy" class="control-label"></label>
+                                        <input asp-for="UpdatedBy" class="form-control" />
+                                        <span asp-validation-for="UpdatedBy" class="text-danger"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label asp-for="IsActive" class="control-label"></label>
+                                        <input asp-for="IsActive" class="form-control" />
+                                        <span asp-validation-for="IsActive" class="text-danger"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label asp-for="DeactivatedDate" class="control-label"></label>
+                                        <input asp-for="DeactivatedDate" class="form-control" />
+                                        <span asp-validation-for="DeactivatedDate" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="DeactiveBy" class="control-label"></label>
+                                        <input asp-for="DeactiveBy" class="form-control" />
+                                        <span asp-validation-for="DeactiveBy" class="text-danger"></span>
+                                    </div>
+
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="BIN" class="control-label"></label>
+                                        <input asp-for="BIN" class="form-control" />
+                                        <span asp-validation-for="BIN" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /.card-body -->
+                        <div class="card-footer">
+                            <input type="submit" value="Save Company" class="btn btn-success" />
+                        </div>
+                    </form>
+                </div>
+                <!-- /.card -->
+            </div>
+            <!--/.col (left) -->
+        </div>
+        <!-- /.row -->
+    </div><!-- /.container-fluid -->
+</section>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

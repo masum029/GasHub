@@ -4,7 +4,74 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+
+
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title font-weight-bold fs-1 color-primary">Company List</h3>
+    </div>
+    <!-- /.card-header -->
+    <div class="card-body">
+        <table id="example3" class="table table-bordered table-striped">
+            <p> <a asp-action="Create" class="btn btn-success">Create New Company</a> </p>
+            <thead>
+                <tr>
+                    @* <th>@Html.DisplayNameFor(model => model.UserId)</th> *@
+                    <th>@Html.DisplayNameFor(model => model.Address)</th>
+                    <th>@Html.DisplayNameFor(model => model.Phone)</th>
+                    <th>@Html.DisplayNameFor(model => model.Mobile)</th>
+                    <th>@Html.DisplayNameFor(model => model.CreatedBy)</th>
+                    <th>@Html.DisplayNameFor(model => model.UpdatedBy)</th>
+                    <th>@Html.DisplayNameFor(model => model.IsActive)</th>
+                    <th>@Html.DisplayNameFor(model => model.DeactivatedDate)</th>
+                    <th>@Html.DisplayNameFor(model => model.DeactiveBy)</th>
+                    <th>@Html.DisplayNameFor(model => model.IsDefault)</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        @* <td>@Html.DisplayFor(modelItem => item.UserId)</td> *@
+                        <td>@Html.DisplayFor(modelItem => item.Address)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Phone)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Mobile)</td>
+                        <td>@Html.DisplayFor(modelItem => item.CreatedBy)</td>
+                        <td>@Html.DisplayFor(modelItem => item.UpdatedBy)</td>
+                        <td>@Html.DisplayFor(modelItem => item.IsActive)</td>
+                        <td>@Html.DisplayFor(modelItem => item.DeactivatedDate)</td>
+                        <td>@Html.DisplayFor(modelItem => item.DeactiveBy)</td>
+                        <td>@Html.DisplayFor(modelItem => item.IsDefault)</td>
+                        <td>
+                            @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { @class = "btn btn-sm btn-primary" })
+                            @Html.ActionLink("Details", "Details", new { id = item.Id }, new { @class = "btn btn-sm btn-info" })
+                            @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { @class = "btn btn-sm btn-danger" })
+                        </td>
+                    </tr>
+                }
+
+            </tbody>
+
+        </table>
+    </div>
+    <!-- /.card-body -->
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@* <h1>Index</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -12,78 +79,38 @@
 <table class="table">
     <thead>
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.UserId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Address)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Phone)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Mobile)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CreatedBy)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.UpdatedBy)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IsActive)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DeactivatedDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DeactiveBy)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IsDefault)
-            </th>
-            <th></th>
+            <th>@Html.DisplayNameFor(model => model.UserId)</th>
+            <th>@Html.DisplayNameFor(model => model.Address)</th>
+            <th>@Html.DisplayNameFor(model => model.Phone)</th>
+            <th>@Html.DisplayNameFor(model => model.Mobile)</th>
+            <th>@Html.DisplayNameFor(model => model.CreatedBy)</th>
+            <th>@Html.DisplayNameFor(model => model.UpdatedBy)</th>
+            <th>@Html.DisplayNameFor(model => model.IsActive)</th>
+            <th>@Html.DisplayNameFor(model => model.DeactivatedDate)</th>
+            <th>@Html.DisplayNameFor(model => model.DeactiveBy)</th>
+            <th>@Html.DisplayNameFor(model => model.IsDefault)</th>
         </tr>
     </thead>
     <tbody>
 @foreach (var item in Model) {
         <tr>
+            <td>@Html.DisplayFor(modelItem => item.UserId)</td>
+            <td>@Html.DisplayFor(modelItem => item.Address)</td>
+            <td>@Html.DisplayFor(modelItem => item.Phone)</td>
+            <td>@Html.DisplayFor(modelItem => item.Mobile)</td>
+            <td>@Html.DisplayFor(modelItem => item.CreatedBy)</td>
+            <td>@Html.DisplayFor(modelItem => item.UpdatedBy)</td>
+            <td>@Html.DisplayFor(modelItem => item.IsActive)</td>
+            <td>@Html.DisplayFor(modelItem => item.DeactivatedDate)</td>
+            <td>@Html.DisplayFor(modelItem => item.DeactiveBy)</td>
+            <td>@Html.DisplayFor(modelItem => item.IsDefault)</td>
             <td>
-                @Html.DisplayFor(modelItem => item.UserId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Address)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Phone)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Mobile)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CreatedBy)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.UpdatedBy)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IsActive)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DeactivatedDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DeactiveBy)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IsDefault)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { @class = "btn btn-sm btn-primary" })
+                @Html.ActionLink("Details", "Details", new { id = item.Id }, new { @class = "btn btn-sm btn-info" })
+                @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { @class = "btn btn-sm btn-danger" })
             </td>
         </tr>
 }
     </tbody>
 </table>
+ *@
