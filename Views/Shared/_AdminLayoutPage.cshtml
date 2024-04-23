@@ -233,6 +233,12 @@
                                 <p>Company</p>
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a asp-action="Index" asp-controller="User" class="nav-link">
+                                <i class="nav-icon fas fa-tachometer-alt"></i>
+                                <p>User</p>
+                            </a>
+                        </li>
                         
                     </ul>
                 </nav>
@@ -243,7 +249,8 @@
 
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">
-            <main role="main" class="pb-3">
+            <main role="main" class="p-2">
+
                 @RenderBody()
             </main>
         </div>
