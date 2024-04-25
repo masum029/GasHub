@@ -1,0 +1,150 @@
+﻿@model GasHub.Models.ViewModels.DeliveryAddressViewModel
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+
+
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>Edit Delivery Address </h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a asp-action="Index">Delivery Address</a></li>
+                    <li class="breadcrumb-item active">Edit</li>
+                </ol>
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+
+
+
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <!-- left column -->
+            <div class="col-md-12">
+                <!-- general form elements -->
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <h3 class="card-title">Edit Delivery Address</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <!-- form start -->
+                    <form asp-action="Edit">
+                        <div class="card-body">
+                            <a asp-action="Index" class="btn btn-success my-2"> <i class="fa fa-list"></i> Back to Delivery Address List</a>
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label asp-for="UserList"></label>
+                                                <select class="form-control" asp-for="DeliveryAddress.UserId">
+                                                    <option value="">Select Chapter</option>
+                                                    @foreach (var user in Model.UserList)
+                                                    {
+                                                        <option value="@user.Id">@user.Name</option>
+                                                    }
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label asp-for="DeliveryAddress.Address" class="control-label"></label>
+                                                <input asp-for="DeliveryAddress.Address" class="form-control" />
+                                                <span asp-validation-for="DeliveryAddress.Address" class="text-danger"></span>
+                                            </div>
+                                            <div class="form-group" hidden="true">
+                                                <label asp-for="DeliveryAddress.Id" class="control-label"></label>
+                                                <input asp-for="DeliveryAddress.Id" class="form-control" />
+                                                <span asp-validation-for="DeliveryAddress.Id" class="text-danger"></span>
+                                            </div>
+                                            <div class="form-group">
+                                                <label asp-for="DeliveryAddress.Phone" class="control-label"></label>
+                                                <input asp-for="DeliveryAddress.Phone" class="form-control" />
+                                                <span asp-validation-for="DeliveryAddress.Phone" class="text-danger"></span>
+                                            </div>
+
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label asp-for="DeliveryAddress.Mobile" class="control-label"></label>
+                                                <input asp-for="DeliveryAddress.Mobile" class="form-control" />
+                                                <span asp-validation-for="DeliveryAddress.Mobile" class="text-danger"></span>
+                                            </div>
+                                            <div class="form-group">
+                                                <label asp-for="DeliveryAddress.CreatedBy" class="control-label"></label>
+                                                <input asp-for="DeliveryAddress.CreatedBy" class="form-control" />
+                                                <span asp-validation-for="DeliveryAddress.CreatedBy" class="text-danger"></span>
+                                            </div>
+                                            <div class="form-group">
+                                                <label asp-for="DeliveryAddress.UpdatedBy" class="control-label"></label>
+                                                <input asp-for="DeliveryAddress.UpdatedBy" class="form-control" />
+                                                <span asp-validation-for="DeliveryAddress.UpdatedBy" class="text-danger"></span>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label asp-for="DeliveryAddress.IsActive" class="control-label"></label>
+                                                <select asp-for="DeliveryAddress.IsActive" class="form-control">
+                                                    <option value="">-- Select --</option>
+                                                    <option value="true">Active</option>
+                                                    <option value="false">Inactive</option>
+                                                </select>
+                                                <span asp-validation-for="DeliveryAddress.IsActive" class="text-danger"></span>
+                                            </div>
+                                            <div class="form-group">
+                                                <label asp-for="DeliveryAddress.DeactivatedDate" class="control-label"></label>
+                                                <input asp-for="DeliveryAddress.DeactivatedDate" class="form-control" />
+                                                <span asp-validation-for="DeliveryAddress.DeactivatedDate" class="text-danger"></span>
+                                            </div>
+                                            <div class="form-group">
+                                                <label asp-for="DeliveryAddress.DeactiveBy" class="control-label"></label>
+                                                <input asp-for="DeliveryAddress.DeactiveBy" class="form-control" />
+                                                <span asp-validation-for="DeliveryAddress.DeactiveBy" class="text-danger"></span>
+                                            </div>
+                                           
+
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label asp-for="DeliveryAddress.IsDefault" class="control-label"></label>
+                                                <input asp-for="DeliveryAddress.IsDefault" class="form-control" />
+                                                <span asp-validation-for="DeliveryAddress.IsDefault" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <!-- /.card-body -->
+                        <div class="card-footer">
+                            <input type="submit" value="Save Delivery Address" class="btn btn-success" />
+                        </div>
+                    </form>
+                </div>
+                <!-- /.card -->
+            </div>
+            <!--/.col (left) -->
+        </div>
+        <!-- /.row -->
+    </div><!-- /.container-fluid -->
+</section>
+
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -13,7 +13,7 @@
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                    <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
                     <li class="breadcrumb-item active">Company</li>
                 </ol>
             </div>
@@ -40,11 +40,8 @@
                                     <th>@Html.DisplayNameFor(model => model.Contactperson)</th>
                                     <th>@Html.DisplayNameFor(model => model.ContactPerNum)</th>
                                     <th>@Html.DisplayNameFor(model => model.ContactNumber)</th>
-                                    <th>@Html.DisplayNameFor(model => model.CreatedBy)</th>
-                                    <th>@Html.DisplayNameFor(model => model.UpdatedBy)</th>
                                     <th>@Html.DisplayNameFor(model => model.IsActive)</th>
                                     <th>@Html.DisplayNameFor(model => model.DeactivatedDate)</th>
-                                    <th>@Html.DisplayNameFor(model => model.DeactiveBy)</th>
                                     <th>@Html.DisplayNameFor(model => model.BIN)</th>
                                     <th>Action</th>
                                 </tr>
@@ -57,8 +54,6 @@
                                         <td>@Html.DisplayFor(modelItem => item.Contactperson)</td>
                                         <td>@Html.DisplayFor(modelItem => item.ContactPerNum)</td>
                                         <td>@Html.DisplayFor(modelItem => item.ContactNumber)</td>
-                                        <td>@Html.DisplayFor(modelItem => item.CreatedBy)</td>
-                                        <td>@Html.DisplayFor(modelItem => item.UpdatedBy)</td>
                                         <td>
                                             <span class="@(item.IsActive.GetValueOrDefault() ? "btn btn-sm btn-primary rounded-pill" : "btn btn-sm btn-danger rounded-pill")">
                                                 <i class="fa fa-@(item.IsActive.GetValueOrDefault() ? "check" : "times")"></i>
@@ -66,7 +61,6 @@
                                             </span>
                                         </td>
                                         <td>@Html.DisplayFor(modelItem => item.DeactivatedDate)</td>
-                                        <td>@Html.DisplayFor(modelItem => item.DeactiveBy)</td>
                                         <td>@Html.DisplayFor(modelItem => item.BIN)</td>
                                         <td>
                                             @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { @class = "btn btn-sm btn-primary" })

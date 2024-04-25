@@ -1,0 +1,143 @@
+﻿@model IEnumerable<GasHub.Models.Retailer>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>Retailer</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
+                    <li class="breadcrumb-item active">Retailer</li>
+                </ol>
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+
+                <!-- /.card -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title font-weight-bold fs-1 color-primary">Retailer  List</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <table id="example3" class="table table-bordered table-striped">
+                            <p> <a asp-action="Create" class="btn btn-success"> <i class="fa fa-plus"></i> Create New Retailer</a> </p>
+                            <thead>
+                                <tr>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.Name)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.Contactperson)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.ContactPerNum)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.ContactNumber)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.IsActive)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.DeactivatedDate)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.DeactiveBy)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.BIN)
+                                    </th>
+                                    
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.CreationDate)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.UpdateDate)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.CreatedBy)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.UpdatedBy)
+                                    </th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Name)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Contactperson)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.ContactPerNum)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.ContactNumber)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.IsActive)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.DeactivatedDate)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.DeactiveBy)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.BIN)
+                                        </td>
+                                       
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.CreationDate)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.UpdateDate)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.CreatedBy)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.UpdatedBy)
+                                        </td>
+                                        <td>
+                                            @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { @class = "btn btn-sm btn-primary" })
+                                            @Html.ActionLink("Details", "Details", new { id = item.Id }, new { @class = "btn btn-sm btn-info" })
+                                            @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { @class = "btn btn-sm btn-danger" })
+                                        </td>
+
+                                    </tr>
+                                }
+
+                            </tbody>
+
+                        </table>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+
+                <!-- /.card -->
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </div>
+    <!-- /.container-fluid -->
+</section>
+

@@ -12,8 +12,8 @@
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item"><a href="#">Home</a></li>
-                    <li class="breadcrumb-item active">Edit Company</li>
+                    <li class="breadcrumb-item"><a asp-action="Index">Company</a></li>
+                    <li class="breadcrumb-item active">Edit</li>
                 </ol>
             </div>
         </div>
@@ -41,71 +41,79 @@
                             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                             <div class="row">
                                 <div class="col-md-6">
-                                    <div class="form-group" hidden="true">
-                                        <label asp-for="Id" class="control-label"></label>
-                                        <input asp-for="Id" class="form-control" />
-                                        <span asp-validation-for="Id" class="text-danger"></span>
-                                    </div>
-                                    <div class="form-group">
-                                        <label asp-for="Name" class="control-label"></label>
-                                        <input asp-for="Name" class="form-control" />
-                                        <span asp-validation-for="Name" class="text-danger"></span>
-                                    </div>
-                                    <div class="form-group">
-                                        <label asp-for="Contactperson" class="control-label"></label>
-                                        <input asp-for="Contactperson" class="form-control" />
-                                        <span asp-validation-for="Contactperson" class="text-danger"></span>
-                                    </div>
-                                    <div class="form-group">
-                                        <label asp-for="ContactPerNum" class="control-label"></label>
-                                        <input asp-for="ContactPerNum" class="form-control" />
-                                        <span asp-validation-for="ContactPerNum" class="text-danger"></span>
-                                    </div>
-                                    <div class="form-group">
-                                        <label asp-for="ContactNumber" class="control-label"></label>
-                                        <input asp-for="ContactNumber" class="form-control" />
-                                        <span asp-validation-for="ContactNumber" class="text-danger"></span>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label asp-for="CreatedBy" class="control-label"></label>
-                                        <input asp-for="CreatedBy" class="form-control" />
-                                        <span asp-validation-for="CreatedBy" class="text-danger"></span>
-                                    </div>
-                                    <div class="form-group">
-                                        <label asp-for="UpdatedBy" class="control-label"></label>
-                                        <input asp-for="UpdatedBy" class="form-control" />
-                                        <span asp-validation-for="UpdatedBy" class="text-danger"></span>
-                                    </div>
-                                    <div class="form-group">
-                                        <label asp-for="IsActive" class="control-label"></label>
-                                        <input asp-for="IsActive" class="form-control" />
-                                        <span asp-validation-for="IsActive" class="text-danger"></span>
-                                    </div>
-                                    <div class="form-group">
-                                        <label asp-for="DeactivatedDate" class="control-label"></label>
-                                        <input asp-for="DeactivatedDate" class="form-control" />
-                                        <span asp-validation-for="DeactivatedDate" class="text-danger"></span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label asp-for="DeactiveBy" class="control-label"></label>
-                                        <input asp-for="DeactiveBy" class="form-control" />
-                                        <span asp-validation-for="DeactiveBy" class="text-danger"></span>
-                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label asp-for="Name" class="control-label"></label>
+                                                <input asp-for="Name" class="form-control" />
+                                                <span asp-validation-for="Name" class="text-danger"></span>
+                                            </div>
+                                            <div class="form-group">
+                                                <label asp-for="Contactperson" class="control-label"></label>
+                                                <input asp-for="Contactperson" class="form-control" />
+                                                <span asp-validation-for="Contactperson" class="text-danger"></span>
+                                            </div>
+                                            <div class="form-group">
+                                                <label asp-for="ContactPerNum" class="control-label"></label>
+                                                <input asp-for="ContactPerNum" class="form-control" />
+                                                <span asp-validation-for="ContactPerNum" class="text-danger"></span>
+                                            </div>
 
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label asp-for="BIN" class="control-label"></label>
-                                        <input asp-for="BIN" class="form-control" />
-                                        <span asp-validation-for="BIN" class="text-danger"></span>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label asp-for="ContactNumber" class="control-label"></label>
+                                                <input asp-for="ContactNumber" class="form-control" />
+                                                <span asp-validation-for="ContactNumber" class="text-danger"></span>
+                                            </div>
+                                            <div class="form-group">
+                                                <label asp-for="CreatedBy" class="control-label"></label>
+                                                <input asp-for="CreatedBy" class="form-control" />
+                                                <span asp-validation-for="CreatedBy" class="text-danger"></span>
+                                            </div>
+                                            <div class="form-group">
+                                                <label asp-for="UpdatedBy" class="control-label"></label>
+                                                <input asp-for="UpdatedBy" class="form-control" />
+                                                <span asp-validation-for="UpdatedBy" class="text-danger"></span>
+                                            </div>
+
+                                        </div>
                                     </div>
                                 </div>
+                                <div class="col-md-6">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label asp-for="IsActive" class="control-label"></label>
+                                                <select asp-for="IsActive" class="form-control">
+                                                    <option value="">-- Select --</option>
+                                                    <option value="true">Active</option>
+                                                    <option value="false">Inactive</option>
+                                                </select>
+                                                <span asp-validation-for="IsActive" class="text-danger"></span>
+                                            </div>
+                                            <div class="form-group">
+                                                <label asp-for="DeactivatedDate" class="control-label"></label>
+                                                <input asp-for="DeactivatedDate" class="form-control" />
+                                                <span asp-validation-for="DeactivatedDate" class="text-danger"></span>
+                                            </div>
+                                            <div class="form-group">
+                                                <label asp-for="DeactiveBy" class="control-label"></label>
+                                                <input asp-for="DeactiveBy" class="form-control" />
+                                                <span asp-validation-for="DeactiveBy" class="text-danger"></span>
+                                            </div>
+
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label asp-for="BIN" class="control-label"></label>
+                                                <input asp-for="BIN" class="form-control" />
+                                                <span asp-validation-for="BIN" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
                             </div>
                         </div>
                         <!-- /.card-body -->

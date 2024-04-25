@@ -26,7 +26,7 @@ namespace GasHub.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(Company company)
         {
-            bool result = await _unitOfWorkClientServices.companyClientServices.AddAsync(company, "Company/Create");
+            bool result = await _unitOfWorkClientServices.companyClientServices.AddAsync(company, "Company/CreateCompany");
             return result ? RedirectToAction("Index") : View(default);
         }
         [HttpGet]
@@ -54,7 +54,7 @@ namespace GasHub.Controllers
             return View(customer);
         }
         [HttpPost,ActionName("Delete")]
-        public async Task<IActionResult> DeleteCompany(Guid id)
+        public async Task<IActionResult> DeleteSuccessfull(Guid id)
         {
             await _unitOfWorkClientServices.companyClientServices.DeleteAsync(id, "Company/DeleteCompany");
             return RedirectToAction("Index");
