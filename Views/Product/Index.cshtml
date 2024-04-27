@@ -35,18 +35,11 @@
                             <p> <a asp-action="Create" class="btn btn-success"> <i class="fa fa-plus"></i> Create New Product</a> </p>
                             <thead>
                                 <tr>
-                                    <th>
-                                        @Html.DisplayNameFor(model => model.CompanyId)
-                                    </th>
+                                   
                                     <th>
                                         @Html.DisplayNameFor(model => model.Name)
                                     </th>
-                                    <th>
-                                        @Html.DisplayNameFor(model => model.ProdSizeId)
-                                    </th>
-                                    <th>
-                                        @Html.DisplayNameFor(model => model.ProdValveId)
-                                    </th>
+                                    
                                     <th>
                                         @Html.DisplayNameFor(model => model.ProdImage)
                                     </th>
@@ -73,17 +66,9 @@
                                 @foreach (var item in Model)
                                 {
                                     <tr>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.CompanyId)
-                                        </td>
+                                        
                                         <td>
                                             @Html.DisplayFor(modelItem => item.Name)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.ProdSizeId)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.ProdValveId)
                                         </td>
                                         <td>
                                             @Html.DisplayFor(modelItem => item.ProdImage)

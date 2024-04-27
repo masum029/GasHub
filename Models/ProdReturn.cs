@@ -12,6 +12,6 @@ namespace GasHub.Models
 
 
         // Navigation property
-        //public virtual Product Product { get; set; }
+        public virtual Product Product { get; set; }
     }
 }

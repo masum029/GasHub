@@ -1,4 +1,5 @@
 ﻿using GasHub.Models;
+using GasHub.Models.ViewModels;
 using GasHub.Services.Abstractions;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,14 +20,18 @@ namespace GasHub.Controllers
             return View(result);
         }
         [HttpGet]
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            return View();
+            var companys = await _unitOfWorkClientServices.companyClientServices.GetAllAsync("Company/getAllCompany");
+            var valv = await _unitOfWorkClientServices.valveClientServices.GetAllAsync("Valve/getAllValve");
+            var productSize = await _unitOfWorkClientServices.productSizeClientServices.GetAllAsync("ProductSize/getAllProductSize");
+            var ProductViewModel = new ProductViewModel(companys,valv,productSize);
+            return View(ProductViewModel);
         }
         [HttpPost]
-        public async Task<IActionResult> Create(Product model)
+        public async Task<IActionResult> Create(ProductViewModel model)
         {
-            bool result = await _unitOfWorkClientServices.productClientServices.AddAsync(model, "Product/CreateProduct");
+            bool result = await _unitOfWorkClientServices.productClientServices.AddAsync(model.Product, "Product/CreateProduct");
             return result ? RedirectToAction("Index") : View(default);
         }
         [HttpGet]
