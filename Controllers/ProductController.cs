@@ -44,12 +44,17 @@ namespace GasHub.Controllers
         public async Task<IActionResult> Edit(Guid id)
         {
             var result = await _unitOfWorkClientServices.productClientServices.GetByIdAsync(id, "Product/getProduct");
-            return View(result);
+            var companys = await _unitOfWorkClientServices.companyClientServices.GetAllAsync("Company/getAllCompany");
+            var valv = await _unitOfWorkClientServices.valveClientServices.GetAllAsync("Valve/getAllValve");
+            var productSize = await _unitOfWorkClientServices.productSizeClientServices.GetAllAsync("ProductSize/getAllProductSize");
+            var ProductViewModel = new ProductViewModel(companys, valv, productSize);
+            ProductViewModel.Product = result;
+            return View(ProductViewModel);
         }
         [HttpPost]
-        public async Task<IActionResult> Edit(Guid id, Product model)
+        public async Task<IActionResult> Edit(Guid id, ProductViewModel model)
         {
-            await _unitOfWorkClientServices.productClientServices.UpdateAsync(id, model, "Product/UpdateProduct");
+            await _unitOfWorkClientServices.productClientServices.UpdateAsync(id, model.Product, "Product/UpdateProduct");
             return RedirectToAction("Index");
         }
         [HttpGet]

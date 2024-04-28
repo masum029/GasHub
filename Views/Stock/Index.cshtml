@@ -36,10 +36,10 @@
                             <thead>
                                 <tr>
                                     <th>
-                                        @Html.DisplayNameFor(model => model.ProductId)
+                                        @Html.DisplayNameFor(model => model.Product.Name)
                                     </th>
                                     <th>
-                                        @Html.DisplayNameFor(model => model.TraderId)
+                                        @Html.DisplayNameFor(model => model.Trader.Name)
                                     </th>
                                     <th>
                                         @Html.DisplayNameFor(model => model.Quantity)
@@ -71,10 +71,10 @@
                                 {
                                     <tr>
                                         <td>
-                                            @Html.DisplayFor(modelItem => item.ProductId)
+                                            @Html.DisplayFor(modelItem => item.Product.Name)
                                         </td>
                                         <td>
-                                            @Html.DisplayFor(modelItem => item.TraderId)
+                                            @Html.DisplayFor(modelItem => item.Trader.Name)
                                         </td>
                                         <td>
                                             @Html.DisplayFor(modelItem => item.Quantity)

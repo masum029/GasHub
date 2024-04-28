@@ -13,6 +13,6 @@
         public string? BIN { get; set; }
 
         // Navigation properties
-        //public virtual ICollection<Stock>? Stocks { get; set; }
+        public virtual ICollection<Stock>? Stocks { get; set; }
     }
 }

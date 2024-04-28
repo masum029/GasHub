@@ -1,19 +1,19 @@
 ﻿@model GasHub.Models.ViewModels.TraderViewModel
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Edit";
 }
 
 <section class="content-header">
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1>Create Trader </h1>
+                <h1>Edit Trader </h1>
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item"><a asp-action="Index">Trader</a></li>
-                    <li class="breadcrumb-item active">Create</li>
+                    <li class="breadcrumb-item active">Edit</li>
                 </ol>
             </div>
         </div>
@@ -31,11 +31,11 @@
                 <!-- general form elements -->
                 <div class="card card-primary">
                     <div class="card-header">
-                        <h3 class="card-title">Create Trader</h3>
+                        <h3 class="card-title">Edit Trader</h3>
                     </div>
                     <!-- /.card-header -->
                     <!-- form start -->
-                    <form asp-action="Create">
+                    <form asp-action="Edit">
                         <div class="card-body">
                             <a asp-action="Index" class="btn btn-success my-2"> <i class="fa fa-list"></i> Back to Trader List</a>
                             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -53,7 +53,7 @@
                                                     }
                                                 </select>
                                             </div>
-                                            
+
                                             <div class="form-group">
                                                 <label asp-for="Trader.Name" class="control-label"></label>
                                                 <input asp-for="Trader.Name" class="form-control" />
@@ -93,7 +93,7 @@
                                 <div class="col-md-6">
                                     <div class="row">
                                         <div class="col-md-6">
-                                            
+
                                             <div class="form-group">
                                                 <label asp-for="Trader.DeactivatedDate" class="control-label"></label>
                                                 <input asp-for="Trader.DeactivatedDate" class="form-control" />
@@ -108,6 +108,11 @@
                                                 <label asp-for="Trader.BIN" class="control-label"></label>
                                                 <input asp-for="Trader.BIN" class="form-control" />
                                                 <span asp-validation-for="Trader.BIN" class="text-danger"></span>
+                                            </div>
+                                            <div class="form-group" hidden="true">
+                                                <label asp-for="Trader.Id" class="control-label"></label>
+                                                <input asp-for="Trader.Id" class="form-control" />
+                                                <span asp-validation-for="Trader.Id" class="text-danger"></span>
                                             </div>
 
                                         </div>
@@ -135,18 +140,15 @@
                                             </div>
 
                                         </div>
-                                       
+
                                     </div>
                                 </div>
 
                             </div>
-
-
                         </div>
                         <!-- /.card-body -->
-
                         <div class="card-footer">
-                            <input type="submit" value="Create Delivery Address" class="btn btn-success" />
+                            <input type="submit" value="Save Trader" class="btn btn-success" />
                         </div>
                     </form>
                 </div>

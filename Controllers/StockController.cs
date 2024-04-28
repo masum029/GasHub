@@ -1,4 +1,5 @@
 ﻿using GasHub.Models;
+using GasHub.Models.ViewModels;
 using GasHub.Services.Abstractions;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,18 +16,22 @@ namespace GasHub.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
+           
             var result = await _unitOfWorkClientServices.stockClientServices.GetAllAsync("Stock/getAllStock");
             return View(result);
         }
         [HttpGet]
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            return View();
+            var productList = await _unitOfWorkClientServices.productClientServices.GetAllAsync("Product/getAllProduct");
+            var traderList = await _unitOfWorkClientServices.traderClientServices.GetAllAsync("Trader/getAllTrader");
+            var StockViewModel = new StockViewModel(productList, traderList);
+            return View(StockViewModel);
         }
         [HttpPost]
-        public async Task<IActionResult> Create(Stock model)
+        public async Task<IActionResult> Create(StockViewModel model)
         {
-            bool result = await _unitOfWorkClientServices.stockClientServices.AddAsync(model, "Stock/CreateStock");
+            bool result = await _unitOfWorkClientServices.stockClientServices.AddAsync(model.Stock, "Stock/CreateStock");
             return result ? RedirectToAction("Index") : View(default);
         }
         [HttpGet]
@@ -38,13 +43,18 @@ namespace GasHub.Controllers
         [HttpGet]
         public async Task<IActionResult> Edit(Guid id)
         {
+
             var result = await _unitOfWorkClientServices.stockClientServices.GetByIdAsync(id, "Stock/getStock");
-            return View(result);
+            var productList = await _unitOfWorkClientServices.productClientServices.GetAllAsync("Product/getAllProduct");
+            var traderList = await _unitOfWorkClientServices.traderClientServices.GetAllAsync("Trader/getAllTrader");
+            var StockViewModel = new StockViewModel(productList, traderList);
+            StockViewModel.Stock = result;
+            return View(StockViewModel);
         }
         [HttpPost]
-        public async Task<IActionResult> Edit(Guid id, Stock model)
+        public async Task<IActionResult> Edit(Guid id, StockViewModel model)
         {
-            await _unitOfWorkClientServices.stockClientServices.UpdateAsync(id, model, "Stock/UpdateStock");
+            await _unitOfWorkClientServices.stockClientServices.UpdateAsync(id, model.Stock, "Stock/UpdateStock");
             return RedirectToAction("Index");
         }
         [HttpGet]

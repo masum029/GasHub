@@ -1,4 +1,5 @@
 ﻿using GasHub.Models;
+using GasHub.Models.ViewModels;
 using GasHub.Services.Abstractions;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,14 +20,16 @@ namespace GasHub.Controllers
             return View(result);
         }
         [HttpGet]
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            return View();
+            var companyList = await _unitOfWorkClientServices.companyClientServices.GetAllAsync("Company/getAllCompany");
+            var TraderViewMode = new TraderViewModel(companyList);
+            return View(TraderViewMode);
         }
         [HttpPost]
-        public async Task<IActionResult> Create(Trader model)
+        public async Task<IActionResult> Create(TraderViewModel model)
         {
-            bool result = await _unitOfWorkClientServices.traderClientServices.AddAsync(model, "Trader/CreateTrader");
+            bool result = await _unitOfWorkClientServices.traderClientServices.AddAsync(model.Trader, "Trader/CreateTrader");
             return result ? RedirectToAction("Index") : View(default);
         }
         [HttpGet]
@@ -39,12 +42,15 @@ namespace GasHub.Controllers
         public async Task<IActionResult> Edit(Guid id)
         {
             var result = await _unitOfWorkClientServices.traderClientServices.GetByIdAsync(id, "Trader/getTrader");
-            return View(result);
+            var companyList = await _unitOfWorkClientServices.companyClientServices.GetAllAsync("Company/getAllCompany");
+            var TraderViewMode = new TraderViewModel(companyList);
+            TraderViewMode.Trader = result;
+            return View(TraderViewMode);
         }
         [HttpPost]
-        public async Task<IActionResult> Edit(Guid id, Trader model)
+        public async Task<IActionResult> Edit(Guid id, TraderViewModel model)
         {
-            await _unitOfWorkClientServices.traderClientServices.UpdateAsync(id, model, "Trader/UpdateTrader");
+            await _unitOfWorkClientServices.traderClientServices.UpdateAsync(id, model.Trader, "Trader/UpdateTrader");
             return RedirectToAction("Index");
         }
         [HttpGet]

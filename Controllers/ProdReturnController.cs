@@ -1,5 +1,4 @@
-﻿using GasHub.Models;
-using GasHub.Models.ViewModels;
+﻿using GasHub.Models.ViewModels;
 using GasHub.Services.Abstractions;
 using Microsoft.AspNetCore.Mvc;
 
@@ -43,13 +42,18 @@ namespace GasHub.Controllers
         [HttpGet]
         public async Task<IActionResult> Edit(Guid id)
         {
-            var result = await _unitOfWorkClientServices.prodReturnClientServices.GetByIdAsync(id, "ProdReturn/getProdReturn");
-            return View(result);
+            var productList = await _unitOfWorkClientServices.productClientServices.GetAllAsync("Product/getAllProduct");
+            var valveList = await _unitOfWorkClientServices.valveClientServices.GetAllAsync("Valve/getAllValve");
+            var productSizeList = await _unitOfWorkClientServices.productSizeClientServices.GetAllAsync("ProductSize/getAllProductSize");
+            var productReturnList = await _unitOfWorkClientServices.prodReturnClientServices.GetByIdAsync(id, "ProdReturn/getProdReturn");
+            var productReturnViewModel = new ProductReturnViewModel(productList, valveList, productSizeList);
+            productReturnViewModel.ProdReturn = productReturnList;
+            return View(productReturnViewModel);
         }
         [HttpPost]
-        public async Task<IActionResult> Edit(Guid id, ProdReturn model)
+        public async Task<IActionResult> Edit(Guid id, ProductReturnViewModel model)
         {
-            await _unitOfWorkClientServices.prodReturnClientServices.UpdateAsync(id, model, "ProdReturn/UpdateProdReturn");
+            await _unitOfWorkClientServices.prodReturnClientServices.UpdateAsync(id, model.ProdReturn, "ProdReturn/UpdateProdReturn");
             return RedirectToAction("Index");
         }
         [HttpGet]

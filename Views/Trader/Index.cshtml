@@ -36,9 +36,6 @@
                             <thead>
                                 <tr>
                                     <th>
-                                        @Html.DisplayNameFor(model => model.CompanyId)
-                                    </th>
-                                    <th>
                                         @Html.DisplayNameFor(model => model.Name)
                                     </th>
                                     <th>
@@ -62,7 +59,6 @@
                                     <th>
                                         @Html.DisplayNameFor(model => model.BIN)
                                     </th>
-                                  
                                     <th>
                                         @Html.DisplayNameFor(model => model.CreationDate)
                                     </th>
@@ -82,9 +78,6 @@
                                 @foreach (var item in Model)
                                 {
                                     <tr>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.CompanyId)
-                                        </td>
                                         <td>
                                             @Html.DisplayFor(modelItem => item.Name)
                                         </td>

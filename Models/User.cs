@@ -19,7 +19,7 @@ namespace GasHub.Models
         public bool? IsBlocked { get; set; }
 
         // Navigation properties
-        //public virtual ICollection<DeliveryAddress>? DeliveryAddresses { get; set; }
-        //public virtual ICollection<Order>? Orders { get; set; }
+        public virtual ICollection<DeliveryAddress>? DeliveryAddresses { get; set; }
+        public virtual ICollection<Order>? Orders { get; set; }
     }
 }
