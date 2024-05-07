@@ -186,9 +186,11 @@ $('#btn-Create').click(function () {
 // Submit button click event
 $('#btnSave').click(function () {
     // Check if the form is valid
+    console.log("btn Save ");
     if ($('#CompanyForm').valid()) {
         // Proceed with form submission
         var formData = $('#CompanyForm').serialize();
+        console.log(formData);
         $.ajax({
             url: '/Company/Create',
             type: 'post',
@@ -203,16 +205,16 @@ $('#btnSave').click(function () {
                     $('#successMessage').show();
                     GetCompanyList();
                     $('#CompanyForm')[0].reset();
-                   
+
                 }
             },
             error: function (xhr, textStatus, errorThrown) {
                 console.log('Error:', errorThrown);
-                
+
             }
         });
     }
-});
+}); 
 
 
 
@@ -265,6 +267,7 @@ function updateCompany(id) {
     
     if ($('#CompanyForm').valid()) {
         const formData = $('#CompanyForm').serialize();
+        console.log(formData);
         $.ajax({
             url: '/Company/Update/' + id,
             type: 'post',

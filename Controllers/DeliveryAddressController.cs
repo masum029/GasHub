@@ -17,13 +17,13 @@ namespace GasHub.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var deliveryAddress = await _unitOfWorkClientServices.deliveryAddressClientServices.GetAllAsync("DeliveryAddress/getAllDeliveryAddress");
+            var deliveryAddress = await _unitOfWorkClientServices.deliveryAddressClientServices.GetAllAsync("User/GetAllUserDetails");
             return View(deliveryAddress);
         }
         [HttpGet]
         public async Task<IActionResult> Create()
         {
-            var users = await _unitOfWorkClientServices.userClientServices.GetAllAsync("User/getAllUser");
+            var users = await _unitOfWorkClientServices.userClientServices.GetAllAsync("User/GetAllUserDetails");
             var deliveryAddressViewModel = new DeliveryAddressViewModel(users);
             return View(deliveryAddressViewModel);
         }

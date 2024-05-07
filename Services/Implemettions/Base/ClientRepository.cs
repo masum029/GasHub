@@ -15,18 +15,26 @@ namespace GasHub.Services.Implemettions.Base
 
         public async Task<bool> AddAsync(T model, string EndPoint)
         {
-            var httpClient = _httpClientFactory.CreateClient("GasHubClient");
-            var json = JsonConvert.SerializeObject(model);
-            var content = new StringContent(json, Encoding.UTF8, "application/json");
-            var response = await httpClient.PostAsync(EndPoint, content);
+            try
+            {
+                var httpClient = _httpClientFactory.CreateClient("GasHubClient");
+                var json = JsonConvert.SerializeObject(model);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+                var response = await httpClient.PostAsync(EndPoint, content);
 
-            if (response.IsSuccessStatusCode)
-            {
-                return true;
+                if (response.IsSuccessStatusCode)
+                {
+                    return true;
+                }
+                else
+                {
+                    throw new HttpRequestException($"Failed to add resource. Status code: {response.StatusCode}");
+                }
             }
-            else
+            catch (Exception)
             {
-                throw new HttpRequestException($"Failed to add resource. Status code: {response.StatusCode}");
+
+                throw;
             }
         }
 

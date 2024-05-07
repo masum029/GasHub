@@ -25,6 +25,7 @@ namespace GasHub.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(Company company)
         {
+            company.CreatedBy = "";
             var result = await _unitOfWorkClientServices.companyClientServices.AddAsync(company, "Company/CreateCompany");
             return Json(result);
         }
