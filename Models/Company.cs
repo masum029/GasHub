@@ -1,11 +1,12 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using System.ComponentModel.DataAnnotations;
 
 namespace GasHub.Models
 {
     public class Company : BaseModel
     {
-        public Guid Id { get; set; }
-
+        
         [Required(ErrorMessage = "Name is required")]
         public string? Name { get; set; }
         [Required(ErrorMessage = "Contactperson is required")]
@@ -19,7 +20,6 @@ namespace GasHub.Models
         public bool? IsActive { get; set; }
         [Required(ErrorMessage = "DeactivatedDate is required")]
         public DateTime? DeactivatedDate { get; set; }
-
         public string? DeactiveBy { get; set; }
 
         [RegularExpression(@"^\d{9}$", ErrorMessage = "BIN should be 9 digits")]

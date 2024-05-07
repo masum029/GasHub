@@ -32,16 +32,16 @@
                         <strong>Holy guacamole!</strong>   Your company was successfully saved.
                         <button id="btnClose" type="button" class="btn-close" aria-label="Close"></button>
                     </div>
-
+                    
                     <!-- /.card-header -->
-
+                    
                     <div class="card-body">
                         <table id="CompanyTable" class="table table-bordered table-striped">
                             <p> <a id="btn-Create" class="btn btn-success"> <i class="fa fa-plus"></i> Create New Company</a> </p>
                             <thead>
                                 <tr>
                                     <th>Name</th>
-                                    <th>Contact Person</th>
+                                    <th>Contact Person</th> 
                                     <th>Contact Person Num</th>
                                     <th>Contact Number</th>
                                     <th>Active</th>
@@ -49,7 +49,7 @@
                                     <th>Action</th>
                                 </tr>
                             </thead>
-
+                           
                         </table>
                     </div>
                     <!-- /.card-body -->
@@ -99,7 +99,7 @@
                                         </div>
                                     </div>
                                     <div class="col-md-6">
-
+                                       
                                         <div class="form-group">
                                             <label asp-for="ContactPerNum" class="control-label"></label>
                                             <input asp-for="ContactPerNum" class="form-control" />
@@ -114,15 +114,15 @@
                                 </div>
                             </div>
                             @* <div class="col-md-6">
-                            <div class="row">
-                            <div class="col-md-6">
-
-
-                            </div>
-                            <div class="col-md-6">
-
-                            </div>
-                            </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                       
+                                       
+                                    </div>
+                                    <div class="col-md-6">
+                                       
+                                    </div>
+                                </div>
                             </div> *@
                         </div>
                     </div>
@@ -168,5 +168,5 @@
 
 @section Scripts {
     <script src="~/js/inventory/company.js"></script>
-
+    
 }

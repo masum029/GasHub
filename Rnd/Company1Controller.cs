@@ -2,13 +2,13 @@
 using GasHub.Services.Abstractions;
 using Microsoft.AspNetCore.Mvc;
 
-namespace GasHub.Controllers
+namespace GasHub.Rnd
 {
-    public class CompanyController : Controller
+    public class Company1Controller : Controller
     {
         private readonly IUnitOfWorkClientServices _unitOfWorkClientServices;
 
-        public CompanyController(IUnitOfWorkClientServices unitOfWorkClientServices)
+        public Company1Controller(IUnitOfWorkClientServices unitOfWorkClientServices)
         {
             _unitOfWorkClientServices = unitOfWorkClientServices;
         }
@@ -23,9 +23,9 @@ namespace GasHub.Controllers
             return Json(new { data = companys });
         }
         [HttpPost]
-        public async Task<IActionResult> Create(Company company)
+        public async Task<IActionResult> Create( Company company)
         {
-            var result = await _unitOfWorkClientServices.companyClientServices.AddAsync(company, "Company/CreateCompany");
+            bool result = await _unitOfWorkClientServices.companyClientServices.AddAsync(company, "Company/CreateCompany");
             return Json(result);
         }
         [HttpGet]
@@ -35,9 +35,9 @@ namespace GasHub.Controllers
             return Json(customer);
         }
         [HttpPost]
-        public async Task<IActionResult> Update(Guid id, Company company)
+        public async Task<IActionResult> Update(Guid id,  Company company)
         {
-            var result = await _unitOfWorkClientServices.companyClientServices.UpdateAsync(id, company, "Company/UpdateCompany");
+            var result =  await _unitOfWorkClientServices.companyClientServices.UpdateAsync(id, company, "Company/UpdateCompany");
             return Json(result);
         }
         [HttpPost]
@@ -46,5 +46,6 @@ namespace GasHub.Controllers
             var deleted = await _unitOfWorkClientServices.companyClientServices.DeleteAsync(id, "Company/DeleteCompany");
             return Json(deleted);
         }
+
     }
 }
