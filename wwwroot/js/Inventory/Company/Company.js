@@ -86,6 +86,95 @@ function onSuccess(companies) {
 }
 
 
+
+
+
+// Initialize validation
+const companyForm = $('#CompanyForm').validate({
+    onkeyup: function (element) {
+        $(element).valid();
+    },
+    rules: {
+        Name: {
+            required: true,
+            minlength: 2,
+            maxlength: 50
+        },
+        Contactperson: {
+            required: true,
+            minlength: 2,
+            maxlength: 50
+        },
+        ContactPerNum: {
+            required: true,
+            digits: true,
+            minlength: 11,
+            maxlength: 11
+        },
+        ContactNumber: {
+            required: true,
+            digits: true,
+            minlength: 11,
+            maxlength: 11
+        },
+        BIN: {
+            required: true
+        }
+    },
+    messages: {
+        Name: {
+            required: "Name is required.",
+            minlength: "Name must be between 2 and 50 characters.",
+            maxlength: "Name must be between 2 and 50 characters."
+        },
+        Contactperson: {
+            required: "Contact Person is required.",
+            minlength: "Contact Person must be between 2 and 50 characters.",
+            maxlength: "Contact Person must be between 2 and 50 characters."
+        },
+        ContactPerNum: {
+            required: "Contact Person Number is required.",
+            digits: "Contact Person Number must contain only digits.",
+            minlength: "Contact Person Number must be exactly 11 digits.",
+            maxlength: "Contact Person Number must be exactly 11 digits."
+        },
+        ContactNumber: {
+            required: "Contact Number is required.",
+            digits: "Contact Number must contain only digits.",
+            minlength: "Contact Number must be exactly 11 digits.",
+            maxlength: "Contact Number must be exactly 11 digits."
+        },
+        BIN: {
+            required: "BIN is required."
+        }
+    },
+    errorElement: 'div',
+    errorPlacement: function (error, element) {
+        error.addClass('invalid-feedback');
+        element.closest('.form-group').append(error);
+    },
+    highlight: function (element, errorClass, validClass) {
+        $(element).addClass('is-invalid');
+    },
+    unhighlight: function (element, errorClass, validClass) {
+        $(element).removeClass('is-invalid');
+    }
+});
+
+// Bind validation on change
+$('#CompanyForm input[type="text"]').on('change', function () {
+    companyForm.element($(this));
+});
+$('#CompanyForm input[type="text"]').on('focus', function () {
+    companyForm.element($(this));
+});
+function resetValidation() {
+    companyForm.resetForm(); // Reset validation
+    $('.form-group .invalid-feedback').remove(); // Remove error messages
+    $('#CompanyForm input').removeClass('is-invalid'); // Remove error styling
+}
+
+
 $('#btn-Create').click(function () {
     $('#modelCreate input[type="text"]').val('');
     $('#modelCreate').modal('show');
@@ -93,34 +182,49 @@ $('#btn-Create').click(function () {
     $('#btnUpdate').hide();
 });
 
-$('#btnSave').click(function () {
-    var formData = $('#CompanyForm').serialize(); // Serialize the form data
 
-    $.ajax({
-        url: '/Company/Create',
-        type: 'post',
-        contentType: 'application/x-www-form-urlencoded', // Correct content type
-        data: formData, // Send serialized form data
-        success: function (response) {
-            console.log('success:', response);
-            $('#modelCreate').modal('hide');
-            if (response === true) {
-                // Show success message
-                $('#successMessage').text('Your company was successfully saved.');
-                $('#successMessage').show();
-                GetCompanyList();
-                $('#CompanyForm')[0].reset();
+// Submit button click event
+$('#btnSave').click(function () {
+    // Check if the form is valid
+    if ($('#CompanyForm').valid()) {
+        // Proceed with form submission
+        var formData = $('#CompanyForm').serialize();
+        $.ajax({
+            url: '/Company/Create',
+            type: 'post',
+            contentType: 'application/x-www-form-urlencoded',
+            data: formData,
+            success: function (response) {
+                console.log('success:', response);
+                $('#modelCreate').modal('hide');
+                if (response === true) {
+                    // Show success message
+                    $('#successMessage').text('Your company was successfully saved.');
+                    $('#successMessage').show();
+                    GetCompanyList();
+                    $('#CompanyForm')[0].reset();
+                   
+                }
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                console.log('Error:', errorThrown);
+                
             }
-        },
-        error: function (xhr, textStatus, errorThrown) {
-            console.log('Error:', errorThrown);
-        }
-    });
+        });
+    }
 });
+
+
+
+
 
 // Edit Company
 function editCompany(id) {
     console.log("Edit company with id:", id);
+
+    // Reset form validation
+    debugger
+
     $.ajax({
         url: '/Company/GetCompany/' + id,
         type: 'get',
@@ -141,12 +245,12 @@ function editCompany(id) {
             $('#DeactivatedDate').val(data.deactivatedDate);
             $('#DeactiveBy').val(data.deactiveBy);
             $('#BIN').val(data.bin);
-
+            debugger
+            resetValidation()
             // Show modal for editing
             $('#modelCreate').modal('show');
-
             // Update button click event handler
-            $('#btnUpdate').click(function () {
+            $('#btnUpdate').off('click').on('click', function () {
                 updateCompany(id);
             });
         },
@@ -156,30 +260,38 @@ function editCompany(id) {
     });
 }
 
-function updateCompany(id) {
-    const formData = $('#CompanyForm').serialize();
 
-    console.log(formData);
-    $.ajax({
-        url: '/Company/Update/' + id,
-        type: 'post',
-        contentType: 'application/x-www-form-urlencoded',
-        data: formData,
-        success: function (response) {
-            $('#modelCreate').modal('hide');
-            if (response === true) {
-                // Show success message
-                $('#successMessage').text('Your company was successfully updated.');
-                $('#successMessage').show();
-                GetCompanyList();
-                $('#CompanyForm')[0].reset();
+function updateCompany(id) {
+    
+    if ($('#CompanyForm').valid()) {
+        const formData = $('#CompanyForm').serialize();
+        $.ajax({
+            url: '/Company/Update/' + id,
+            type: 'post',
+            contentType: 'application/x-www-form-urlencoded',
+            data: formData,
+            success: function (response) {
+                $('#modelCreate').modal('hide');
+                if (response === true) {
+                    // Show success message
+                    $('#successMessage').text('Your company was successfully updated.');
+                    $('#successMessage').show();
+                    // Reset the form
+                    $('#CompanyForm')[0].reset();
+                    // Update the company list
+                    GetCompanyList();
+                }
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                console.log('Error:', errorThrown);
+                // Show error message
+                $('#errorMessage').text('An error occurred while updating the company.');
+                $('#errorMessage').show();
             }
-        },
-        error: function (xhr, textStatus, errorThrown) {
-            console.log('Error:', errorThrown);
-        }
-    });
+        });
+    }
 }
+
 
 
 
