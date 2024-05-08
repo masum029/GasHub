@@ -1,24 +1,25 @@
-﻿$(document).ready(function () {
-    GetCompanyList();
+﻿$(document).ready(async function () {
+    await GetCompanyList();
 });
 
-function GetCompanyList() {
-    $.ajax({
-        url: '/Company/GetCompanyList',
-        type: 'get',
-        dataType: 'json',
-        contentType: 'application/json;charset=utf-8',
-        success: function (data) {
-            if (data && data.data && data.data.length > 0) {
-                const companies = data.data;
-                onSuccess(companies)
-            }
+async function GetCompanyList() {
+    debugger
+    try {
+        const data = await $.ajax({
+            url: '/Company/GetCompanyList',
+            type: 'get',
+            dataType: 'json',
+            contentType: 'application/json;charset=utf-8'
+        });
 
-        },
-        error: function (xhr, textStatus, errorThrown) {
-            console.log('Error:', errorThrown);
+        if (data && data.data && data.data.length > 0) {
+            const companies = data.data;
+            console.log('companies:', companies);
+            onSuccess(companies);
         }
-    });
+    } catch (error) {
+        console.log('Error:', error);
+    }
 }
 
 function onSuccess(companies) {
@@ -84,10 +85,6 @@ function onSuccess(companies) {
         });
     }
 }
-
-
-
-
 
 // Initialize validation
 const companyForm = $('#CompanyForm').validate({
@@ -206,126 +203,119 @@ $('#modelCreate').on('shown.bs.modal', function () {
 $('#modelCreate').on('keypress', 'input', handleEnterKey);
 
 // Submit button click event
-$('#btnSave').click(function () {
+$('#btnSave').click(async function () {
     // Check if the form is valid
     if ($('#CompanyForm').valid()) {
         // Proceed with form submission
         var formData = $('#CompanyForm').serialize();
-        $.ajax({
-            url: '/Company/Create',
-            type: 'post',
-            contentType: 'application/x-www-form-urlencoded',
-            data: formData,
-            success: function (response) {
-                $('#modelCreate').modal('hide');
-                if (response === true) {
-                    // Show success message
-                    $('#successMessage').text('Your company was successfully saved.');
-                    $('#successMessage').show();
-                    GetCompanyList();
-                    $('#CompanyForm')[0].reset();
-                }
-            },
-            error: function (xhr, textStatus, errorThrown) {
-                console.log('Error:', errorThrown);
+        try {
+            const response = await $.ajax({
+                url: '/Company/Create',
+                type: 'post',
+                contentType: 'application/x-www-form-urlencoded',
+                data: formData
+            });
+
+            $('#modelCreate').modal('hide');
+            if (response === true) {
+                // Show success message
+                $('#successMessage').text('Your company was successfully saved.');
+                $('#successMessage').show();
+                await GetCompanyList
+                    ();
+                $('#CompanyForm')[0].reset();
             }
-        });
+        } catch (error) {
+            console.log('Error:', error);
+        }
     }
 });
 
-
-
-
-
 // Edit Company
-function editCompany(id) {
+async function editCompany(id) {
     console.log("Edit company with id:", id);
 
     // Reset form validation
     debugger
 
-    $.ajax({
-        url: '/Company/GetCompany/' + id,
-        type: 'get',
-        dataType: 'json',
-        contentType: 'application/json;charset=utf-8',
-        success: function (data) {
-            // Populate form fields with company data
-            $('#btnSave').hide();
-            $('#btnUpdate').show();
-            $('#Name').val(data.name);
-            $('#Contactperson').val(data.contactperson);
-            $('#ContactPerNum').val(data.contactPerNum);
-            $('#ContactNumber').val(data.contactNumber);
-            $('#BIN').val(data.bin);
-            debugger
-            resetValidation()
-            // Show modal for editing
-            $('#modelCreate').modal('show');
-            // Update button click event handler
-            $('#btnUpdate').off('click').on('click', function () {
-                updateCompany(id);
-            });
-        },
-        error: function (xhr, textStatus, errorThrown) {
-            console.log('Error:', errorThrown);
-        }
-    });
-}
-
-
-function updateCompany(id) {
-    
-    if ($('#CompanyForm').valid()) {
-        const formData = $('#CompanyForm').serialize();
-        console.log(formData);
-        $.ajax({
-            url: '/Company/Update/' + id,
-            type: 'put',
-            contentType: 'application/x-www-form-urlencoded',
-            data: formData,
-            success: function (response) {
-                $('#modelCreate').modal('hide');
-                if (response === true) {
-                    // Show success message
-                    $('#successMessage').text('Your company was successfully updated.');
-                    $('#successMessage').show();
-                    // Reset the form
-                    $('#CompanyForm')[0].reset();
-                    // Update the company list
-                    GetCompanyList();
-                }
-            },
-            error: function (xhr, textStatus, errorThrown) {
-                console.log('Error:', errorThrown);
-                // Show error message
-                $('#errorMessage').text('An error occurred while updating the company.');
-                $('#errorMessage').show();
-            }
+    try {
+        const data = await $.ajax({
+            url: '/Company/GetCompany/' + id,
+            type: 'get',
+            dataType: 'json',
+            contentType: 'application/json;charset=utf-8'
         });
+
+        // Populate form fields with company data
+        $('#btnSave').hide();
+        $('#btnUpdate').show();
+        $('#Name').val(data.name);
+        $('#Contactperson').val(data.contactperson);
+        $('#ContactPerNum').val(data.contactPerNum);
+        $('#ContactNumber').val(data.contactNumber);
+        $('#BIN').val(data.bin);
+        debugger
+        resetValidation()
+        // Show modal for editing
+        $('#modelCreate').modal('show');
+        // Update button click event handler
+        $('#btnUpdate').off('click').on('click', function () {
+            updateCompany(id);
+        });
+    } catch (error) {
+        console.log('Error:', error);
     }
 }
 
 
+async function updateCompany(id) {
+    if ($('#CompanyForm').valid()) {
+        const formData = $('#CompanyForm').serialize();
+        console.log(formData);
+        try {
+            const response = await $.ajax({
+                url: '/Company/Update/' + id,
+                type: 'put',
+                contentType: 'application/x-www-form-urlencoded',
+                data: formData
+            });
 
+            $('#modelCreate').modal('hide');
+            if (response === true) {
+                // Show success message
+                $('#successMessage').text('Your company was successfully updated.');
+                $('#successMessage').show();
+                // Reset the form
+                $('#CompanyForm')[0].reset();
+                // Update the company list
+                await GetCompanyList();
+            }
+        } catch (error) {
+            console.log('Error:', error);
+            // Show error message
+            $('#errorMessage').text('An error occurred while updating the company.');
+            $('#errorMessage').show();
+        }
+    }
+}
 
 // Details Company
-function showDetails(id) {
+async function showDetails(id) {
     $('#deleteAndDetailsModel').modal('show');
     // Fetch company details and populate modal
-    $.ajax({
-        url: '/Company/GetCompany', // Assuming this is the endpoint to fetch company details
-        type: 'GET',
-        data: { id: id },
-        success: function (response) {
-            console.log(response);
-            // Assuming response contains company details
-            populateCompanyDetails(response);
-        },
-        error: function (xhr, status, error) {
-            console.log(error);
-        }
-    });
+    try {
+        const response = await $.ajax({
+            url: '/Company/GetCompany', // Assuming this is the endpoint to fetch company details
+            type: 'GET',
+            data: { id: id }
+        });
+
+        console.log(response);
+        // Assuming response contains company details
+        populateCompanyDetails(response);
+    } catch (error) {
+        console.log(error);
+    }
 }
 
 function deleteCompany(id) {
@@ -348,6 +338,3 @@ function deleteCompany(id) {
         });
     });
 }
-
-
-

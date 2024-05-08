@@ -1,41 +1,36 @@
-﻿$(document).ready(function () {
-    GetCompanyList();
+﻿$(document).ready(async function () {
+    await GetCompanyList();
 });
 
-function GetCompanyList() {
-    $.ajax({
-        url: '/DeliveryAddress/GetDeliveryAddressList',
-        type: 'get',
-        dataType: 'json',
-        contentType: 'application/json;charset=utf-8',
-        success: function (data) {
-            if (data && data.data && data.data.length > 0) {
-                const companies = data.data;
-                companies.forEach(function (company) {
-                    console.log('company:', company);
-                    $.ajax({
+async function GetCompanyList() {
+    try {
+        const data = await $.ajax({
+            url: '/DeliveryAddress/GetDeliveryAddressList',
+            type: 'get',
+            dataType: 'json',
+            contentType: 'application/json;charset=utf-8'
+        });
+
+        if (data && data.data && data.data.length > 0) {
+            const companies = data.data;
+            for (const company of companies) {
+                try {
+                    const userData = await $.ajax({
                         url: '/User/GetallUser/' + company.userId,
                         type: 'get',
                         dataType: 'json',
                         contentType: 'application/json;charset=utf-8'
-                    }).then(function (userData) {
-                        console.log(userData.data);
-                        var users = userData.data;
-                        onSuccess(companies, users)
-                    }).catch(function (error) {
-                        console.log('Error fetching user details:', error);
-                    })
-                });
-                
+                    });
+                    onSuccess(companies, userData.data);
+                } catch (error) {
+                    console.log('Error fetching user details:', error);
+                }
             }
-        },
-        error: function (xhr, textStatus, errorThrown) {
-            console.log('Error:', errorThrown);
         }
-    });
+    } catch (error) {
+        console.log('Error:', error);
+    }
 }
-
-
 
 function onSuccess(companies, users) {
     if (companies.length > 0 && users.length > 0) {
@@ -81,13 +76,13 @@ function onSuccess(companies, users) {
                 {
                     data: null,
                     render: function (data, type, row, meta) {
-                        return row.fullName; 
+                        return row.fullName;
                     }
                 },
                 {
                     data: null,
                     render: function (data, type, row, meta) {
-                        return row.email; 
+                        return row.email;
                     }
                 },
                 {
@@ -126,6 +121,7 @@ function onSuccess(companies, users) {
         });
     }
 }
+
 
 
 //======================================================================
@@ -244,198 +240,172 @@ $('#modelCreate').on('keypress', 'input', handleEnterKey);
 
 //======================================================================
 // Submit button click event
-$('#btnSave').click(function () {
+$('#btnSave').click(async function () {
     console.log("Save");
     // Check if the form is valid
     if ($('#CompanyForm').valid()) {
         // Proceed with form submission
         var formData = $('#CompanyForm').serialize();
         console.log(formData);
-        $.ajax({
-            url: '/DeliveryAddress/Create',
-            type: 'post',
-            contentType: 'application/x-www-form-urlencoded',
-            data: formData,
-            success: function (response) {
-                $('#modelCreate').modal('hide');
-                if (response === true) {
-                    // Show success message
-                    $('#successMessage').text('Your Delivery Address was successfully saved.');
-                    $('#successMessage').show();
-                    GetCompanyList();
-                    $('#CompanyForm')[0].reset();
-                }
-            },
-            error: function (xhr, textStatus, errorThrown) {
-                console.log('Error:', errorThrown);
+        try {
+            var response = await $.ajax({
+                url: '/DeliveryAddress/Create',
+                type: 'post',
+                contentType: 'application/x-www-form-urlencoded',
+                data: formData
+            });
+
+            $('#modelCreate').modal('hide');
+            if (response === true) {
+                // Show success message
+                $('#successMessage').text('Your Delivery Address was successfully saved.');
+                $('#successMessage').show();
+                await GetCompanyList();
+                $('#CompanyForm')[0].reset();
             }
-        });
+        } catch (error) {
+            console.log('Error:', error);
+        }
     }
 });
 
+async function populateUserDropdown() {
+    try {
+        const data = await $.ajax({
+            url: '/User/GetallUser',
+            type: 'get',
+            dataType: 'json',
+            contentType: 'application/json;charset=utf-8'
+        });
 
-
-
-
-function populateUserDropdown() {
-    $.ajax({
-        url: '/User/GetallUser',
-        type: 'get',
-        dataType: 'json',
-        contentType: 'application/json;charset=utf-8',
-        success: function (data) {
-            // Clear existing options
-            $('#userDropdown').empty();
-            // Add default option
-            $('#userDropdown').append('<option value="">Select User</option>');
-            // Add user options
-            console.log(data.data);
-            $.each(data.data, function (index, user) {
-                $('#userDropdown').append('<option value="' + user.id + '">' + user.userName + '</option>');
-            });
-        },
-        error: function (xhr, status, error) {
-            console.error(xhr.responseText);
-            // Handle error
-        }
-    });
+        // Clear existing options
+        $('#userDropdown').empty();
+        // Add default option
+        $('#userDropdown').append('<option value="">Select User</option>');
+        // Add user options
+        console.log(data.data);
+        $.each(data.data, function (index, user) {
+            $('#userDropdown').append('<option value="' + user.id + '">' + user.userName + '</option>');
+        });
+    } catch (error) {
+        console.error(error);
+        // Handle error
+    }
 }
 
 // Call the function to populate the dropdown when the page loads
-
+populateUserDropdown();
 
 // Optionally, you can refresh the user list on some event, like a button click
 $('#refreshButton').click(function () {
     populateUserDropdown();
 });
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // Edit Company
-function editCompany(id) {
+async function editCompany(id) {
     console.log("Edit company with id:", id);
-    populateUserDropdown();
+    await populateUserDropdown();
     // Reset form validation
     debugger
 
-    $.ajax({
-        url: '/DeliveryAddress/GetById/' + id,
-        type: 'get',
-        dataType: 'json',
-        contentType: 'application/json;charset=utf-8',
-        success: function (data) {
-            // Populate form fields with company data
-            $('#btnSave').hide();
-            $('#btnUpdate').show();
-            $('#userDropdown').val(data.userId);
-            $('#address').val(data.address);
-            $('#phone').val(data.phone);
-            $('#mobile').val(data.mobile);
-
-            debugger
-            resetValidation()
-            // Show modal for editing
-            $('#modelCreate').modal('show');
-            // Update button click event handler
-            $('#btnUpdate').off('click').on('click', function () {
-                updateCompany(id);
-            });
-        },
-        error: function (xhr, textStatus, errorThrown) {
-            console.log('Error:', errorThrown);
-        }
-    });
-}
-
-
-function updateCompany(id) {
-
-    if ($('#CompanyForm').valid()) {
-        const formData = $('#CompanyForm').serialize();
-        console.log(formData);
-        $.ajax({
-            url: '/DeliveryAddress/Update/' + id,
-            type: 'put',
-            contentType: 'application/x-www-form-urlencoded',
-            data: formData,
-            success: function (response) {
-                $('#modelCreate').modal('hide');
-                if (response === true) {
-                    // Show success message
-                    $('#successMessage').text('Your Delivery Address was successfully updated.');
-                    $('#successMessage').show();
-                    // Reset the form
-                    $('#CompanyForm')[0].reset();
-                    // Update the company list
-                    GetCompanyList();
-                }
-            },
-            error: function (xhr, textStatus, errorThrown) {
-                console.log('Error:', errorThrown);
-                // Show error message
-                $('#errorMessage').text('An error occurred while updating the company.');
-                $('#errorMessage').show();
-            }
+    try {
+        const data = await $.ajax({
+            url: '/DeliveryAddress/GetById/' + id,
+            type: 'get',
+            dataType: 'json',
+            contentType: 'application/json;charset=utf-8'
         });
+
+        // Populate form fields with company data
+        $('#btnSave').hide();
+        $('#btnUpdate').show();
+        $('#userDropdown').val(data.userId);
+        $('#address').val(data.address);
+        $('#phone').val(data.phone);
+        $('#mobile').val(data.mobile);
+
+        debugger
+        resetValidation()
+        // Show modal for editing
+        $('#modelCreate').modal('show');
+        // Update button click event handler
+        $('#btnUpdate').off('click').on('click', function () {
+            updateCompany(id);
+        });
+    } catch (error) {
+        console.log('Error:', error);
     }
 }
 
+async function updateCompany(id) {
+    if ($('#CompanyForm').valid()) {
+        const formData = $('#CompanyForm').serialize();
+        console.log(formData);
+        try {
+            var response = await $.ajax({
+                url: '/DeliveryAddress/Update/' + id,
+                type: 'put',
+                contentType: 'application/x-www-form-urlencoded',
+                data: formData
+            });
 
-
+            $('#modelCreate').modal('hide');
+            if (response === true) {
+                // Show success message
+                $('#successMessage').text('Your Delivery Address was successfully updated.');
+                $('#successMessage').show();
+                // Reset the form
+                $('#CompanyForm')[0].reset();
+                // Update the company list
+                await GetCompanyList();
+            }
+        } catch (error) {
+            console.log('Error:', error);
+            // Show error message
+            $('#errorMessage').text('An error occurred while updating the company.');
+            $('#errorMessage').show();
+        }
+    }
+}
 
 // Details Company
-function showDetails(id) {
+async function showDetails(id) {
     $('#deleteAndDetailsModel').modal('show');
     // Fetch company details and populate modal
-    $.ajax({
-        url: '/Company/GetCompany', // Assuming this is the endpoint to fetch company details
-        type: 'GET',
-        data: { id: id },
-        success: function (response) {
-            console.log(response);
-            // Assuming response contains company details
-            populateCompanyDetails(response);
-        },
-        error: function (xhr, status, error) {
+    try {
+        const response = await $.ajax({
+            url: '/Company/GetCompany',
+            type: 'GET',
+            data: { id: id }
+        });
+
+        console.log(response);
+        // Assuming response contains company details
+        populateCompanyDetails(response);
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+async function deleteCompany(id) {
+    $('#deleteAndDetailsModel').modal('show');
+
+    $('#companyDetails').empty();
+    $('#btnDelete').click(async function () {
+        try {
+            const response = await $.ajax({
+                url: '/DeliveryAddress/Delete',
+                type: 'POST',
+                data: { id: id }
+            });
+
+            $('#deleteAndDetailsModel').modal('hide');
+            await GetCompanyList();
+        } catch (error) {
             console.log(error);
+            $('#deleteAndDetailsModel').modal('hide');
         }
     });
 }
 
-function deleteCompany(id) {
-    $('#deleteAndDetailsModel').modal('show');
 
-    $('#companyDetails').empty();
-    $('#btnDelete').click(function () {
-        $.ajax({
-            url: '/DeliveryAddress/Delete',
-            type: 'POST',
-            data: { id: id },
-            success: function (response) {
-                $('#deleteAndDetailsModel').modal('hide');
-                GetCompanyList();
-            },
-            error: function (xhr, status, error) {
-                console.log(error);
-                $('#deleteAndDetailsModel').modal('hide');
-            }
-        });
-    });
-}
