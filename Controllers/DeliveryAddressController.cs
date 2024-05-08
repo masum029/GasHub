@@ -13,58 +13,42 @@ namespace GasHub.Controllers
         {
             _unitOfWorkClientServices = unitOfWorkClientServices;
         }
-
-        [HttpGet]
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            var deliveryAddress = await _unitOfWorkClientServices.deliveryAddressClientServices.GetAllAsync("User/GetAllUserDetails");
-            return View(deliveryAddress);
+            return View();
         }
         [HttpGet]
-        public async Task<IActionResult> Create()
+        public async Task<IActionResult> GetDeliveryAddressList()
         {
-            var users = await _unitOfWorkClientServices.userClientServices.GetAllAsync("User/GetAllUserDetails");
-            var deliveryAddressViewModel = new DeliveryAddressViewModel(users);
-            return View(deliveryAddressViewModel);
+            var DeliveryAddress = await _unitOfWorkClientServices.deliveryAddressClientServices.GetAllAsync("DeliveryAddress/getAllDeliveryAddress");
+            return Json(new { data = DeliveryAddress });
         }
         [HttpPost]
-        public async Task<IActionResult> Create(DeliveryAddressViewModel model)
+        public async Task<IActionResult> Create(DeliveryAddress model)
         {
-            bool result = await _unitOfWorkClientServices.deliveryAddressClientServices.AddAsync(model.DeliveryAddress, "DeliveryAddress/CreateDeliveryAddress");
-            return result ? RedirectToAction("Index") : RedirectToAction("Error");
+            model.CreatedBy = "";
+            var result = await _unitOfWorkClientServices.deliveryAddressClientServices.AddAsync(model, "DeliveryAddress/CreateDeliveryAddress");
+            return Json(result);
         }
         [HttpGet]
-        public async Task<IActionResult> Details(Guid id)
-        {
-            var result = await _unitOfWorkClientServices.deliveryAddressClientServices.GetByIdAsync(id, "DeliveryAddress/getDeliveryAddress");
-            return View(result);
-        }
-        [HttpGet]
-        public async Task<IActionResult> Edit(Guid id)
-        {
-            var users = await _unitOfWorkClientServices.userClientServices.GetAllAsync("User/getAllUser");
-            var deliveryAddress = await _unitOfWorkClientServices.deliveryAddressClientServices.GetByIdAsync(id, "DeliveryAddress/getDeliveryAddress");
-            var deliveryAddressViewModel = new DeliveryAddressViewModel(users);
-            deliveryAddressViewModel.DeliveryAddress = deliveryAddress;
-            return View(deliveryAddressViewModel);
-        }
-        [HttpPost]
-        public async Task<IActionResult> Edit(Guid id, DeliveryAddressViewModel model)
-        {
-            await _unitOfWorkClientServices.deliveryAddressClientServices.UpdateAsync(id, model.DeliveryAddress, "DeliveryAddress/UpdateDeliveryAddress");
-            return RedirectToAction("Index");
-        }
-        [HttpGet]
-        public async Task<IActionResult> Delete(Guid id)
+        public async Task<IActionResult> GetById(Guid id)
         {
             var customer = await _unitOfWorkClientServices.deliveryAddressClientServices.GetByIdAsync(id, "DeliveryAddress/getDeliveryAddress");
-            return View(customer);
+            return Json(customer);
         }
-        [HttpPost, ActionName("Delete")]
-        public async Task<IActionResult> DeleteSuccessfull(Guid id)
+        [HttpPut]
+        public async Task<IActionResult> Update(Guid id, DeliveryAddress model)
         {
-            await _unitOfWorkClientServices.deliveryAddressClientServices.DeleteAsync(id, "DeliveryAddress/DeleteDeliveryAddress");
-            return RedirectToAction("Index");
+            model.UpdatedBy = "User";
+            var result = await _unitOfWorkClientServices.deliveryAddressClientServices.UpdateAsync(id, model, "DeliveryAddress/UpdateDeliveryAddress");
+            return Json(result);
         }
+        [HttpPost]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            var deleted = await _unitOfWorkClientServices.deliveryAddressClientServices.DeleteAsync(id, "DeliveryAddress/DeleteDeliveryAddress");
+            return Json(deleted);
+        }
+
     }
 }

@@ -35,7 +35,7 @@ namespace GasHub.Controllers
             var customer = await _unitOfWorkClientServices.companyClientServices.GetByIdAsync(id, "Company/getCompany");
             return Json(customer);
         }
-        [HttpPost]
+        [HttpPut]
         public async Task<IActionResult> Update(Guid id, Company company)
         {
             var result = await _unitOfWorkClientServices.companyClientServices.UpdateAsync(id, company, "Company/UpdateCompany");

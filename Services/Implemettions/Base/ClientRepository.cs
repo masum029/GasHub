@@ -86,7 +86,7 @@ namespace GasHub.Services.Implemettions.Base
         }
 
         public async Task<bool> UpdateAsync(Guid id, T model, string EndPoint)
-        {
+       {
             var httpClient = _httpClientFactory.CreateClient("GasHubClient");
             var json = JsonConvert.SerializeObject(model);
             var content = new StringContent(json, Encoding.UTF8, "application/json");

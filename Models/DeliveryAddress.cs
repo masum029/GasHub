@@ -15,7 +15,6 @@ namespace GasHub.Models
         public DateTime? DeactivatedDate { get; set; }
         public string? DeactiveBy { get; set; }
         public bool? IsDefault { get; set; }
-        // Navigation property
-        public virtual User User { get; set; }
+
     }
 }
