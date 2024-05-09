@@ -19,9 +19,9 @@ namespace GasHub.Controllers
             return View(result);
         }
         [HttpGet]
-        public async Task<IActionResult> GetallUser(Guid id)
+        public async Task<IActionResult> GetallUser()
         {
-            var users = await _unitOfWorkClientServices.userClientServices.GetAllAsync("User/GetAll");
+            var users = await _unitOfWorkClientServices.userClientServices.GetAllAsync("User/GetAllUserDetails");
             return Json(new { data = users });
         }
         [HttpGet]

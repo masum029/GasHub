@@ -20,6 +20,12 @@ namespace GasHub.Controllers
             return View(result);
         }
         [HttpGet]
+        public async Task<IActionResult> GetAllProduct()
+        {
+            var products = await _unitOfWorkClientServices.productClientServices.GetAllAsync("Product/getAllProduct");
+            return Json(new { data = products });
+        }
+        [HttpGet]
         public async Task<IActionResult> Create()
         {
             var companys = await _unitOfWorkClientServices.companyClientServices.GetAllAsync("Company/getAllCompany");

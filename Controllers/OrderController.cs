@@ -13,59 +13,41 @@ namespace GasHub.Controllers
         {
             _unitOfWorkClientServices = unitOfWorkClientServices;
         }
-        [HttpGet]
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            var result = await _unitOfWorkClientServices.orderClientServices.GetAllAsync("Order/getAllOrder");
-            return View(result);
+            return View();
         }
         [HttpGet]
-        public async Task<IActionResult> Create()
+        public async Task<IActionResult> GetOrderList()
         {
-            var users = await _unitOfWorkClientServices.userClientServices.GetAllAsync("User/getAllUser");
-            var products = await _unitOfWorkClientServices.productClientServices.GetAllAsync("Product/getAllProduct");
-            var orderView = new OrderViewModel(users,products);
-            return View(orderView);
+            var orders = await _unitOfWorkClientServices.orderClientServices.GetAllAsync("Order/getAllOrder");
+            return Json(new { data = orders });
         }
         [HttpPost]
-        public async Task<IActionResult> Create(OrderViewModel model)
+        public async Task<IActionResult> Create(Order model)
         {
-            bool result = await _unitOfWorkClientServices.orderClientServices.AddAsync(model.Order, "Order/CreateOrder");
-            return result ? RedirectToAction("Index") : View(default);
+            model.CreatedBy = "mamun";
+            var orders = await _unitOfWorkClientServices.orderClientServices.AddAsync(model, "Order/CreateOrder");
+            return Json(orders);
         }
         [HttpGet]
-        public async Task<IActionResult> Details(Guid id)
-        {
-            var result = await _unitOfWorkClientServices.orderClientServices.GetByIdAsync(id, "Order/getOrder");
-            return View(result);
-        }
-        [HttpGet]
-        public async Task<IActionResult> Edit(Guid id)
+        public async Task<IActionResult> GetById(Guid id)
         {
             var order = await _unitOfWorkClientServices.orderClientServices.GetByIdAsync(id, "Order/getOrder");
-            var users = await _unitOfWorkClientServices.userClientServices.GetAllAsync("User/getAllUser");
-            var products = await _unitOfWorkClientServices.productClientServices.GetAllAsync("Product/getAllProduct");
-            var orderView = new OrderViewModel(users, products);
-            orderView.Order = order;
-            return View(orderView);
+            return Json(order);
+        }
+        [HttpPut]
+        public async Task<IActionResult> Update(Guid id, Order model)
+        {
+            model.UpdatedBy = "mamun";
+            var order = await _unitOfWorkClientServices.orderClientServices.UpdateAsync(id, model, "Order/UpdateOrder");
+            return Json(order);
         }
         [HttpPost]
-        public async Task<IActionResult> Edit(Guid id, OrderViewModel model)
-        {
-            await _unitOfWorkClientServices.orderClientServices.UpdateAsync(id, model.Order, "Order/UpdateOrder");
-            return RedirectToAction("Index");
-        }
-        [HttpGet]
         public async Task<IActionResult> Delete(Guid id)
         {
-            var result = await _unitOfWorkClientServices.orderClientServices.GetByIdAsync(id, "Order/getOrder");
-            return View(result);
-        }
-        [HttpPost, ActionName("Delete")]
-        public async Task<IActionResult> DeleteSuccessfull(Guid id)
-        {
-            await _unitOfWorkClientServices.orderClientServices.DeleteAsync(id, "Order/DeleteOrder");
-            return RedirectToAction("Index");
+            var deleted = await _unitOfWorkClientServices.orderClientServices.DeleteAsync(id, "Order/DeleteOrder");
+            return Json(deleted);
         }
     }
 }
