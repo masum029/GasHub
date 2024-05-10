@@ -12,11 +12,9 @@ namespace GasHub.Controllers
         {
             _unitOfWorkClientServices = unitOfWorkClientServices;
         }
-        [HttpGet]
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            var result = await _unitOfWorkClientServices.productSizeClientServices.GetAllAsync("ProductSize/getAllProductSize");
-            return View(result);
+            return View();
         }
         [HttpGet]
         public async Task<IActionResult> GetallProductSize()
@@ -24,46 +22,31 @@ namespace GasHub.Controllers
             var productSize = await _unitOfWorkClientServices.productSizeClientServices.GetAllAsync("ProductSize/getAllProductSize");
             return Json(new { data = productSize });
         }
-        [HttpGet]
-        public IActionResult Create()
-        {
-            return View();
-        }
         [HttpPost]
         public async Task<IActionResult> Create(ProductSize model)
         {
-            bool result = await _unitOfWorkClientServices.productSizeClientServices.AddAsync(model, "ProductSize/CreateProductSize");
-            return result ? RedirectToAction("Index") : View(default);
+            model.CreatedBy = "mamun";
+            var productSize = await _unitOfWorkClientServices.productSizeClientServices.AddAsync(model, "ProductSize/CreateProductSize");
+            return Json(productSize);
         }
         [HttpGet]
-        public async Task<IActionResult> Details(Guid id)
+        public async Task<IActionResult> GetById(Guid id)
         {
-            var result = await _unitOfWorkClientServices.productSizeClientServices.GetByIdAsync(id, "ProductSize/getProductSize");
-            return View(result);
+            var productSize = await _unitOfWorkClientServices.productSizeClientServices.GetByIdAsync(id, "ProductSize/getProductSize");
+            return Json(productSize);
         }
-        [HttpGet]
-        public async Task<IActionResult> Edit(Guid id)
+        [HttpPut]
+        public async Task<IActionResult> Update(Guid id, ProductSize model)
         {
-            var result = await _unitOfWorkClientServices.productSizeClientServices.GetByIdAsync(id, "ProductSize/getProductSize");
-            return View(result);
+            model.UpdatedBy = "mamun";
+            var productSize = await _unitOfWorkClientServices.productSizeClientServices.UpdateAsync(id, model, "ProductSize/UpdateProductSize");
+            return Json(productSize);
         }
         [HttpPost]
-        public async Task<IActionResult> Edit(Guid id, ProductSize model)
-        {
-            await _unitOfWorkClientServices.productSizeClientServices.UpdateAsync(id, model, "ProductSize/UpdateProductSize");
-            return RedirectToAction("Index");
-        }
-        [HttpGet]
         public async Task<IActionResult> Delete(Guid id)
         {
-            var result = await _unitOfWorkClientServices.productSizeClientServices.GetByIdAsync(id, "ProductSize/getProductSize");
-            return View(result);
-        }
-        [HttpPost, ActionName("Delete")]
-        public async Task<IActionResult> DeleteSuccessfull(Guid id)
-        {
-            await _unitOfWorkClientServices.productSizeClientServices.DeleteAsync(id, "ProductSize/DeleteProductSize");
-            return RedirectToAction("Index");
+            var deleted = await _unitOfWorkClientServices.productSizeClientServices.DeleteAsync(id, "ProductSize/DeleteProductSize");
+            return Json(deleted);
         }
     }
 }
