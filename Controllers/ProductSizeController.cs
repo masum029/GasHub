@@ -19,6 +19,12 @@ namespace GasHub.Controllers
             return View(result);
         }
         [HttpGet]
+        public async Task<IActionResult> GetallProductSize()
+        {
+            var productSize = await _unitOfWorkClientServices.productSizeClientServices.GetAllAsync("ProductSize/getAllProductSize");
+            return Json(new { data = productSize });
+        }
+        [HttpGet]
         public IActionResult Create()
         {
             return View();

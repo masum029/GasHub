@@ -13,6 +13,12 @@ namespace GasHub.Controllers
             _unitOfWorkClientServices = unitOfWorkClientServices;
         }
         [HttpGet]
+        public async Task<IActionResult> GetallValve()
+        {
+            var Valve = await _unitOfWorkClientServices.valveClientServices.GetAllAsync("Valve/getAllValve");
+            return Json(new { data = Valve });
+        }
+        [HttpGet]
         public async Task<IActionResult> Index()
         {
             var result = await _unitOfWorkClientServices.valveClientServices.GetAllAsync("Valve/getAllValve");
