@@ -1,4 +1,4 @@
-﻿@model IEnumerable<GasHub.Models.Product>
+﻿@model GasHub.Models.Product
 
 @{
     ViewData["Title"] = "Index";
@@ -19,86 +19,37 @@
         </div>
     </div><!-- /.container-fluid -->
 </section>
+
+
+
 <section class="content">
     <div class="container-fluid">
         <div class="row">
             <div class="col-12">
-
                 <!-- /.card -->
                 <div class="card">
                     <div class="card-header">
                         <h3 class="card-title font-weight-bold fs-1 color-primary">Product List</h3>
                     </div>
+                    <div id="successMessage" class="alert alert-success" role="alert" style="display: none;">
+                        <strong>Holy guacamole!</strong>   Your company was successfully saved.
+                        <button id="btnClose" type="button" class="btn-close" aria-label="Close"></button>
+                    </div>
+
                     <!-- /.card-header -->
+
                     <div class="card-body">
-                        <table id="example3" class="table table-bordered table-striped">
-                            <p> <a asp-action="Create" class="btn btn-success"> <i class="fa fa-plus"></i> Create New Product</a> </p>
+                        <table id="CompanyTable" class="table table-bordered table-striped">
+                            <p> <a id="btn-Create" class="btn btn-success"> <i class="fa fa-plus"></i> Create New Product</a> </p>
                             <thead>
                                 <tr>
-                                   
-                                    <th>
-                                        @Html.DisplayNameFor(model => model.Name)
-                                    </th>
-                                    
-                                    <th>
-                                        @Html.DisplayNameFor(model => model.ProdImage)
-                                    </th>
-                                    <th>
-                                        @Html.DisplayNameFor(model => model.IsActive)
-                                    </th>
-                                    
-                                    <th>
-                                        @Html.DisplayNameFor(model => model.CreationDate)
-                                    </th>
-                                    <th>
-                                        @Html.DisplayNameFor(model => model.UpdateDate)
-                                    </th>
-                                    <th>
-                                        @Html.DisplayNameFor(model => model.CreatedBy)
-                                    </th>
-                                    <th>
-                                        @Html.DisplayNameFor(model => model.UpdatedBy)
-                                    </th>
+                                    <th>Product Name</th>
+                                    <th>Company Name</th>
+                                    <th>Product Size</th>
+                                    <th>Product Unit</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                @foreach (var item in Model)
-                                {
-                                    <tr>
-                                        
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.Name)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.ProdImage)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.IsActive)
-                                        </td>
-                                        
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.CreationDate)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.UpdateDate)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.CreatedBy)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.UpdatedBy)
-                                        </td>
-                                        <td>
-                                            @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { @class = "btn btn-sm btn-primary" })
-                                            @Html.ActionLink("Details", "Details", new { id = item.Id }, new { @class = "btn btn-sm btn-info" })
-                                            @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { @class = "btn btn-sm btn-danger" })
-                                        </td>
-
-                                    </tr>
-                                }
-
-                            </tbody>
 
                         </table>
                     </div>
@@ -113,4 +64,117 @@
     </div>
     <!-- /.container-fluid -->
 </section>
+
+
+
+<div class="modal  fade " id="modelCreate" tabindex="-1" role="dialog" aria-labelledby="myModalLabelAddEmployee" aria-hidden="true">
+    <div class="modal-dialog modal-xl ">
+        <div class="modal-content w-auto">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabelAddEmployee">Add Company</h4>
+                <h4 class="modal-title" style="display:none;" id="myModalLabelUpdateEmployee">Update Company</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="CompanyForm">
+                    <div class="card-body">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="row">
+                                     <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label asp-for="Name" class="control-label"></label>
+                                            <input asp-for="Name" class="form-control" name="Name" />
+                                            <span asp-validation-for="Name" class="text-danger"></span>
+                                        </div>
+                                        <div class="form-group">
+                                            <label asp-for="ProdImage" class="control-label"></label>
+                                            <input asp-for="ProdImage" class="form-control" name="ProdImage" />
+                                            <span asp-validation-for="ProdImage" class="text-danger"></span>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label asp-for="CompanyId"></label>
+                                            <select class="form-control" asp-for="CompanyId" id="companyDropdown">
+                                                <option value="">Select Product</option>
+                                            </select>
+                                        </div>
+
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label asp-for="ProdValveId"></label>
+                                            <select class="form-control" asp-for="ProdValveId" id="prodValveDropdown">
+                                                <option value="">Select Product</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label asp-for="ProdSizeId"></label>
+                                            <select class="form-control" asp-for="ProdSizeId" id="prodSizeDropdown">
+                                                <option value="">Select Return Product</option>
+                                            </select>
+                                        </div>
+
+                                    </div> 
+                                </div>
+                            </div>
+                            @* <div class="col-md-6">
+                            <div class="row">
+                            <div class="col-md-6">
+
+
+                            </div>
+                            <div class="col-md-6">
+
+                            </div>
+                            </div>
+                            </div> *@
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="btnSave">Save</button>
+                <button type="button" class="btn btn-primary" id="btnUpdate">Update</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteAndDetailsModel" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                Are you sure you want to delete the following Company ?
+            </div>
+
+            <div class="modal-body" id="companyDetails">
+                <!-- Company details will be populated dynamically by jQuery -->
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" id="btnDelete">Delete</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script src="~/js/inventory/product/product.js"></script>
+}
+
+
 
