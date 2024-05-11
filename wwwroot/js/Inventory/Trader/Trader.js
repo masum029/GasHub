@@ -1,33 +1,62 @@
 ﻿$(document).ready(async function () {
-    await GetCompanyList();
+    await GetTraderList();
 });
 
-async function GetCompanyList() {
-    debugger
+async function GetTraderList() {
     try {
-        const data = await $.ajax({
+        const traders = await $.ajax({
+            url: '/Trader/GetallTrader',
+            type: 'get',
+            dataType: 'json',
+            contentType: 'application/json;charset=utf-8'
+        });
+        const companys = await $.ajax({
             url: '/Company/GetCompanyList',
             type: 'get',
             dataType: 'json',
             contentType: 'application/json;charset=utf-8'
         });
-
-        if (data && data.data && data.data.length > 0) {
-            const companies = data.data;
-            console.log('companies:', companies);
-            onSuccess(companies);
+        if (traders && traders.data ) {
+            onSuccess(traders.data, companys.data);
         }
     } catch (error) {
         console.log('Error:', error);
     }
 }
 
-function onSuccess(companies) {
-    if (companies.length > 0) {
+
+function onSuccess(traders, companys) {
+    debugger
+    if (traders && companys) {
         if ($.fn.DataTable.isDataTable('#CompanyTable')) {
             // If initialized, destroy the DataTable first
             $('#CompanyTable').DataTable().destroy();
         }
+
+        // Convert users array to a map for easy lookup
+        var companysMap = {};
+        companys.forEach(function (company) {
+            companysMap[company.id] = company;
+        });
+
+        // Merge company and user data
+        var mergedData = traders.map(function (trader) {
+            var company = companysMap[trader.companyId];
+            console.log('company:', company);
+            console.log('trader:', trader);
+            if (trader) {
+                return {
+                    id: trader.id,
+                    companyName: company.name,
+                    traderName: trader.name,
+                    phone: trader.contactNumber,
+                    contactParsonName: trader.contactperson,
+                    contactParsoneNumber: trader.contactPerNum,
+                };
+            }
+            return null; // Skip if user not found
+        }).filter(Boolean); // Remove null entries
+        console.log('onSuccess:', mergedData);
         $('#CompanyTable').dataTable({
             processing: true,
             lengthChange: true,
@@ -35,50 +64,44 @@ function onSuccess(companies) {
             searching: true,
             ordering: true,
             paging: true,
-            data: companies,
+            data: mergedData,
             columns: [
                 {
-                    data: 'Name',
+                    data: 'companyName',
                     render: function (data, type, row, meta) {
-                        return row.name;
+                        return data;
                     }
                 },
                 {
-                    data: 'Contactperson',
+                    data: 'traderName',
                     render: function (data, type, row, meta) {
-                        return row.contactperson;
+                        return data;
                     }
                 },
                 {
-                    data: 'ContactPerNum',
+                    data: 'phone',
                     render: function (data, type, row, meta) {
-                        return row.contactPerNum;
+                        return data;
                     }
                 },
                 {
-                    data: 'ContactNumber',
+                    data: 'contactParsonName',
                     render: function (data, type, row, meta) {
-                        return row.contactNumber;
+                        return data;
                     }
                 },
                 {
-                    data: 'IsActive',
+                    data: 'contactParsoneNumber',
                     render: function (data, type, row, meta) {
-                        return row.isActive ? '<button class="btn btn-sm btn-primary rounded-pill">Yes</button>' : '<button class="btn btn-sm btn-danger rounded-pill">No</button>';
+                        return data;
                     }
                 },
                 {
-                    data: 'BIN',
-                    render: function (data, type, row, meta) {
-                        return row.bin;
-                    }
-                },
-                {
-                    data: null,
-                    render: function (data, type, row, meta) {
-                        return '<button class="btn btn-primary btn-sm ms-1" onclick="editCompany(\'' + row.id + '\')">Edit</button>' + ' ' +
-                            '<button class="btn btn-info btn-sm ms-1" onclick="showDetails(\'' + row.id + '\')">Details</button>' + ' ' +
-                            '<button class="btn btn-danger btn-sm ms-1" onclick="deleteCompany(\'' + row.id + '\')">Delete</button>';
+                    data: 'id',
+                    render: function (data) {
+                        return '<button class="btn btn-primary btn-sm ms-1" onclick="editCompany(\'' + data + '\')">Edit</button>' + ' ' +
+                            '<button class="btn btn-info btn-sm ms-1" onclick="showDetails(\'' + data + '\')">Details</button>' + ' ' +
+                            '<button class="btn btn-danger btn-sm ms-1" onclick="deleteCompany(\'' + data + '\')">Delete</button>';
                     }
                 }
             ]
@@ -86,16 +109,31 @@ function onSuccess(companies) {
     }
 }
 
+
+
+//======================================================================
+
+
+
 // Initialize validation
 const companyForm = $('#CompanyForm').validate({
     onkeyup: function (element) {
         $(element).valid();
     },
     rules: {
+        CompanyId: {
+            required: true,
+        },
         Name: {
             required: true,
             minlength: 2,
             maxlength: 50
+        },
+        ContactNumber: {
+            required: true,
+            digits: true,
+            minlength: 11,
+            maxlength: 11
         },
         Contactperson: {
             required: true,
@@ -107,43 +145,34 @@ const companyForm = $('#CompanyForm').validate({
             digits: true,
             minlength: 11,
             maxlength: 11
-        },
-        ContactNumber: {
-            required: true,
-            digits: true,
-            minlength: 11,
-            maxlength: 11
-        },
-        BIN: {
-            required: true
         }
     },
     messages: {
+        CompanyId: {
+            required: " User Name is required.",
+        },
         Name: {
-            required: "Name is required.",
-            minlength: "Name must be between 2 and 50 characters.",
-            maxlength: "Name must be between 2 and 50 characters."
-        },
-        Contactperson: {
-            required: "Contact Person is required.",
-            minlength: "Contact Person must be between 2 and 50 characters.",
-            maxlength: "Contact Person must be between 2 and 50 characters."
-        },
-        ContactPerNum: {
-            required: "Contact Person Number is required.",
-            digits: "Contact Person Number must contain only digits.",
-            minlength: "Contact Person Number must be exactly 11 digits.",
-            maxlength: "Contact Person Number must be exactly 11 digits."
+            required: "Address is required.",
+            minlength: "Address must be between 2 and 50 characters.",
+            maxlength: "Address must be between 2 and 50 characters."
         },
         ContactNumber: {
-            required: "Contact Number is required.",
-            digits: "Contact Number must contain only digits.",
-            minlength: "Contact Number must be exactly 11 digits.",
-            maxlength: "Contact Number must be exactly 11 digits."
+            required: "Phone Number is required.",
+            digits: "Phone Number must contain only digits.",
+            minlength: "Phone Number must be exactly 11 digits.",
+            maxlength: "Phone Number must be exactly 11 digits."
         },
-        BIN: {
-            required: "BIN is required."
-        }
+        ContactPerNum: {
+            required: "Mobile is required.",
+            digits: "Mobile must contain only digits.",
+            minlength: "Mobile must be exactly 11 digits.",
+            maxlength: "Mobile must be exactly 11 digits."
+        },
+        Contactperson: {
+            required: "Address is required.",
+            minlength: "Address must be between 2 and 50 characters.",
+            maxlength: "Address must be between 2 and 50 characters."
+        },
     },
     errorElement: 'div',
     errorPlacement: function (error, element) {
@@ -177,6 +206,7 @@ $('#btn-Create').click(function () {
     $('#modelCreate').modal('show');
     $('#btnSave').show();
     $('#btnUpdate').hide();
+    populateCompanyDropdown();
 });
 
 
@@ -202,15 +232,19 @@ $('#modelCreate').on('shown.bs.modal', function () {
 // Listen for Enter key press on input fields
 $('#modelCreate').on('keypress', 'input', handleEnterKey);
 
+//======================================================================
 // Submit button click event
 $('#btnSave').click(async function () {
+    debugger
+    console.log("Save");
     // Check if the form is valid
     if ($('#CompanyForm').valid()) {
         // Proceed with form submission
         var formData = $('#CompanyForm').serialize();
+        console.log(formData);
         try {
-            const response = await $.ajax({
-                url: '/Company/Create',
+            var response = await $.ajax({
+                url: '/Trader/Create',
                 type: 'post',
                 contentType: 'application/x-www-form-urlencoded',
                 data: formData
@@ -219,9 +253,9 @@ $('#btnSave').click(async function () {
             $('#modelCreate').modal('hide');
             if (response === true) {
                 // Show success message
-                $('#successMessage').text('Your company was successfully saved.');
+                $('#successMessage').text('Your Delivery Address was successfully saved.');
                 $('#successMessage').show();
-                await GetCompanyList();
+                await GetTraderList()
                 $('#CompanyForm')[0].reset();
             }
         } catch (error) {
@@ -230,16 +264,41 @@ $('#btnSave').click(async function () {
     }
 });
 
+async function populateCompanyDropdown() {
+    try {
+        const data = await $.ajax({
+            url: '/Company/GetCompanyList',
+            type: 'get',
+            dataType: 'json',
+            contentType: 'application/json;charset=utf-8'
+        });
+
+        // Clear existing options
+        $('#companyDropdown').empty();
+        // Add default option
+        $('#companyDropdown').append('<option value="">Select User</option>');
+        // Add user options
+        console.log(data.data);
+        $.each(data.data, function (index, company) {
+            $('#companyDropdown').append('<option value="' + company.id + '">' + company.name + '</option>');
+        });
+    } catch (error) {
+        console.error(error);
+        // Handle error
+    }
+}
+
+
 // Edit Company
 async function editCompany(id) {
     console.log("Edit company with id:", id);
-
+    await populateCompanyDropdown();
     // Reset form validation
     debugger
 
     try {
         const data = await $.ajax({
-            url: '/Company/GetCompany/' + id,
+            url: '/Trader/GetById/' + id,
             type: 'get',
             dataType: 'json',
             contentType: 'application/json;charset=utf-8'
@@ -248,11 +307,13 @@ async function editCompany(id) {
         // Populate form fields with company data
         $('#btnSave').hide();
         $('#btnUpdate').show();
+        $('#companyDropdown').val(data.companyId);
         $('#Name').val(data.name);
+        $('#ContactNumber').val(data.contactNumber);
         $('#Contactperson').val(data.contactperson);
         $('#ContactPerNum').val(data.contactPerNum);
-        $('#ContactNumber').val(data.contactNumber);
-        $('#BIN').val(data.bin);
+
+
         debugger
         resetValidation()
         // Show modal for editing
@@ -266,14 +327,13 @@ async function editCompany(id) {
     }
 }
 
-
 async function updateCompany(id) {
     if ($('#CompanyForm').valid()) {
         const formData = $('#CompanyForm').serialize();
         console.log(formData);
         try {
-            const response = await $.ajax({
-                url: '/Company/Update/' + id,
+            var response = await $.ajax({
+                url: '/Trader/Update/' + id,
                 type: 'put',
                 contentType: 'application/x-www-form-urlencoded',
                 data: formData
@@ -282,12 +342,12 @@ async function updateCompany(id) {
             $('#modelCreate').modal('hide');
             if (response === true) {
                 // Show success message
-                $('#successMessage').text('Your company was successfully updated.');
+                $('#successMessage').text('Your Delivery Address was successfully updated.');
                 $('#successMessage').show();
                 // Reset the form
                 $('#CompanyForm')[0].reset();
                 // Update the company list
-                await GetCompanyList();
+                await GetTraderList();
             }
         } catch (error) {
             console.log('Error:', error);
@@ -304,7 +364,7 @@ async function showDetails(id) {
     // Fetch company details and populate modal
     try {
         const response = await $.ajax({
-            url: '/Company/GetCompany', // Assuming this is the endpoint to fetch company details
+            url: '/Company/GetCompany',
             type: 'GET',
             data: { id: id }
         });
@@ -317,23 +377,25 @@ async function showDetails(id) {
     }
 }
 
-function deleteCompany(id) {
+async function deleteCompany(id) {
     $('#deleteAndDetailsModel').modal('show');
 
     $('#companyDetails').empty();
-    $('#btnDelete').click(function () {
-        $.ajax({
-            url: '/Company/Delete',
-            type: 'POST',
-            data: { id: id },
-            success: function (response) {
-                $('#deleteAndDetailsModel').modal('hide');
-                GetCompanyList();
-            },
-            error: function (xhr, status, error) {
-                console.log(error);
-                $('#deleteAndDetailsModel').modal('hide');
-            }
-        });
+    $('#btnDelete').click(async function () {
+        try {
+            const response = await $.ajax({
+                url: '/Trader/Delete',
+                type: 'POST',
+                data: { id: id }
+            });
+
+            $('#deleteAndDetailsModel').modal('hide');
+            await GetTraderList()
+        } catch (error) {
+            console.log(error);
+            $('#deleteAndDetailsModel').modal('hide');
+        }
     });
 }
+
+

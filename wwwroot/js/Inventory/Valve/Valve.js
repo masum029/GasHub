@@ -1,12 +1,12 @@
 ﻿$(document).ready(async function () {
-    await GetCompanyList();
+    await GetValveList();
 });
 
-async function GetCompanyList() {
+async function GetValveList() {
     debugger
     try {
         const data = await $.ajax({
-            url: '/Company/GetCompanyList',
+            url: '/Valve/GetallValve',
             type: 'get',
             dataType: 'json',
             contentType: 'application/json;charset=utf-8'
@@ -22,8 +22,8 @@ async function GetCompanyList() {
     }
 }
 
-function onSuccess(companies) {
-    if (companies.length > 0) {
+function onSuccess(Valves) {
+    if (Valves.length > 0) {
         if ($.fn.DataTable.isDataTable('#CompanyTable')) {
             // If initialized, destroy the DataTable first
             $('#CompanyTable').DataTable().destroy();
@@ -35,7 +35,7 @@ function onSuccess(companies) {
             searching: true,
             ordering: true,
             paging: true,
-            data: companies,
+            data: Valves,
             columns: [
                 {
                     data: 'Name',
@@ -44,33 +44,9 @@ function onSuccess(companies) {
                     }
                 },
                 {
-                    data: 'Contactperson',
+                    data: 'Unit',
                     render: function (data, type, row, meta) {
-                        return row.contactperson;
-                    }
-                },
-                {
-                    data: 'ContactPerNum',
-                    render: function (data, type, row, meta) {
-                        return row.contactPerNum;
-                    }
-                },
-                {
-                    data: 'ContactNumber',
-                    render: function (data, type, row, meta) {
-                        return row.contactNumber;
-                    }
-                },
-                {
-                    data: 'IsActive',
-                    render: function (data, type, row, meta) {
-                        return row.isActive ? '<button class="btn btn-sm btn-primary rounded-pill">Yes</button>' : '<button class="btn btn-sm btn-danger rounded-pill">No</button>';
-                    }
-                },
-                {
-                    data: 'BIN',
-                    render: function (data, type, row, meta) {
-                        return row.bin;
+                        return row.unit;
                     }
                 },
                 {
@@ -97,25 +73,8 @@ const companyForm = $('#CompanyForm').validate({
             minlength: 2,
             maxlength: 50
         },
-        Contactperson: {
+        Unit: {
             required: true,
-            minlength: 2,
-            maxlength: 50
-        },
-        ContactPerNum: {
-            required: true,
-            digits: true,
-            minlength: 11,
-            maxlength: 11
-        },
-        ContactNumber: {
-            required: true,
-            digits: true,
-            minlength: 11,
-            maxlength: 11
-        },
-        BIN: {
-            required: true
         }
     },
     messages: {
@@ -124,25 +83,8 @@ const companyForm = $('#CompanyForm').validate({
             minlength: "Name must be between 2 and 50 characters.",
             maxlength: "Name must be between 2 and 50 characters."
         },
-        Contactperson: {
-            required: "Contact Person is required.",
-            minlength: "Contact Person must be between 2 and 50 characters.",
-            maxlength: "Contact Person must be between 2 and 50 characters."
-        },
-        ContactPerNum: {
-            required: "Contact Person Number is required.",
-            digits: "Contact Person Number must contain only digits.",
-            minlength: "Contact Person Number must be exactly 11 digits.",
-            maxlength: "Contact Person Number must be exactly 11 digits."
-        },
-        ContactNumber: {
-            required: "Contact Number is required.",
-            digits: "Contact Number must contain only digits.",
-            minlength: "Contact Number must be exactly 11 digits.",
-            maxlength: "Contact Number must be exactly 11 digits."
-        },
-        BIN: {
-            required: "BIN is required."
+        Unit: {
+            required: "Unit is required."
         }
     },
     errorElement: 'div',
@@ -210,7 +152,7 @@ $('#btnSave').click(async function () {
         var formData = $('#CompanyForm').serialize();
         try {
             const response = await $.ajax({
-                url: '/Company/Create',
+                url: '/Valve/Create',
                 type: 'post',
                 contentType: 'application/x-www-form-urlencoded',
                 data: formData
@@ -219,9 +161,9 @@ $('#btnSave').click(async function () {
             $('#modelCreate').modal('hide');
             if (response === true) {
                 // Show success message
-                $('#successMessage').text('Your company was successfully saved.');
+                $('#successMessage').text('Your Valve was successfully saved.');
                 $('#successMessage').show();
-                await GetCompanyList();
+                await GetValveList();
                 $('#CompanyForm')[0].reset();
             }
         } catch (error) {
@@ -239,7 +181,7 @@ async function editCompany(id) {
 
     try {
         const data = await $.ajax({
-            url: '/Company/GetCompany/' + id,
+            url: '/Valve/GetById/' + id,
             type: 'get',
             dataType: 'json',
             contentType: 'application/json;charset=utf-8'
@@ -249,10 +191,8 @@ async function editCompany(id) {
         $('#btnSave').hide();
         $('#btnUpdate').show();
         $('#Name').val(data.name);
-        $('#Contactperson').val(data.contactperson);
-        $('#ContactPerNum').val(data.contactPerNum);
-        $('#ContactNumber').val(data.contactNumber);
-        $('#BIN').val(data.bin);
+        $('#Unit').val(data.unit);
+        
         debugger
         resetValidation()
         // Show modal for editing
@@ -273,7 +213,7 @@ async function updateCompany(id) {
         console.log(formData);
         try {
             const response = await $.ajax({
-                url: '/Company/Update/' + id,
+                url: '/Valve/Update/' + id,
                 type: 'put',
                 contentType: 'application/x-www-form-urlencoded',
                 data: formData
@@ -282,12 +222,12 @@ async function updateCompany(id) {
             $('#modelCreate').modal('hide');
             if (response === true) {
                 // Show success message
-                $('#successMessage').text('Your company was successfully updated.');
+                $('#successMessage').text('Your Valve was successfully updated.');
                 $('#successMessage').show();
                 // Reset the form
                 $('#CompanyForm')[0].reset();
                 // Update the company list
-                await GetCompanyList();
+                await GetValveList();
             }
         } catch (error) {
             console.log('Error:', error);
@@ -323,12 +263,12 @@ function deleteCompany(id) {
     $('#companyDetails').empty();
     $('#btnDelete').click(function () {
         $.ajax({
-            url: '/Company/Delete',
+            url: '/Valve/Delete',
             type: 'POST',
             data: { id: id },
             success: function (response) {
                 $('#deleteAndDetailsModel').modal('hide');
-                GetCompanyList();
+                GetValveList();
             },
             error: function (xhr, status, error) {
                 console.log(error);

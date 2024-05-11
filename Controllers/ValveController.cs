@@ -12,58 +12,41 @@ namespace GasHub.Controllers
         {
             _unitOfWorkClientServices = unitOfWorkClientServices;
         }
+        public IActionResult Index()
+        {
+            return View();
+        }
         [HttpGet]
         public async Task<IActionResult> GetallValve()
         {
             var Valve = await _unitOfWorkClientServices.valveClientServices.GetAllAsync("Valve/getAllValve");
             return Json(new { data = Valve });
         }
-        [HttpGet]
-        public async Task<IActionResult> Index()
-        {
-            var result = await _unitOfWorkClientServices.valveClientServices.GetAllAsync("Valve/getAllValve");
-            return View(result);
-        }
-        [HttpGet]
-        public IActionResult Create()
-        {
-            return View();
-        }
         [HttpPost]
         public async Task<IActionResult> Create(Valve model)
         {
-            bool result = await _unitOfWorkClientServices.valveClientServices.AddAsync(model, "Valve/CreateValve");
-            return result ? RedirectToAction("Index") : View(default);
+            model.CreatedBy = "mamun";
+            var Valve = await _unitOfWorkClientServices.valveClientServices.AddAsync(model, "Valve/CreateValve");
+            return Json(Valve);
         }
         [HttpGet]
-        public async Task<IActionResult> Details(Guid id)
+        public async Task<IActionResult> GetById(Guid id)
         {
-            var result = await _unitOfWorkClientServices.valveClientServices.GetByIdAsync(id, "Valve/getValve");
-            return View(result);
+            var Valve = await _unitOfWorkClientServices.valveClientServices.GetByIdAsync(id, "Valve/getValve");
+            return Json(Valve);
         }
-        [HttpGet]
-        public async Task<IActionResult> Edit(Guid id)
+        [HttpPut]
+        public async Task<IActionResult> Update(Guid id, Valve model)
         {
-            var result = await _unitOfWorkClientServices.valveClientServices.GetByIdAsync(id, "Valve/getValve");
-            return View(result);
+            model.UpdatedBy = "mamun";
+            var Valve = await _unitOfWorkClientServices.valveClientServices.UpdateAsync(id, model, "Valve/UpdateValve");
+            return Json(Valve);
         }
         [HttpPost]
-        public async Task<IActionResult> Edit(Guid id, Valve model)
-        {
-            await _unitOfWorkClientServices.valveClientServices.UpdateAsync(id, model, "Valve/UpdateValve");
-            return RedirectToAction("Index");
-        }
-        [HttpGet]
         public async Task<IActionResult> Delete(Guid id)
         {
-            var result = await _unitOfWorkClientServices.valveClientServices.GetByIdAsync(id, "Valve/getValve");
-            return View(result);
-        }
-        [HttpPost, ActionName("Delete")]
-        public async Task<IActionResult> DeleteSuccessfull(Guid id)
-        {
-            await _unitOfWorkClientServices.valveClientServices.DeleteAsync(id, "Valve/DeleteValve");
-            return RedirectToAction("Index");
+            var deleted = await _unitOfWorkClientServices.valveClientServices.DeleteAsync(id, "Valve/DeleteValve");
+            return Json(deleted);
         }
     }
 }
