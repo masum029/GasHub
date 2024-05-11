@@ -12,52 +12,42 @@ namespace GasHub.Controllers
         {
             _unitOfWorkClientServices = unitOfWorkClientServices;
         }
-        [HttpGet]
-        public async Task<IActionResult> Index()
-        {
-            var result = await _unitOfWorkClientServices.retailerClientServices.GetAllAsync("Retailer/getAllRetailer");
-            return View(result);
-        }
-        [HttpGet]
-        public IActionResult Create()
+        public IActionResult Index()
         {
             return View();
+        }
+        [HttpGet]
+        public async Task<IActionResult> GetallRetailer()
+        {
+            var retailer = await _unitOfWorkClientServices.retailerClientServices.GetAllAsync("Retailer/getAllRetailer");
+            return Json(new { data = retailer });
         }
         [HttpPost]
         public async Task<IActionResult> Create(Retailer model)
         {
-            bool result = await _unitOfWorkClientServices.retailerClientServices.AddAsync(model, "Retailer/CreateRetailer");
-            return result ? RedirectToAction("Index") : View(default);
+            model.CreatedBy = "mamun";
+            var retailer = await _unitOfWorkClientServices.retailerClientServices.AddAsync(model, "Retailer/CreateRetailer");
+            return Json(retailer);
         }
         [HttpGet]
-        public async Task<IActionResult> Details(Guid id)
+        public async Task<IActionResult> GetById(Guid id)
         {
-            var result = await _unitOfWorkClientServices.retailerClientServices.GetByIdAsync(id, "Retailer/getRetailer");
-            return View(result);
+            var retailer = await _unitOfWorkClientServices.retailerClientServices.GetByIdAsync(id, "Retailer/getRetailer");
+            return Json(retailer);
         }
-        [HttpGet]
-        public async Task<IActionResult> Edit(Guid id)
+        [HttpPut]
+        public async Task<IActionResult> Update(Guid id, Retailer model)
         {
-            var result = await _unitOfWorkClientServices.retailerClientServices.GetByIdAsync(id, "Retailer/getRetailer");
-            return View(result);
+            model.UpdatedBy = "mamun";
+            var productSize = await _unitOfWorkClientServices.retailerClientServices.UpdateAsync(id, model, "Retailer/UpdateRetailer");
+            return Json(productSize);
         }
         [HttpPost]
-        public async Task<IActionResult> Edit(Guid id, Retailer model)
-        {
-            await _unitOfWorkClientServices.retailerClientServices.UpdateAsync(id, model, "Retailer/UpdateRetailer");
-            return RedirectToAction("Index");
-        }
-        [HttpGet]
         public async Task<IActionResult> Delete(Guid id)
         {
-            var result = await _unitOfWorkClientServices.retailerClientServices.GetByIdAsync(id, "Retailer/getRetailer");
-            return View(result);
+            var deleted = await _unitOfWorkClientServices.retailerClientServices.DeleteAsync(id, "Retailer/DeleteRetailer");
+            return Json(deleted);
         }
-        [HttpPost, ActionName("Delete")]
-        public async Task<IActionResult> DeleteSuccessfull(Guid id)
-        {
-            await _unitOfWorkClientServices.retailerClientServices.DeleteAsync(id, "Retailer/DeleteRetailer");
-            return RedirectToAction("Index");
-        }
+        
     }
 }
