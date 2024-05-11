@@ -13,6 +13,13 @@ namespace GasHub.Controllers
         {
             _unitOfWorkClientServices = unitOfWorkClientServices;
         }
+
+        [HttpGet]
+        public async Task<IActionResult> GetallTrader()
+        {
+            var traders = await _unitOfWorkClientServices.traderClientServices.GetAllAsync("Trader/getAllTrader");
+            return Json(new { data = traders });
+        }
         [HttpGet]
         public async Task<IActionResult> Index()
         {

@@ -1,5 +1,4 @@
 ﻿using GasHub.Models;
-using GasHub.Models.ViewModels;
 using GasHub.Services.Abstractions;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,61 +12,41 @@ namespace GasHub.Controllers
         {
             _unitOfWorkClientServices = unitOfWorkClientServices;
         }
-        [HttpGet]
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-           
-            var result = await _unitOfWorkClientServices.stockClientServices.GetAllAsync("Stock/getAllStock");
-            return View(result);
+            return View();
         }
         [HttpGet]
-        public async Task<IActionResult> Create()
+        public async Task<IActionResult> GetallStock()
         {
-            var productList = await _unitOfWorkClientServices.productClientServices.GetAllAsync("Product/getAllProduct");
-            var traderList = await _unitOfWorkClientServices.traderClientServices.GetAllAsync("Trader/getAllTrader");
-            var StockViewModel = new StockViewModel(productList, traderList);
-            return View(StockViewModel);
+            var stock = await _unitOfWorkClientServices.stockClientServices.GetAllAsync("Stock/getAllStock");
+            return Json(new { data = stock });
         }
         [HttpPost]
-        public async Task<IActionResult> Create(StockViewModel model)
+        public async Task<IActionResult> Create(Stock model)
         {
-            bool result = await _unitOfWorkClientServices.stockClientServices.AddAsync(model.Stock, "Stock/CreateStock");
-            return result ? RedirectToAction("Index") : View(default);
+            model.CreatedBy = "mamun";
+            var stock = await _unitOfWorkClientServices.stockClientServices.AddAsync(model, "Stock/CreateStock");
+            return Json(stock);
         }
         [HttpGet]
-        public async Task<IActionResult> Details(Guid id)
+        public async Task<IActionResult> GetById(Guid id)
         {
-            var result = await _unitOfWorkClientServices.stockClientServices.GetByIdAsync(id, "Stock/getStock");
-            return View(result);
+            var stock = await _unitOfWorkClientServices.stockClientServices.GetByIdAsync(id, "Stock/getStock");
+            return Json(stock);
         }
-        [HttpGet]
-        public async Task<IActionResult> Edit(Guid id)
+        [HttpPut]
+        public async Task<IActionResult> Update(Guid id, Stock model)
         {
-
-            var result = await _unitOfWorkClientServices.stockClientServices.GetByIdAsync(id, "Stock/getStock");
-            var productList = await _unitOfWorkClientServices.productClientServices.GetAllAsync("Product/getAllProduct");
-            var traderList = await _unitOfWorkClientServices.traderClientServices.GetAllAsync("Trader/getAllTrader");
-            var StockViewModel = new StockViewModel(productList, traderList);
-            StockViewModel.Stock = result;
-            return View(StockViewModel);
+            model.UpdatedBy = "mamun";
+            var stock = await _unitOfWorkClientServices.stockClientServices.UpdateAsync(id, model, "Stock/UpdateStock");
+            return Json(stock);
         }
         [HttpPost]
-        public async Task<IActionResult> Edit(Guid id, StockViewModel model)
-        {
-            await _unitOfWorkClientServices.stockClientServices.UpdateAsync(id, model.Stock, "Stock/UpdateStock");
-            return RedirectToAction("Index");
-        }
-        [HttpGet]
         public async Task<IActionResult> Delete(Guid id)
         {
-            var result = await _unitOfWorkClientServices.stockClientServices.GetByIdAsync(id, "Stock/getStock");
-            return View(result);
-        }
-        [HttpPost, ActionName("Delete")]
-        public async Task<IActionResult> DeleteSuccessfull(Guid id)
-        {
-            await _unitOfWorkClientServices.stockClientServices.DeleteAsync(id, "Stock/DeleteStock");
-            return RedirectToAction("Index");
+            var deleted = await _unitOfWorkClientServices.stockClientServices.DeleteAsync(id, "Stock/DeleteStock");
+            return Json(deleted);
         }
     }
 }
