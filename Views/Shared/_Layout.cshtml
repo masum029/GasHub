@@ -1,4 +1,23 @@
-﻿<!DOCTYPE html>
+﻿@using System.Security.Claims
+@using Microsoft.IdentityModel.JsonWebTokens
+
+@{
+    var userName = string.Empty;
+    if (User.Identity.IsAuthenticated)
+    {
+        var claimsIdentity = User.Identity as ClaimsIdentity;
+        if (claimsIdentity != null)
+        {
+            var userNameClaim = claimsIdentity.FindFirst(ClaimTypes.Name);
+            if (userNameClaim != null)
+            {
+                userName = userNameClaim.Value;
+            }
+        }
+    }
+}
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -380,8 +399,24 @@
                                                 <a href="contact.html">Contact</a>
                                             </li>
                                             <li>
-                                                <a asp-action="Index" asp-controller="Default">Dashboard</a>
+                                                <a asp-action="LogOut" asp-controller="Public">LogOut</a>
                                             </li>
+                                            
+                                            @{
+                                                if (User.Identity.IsAuthenticated)
+                                                {
+                                                    <li>
+                                                        <a asp-action="Index" asp-controller="Default">@User.Identity.Name</a>
+                                                    </li>
+                                                }
+                                                else
+                                                {
+                                                    <li>
+                                                        <a asp-action="Register" asp-controller="Public">Register</a>
+                                                    </li>
+                                                }
+                                            }
+
                                         </ul>
                                     </nav>
                                     <!-- for wp -->
@@ -670,8 +705,8 @@
     <!--<< MeanMenu Js >>-->
     <script src="~/Users/assets/js/jquery.meanmenu.min.js"></script>
     <!--<< CountDown Js >>-->
-    <script src="~/Users/assets/js/countdowncustom.js"></script>
-    @* <script src="~/Users/assets/js/countdowncustom.js"></script>  *@
+    
+     <script src="~/Users/assets/js/countdowncustom.js"></script>  
     <!--<< Magnific Popup Js >>-->
     <script src="~/Users/assets/js/jquery.magnific-popup.min.js"></script>
     <!--<< GSAP Animation Js >>-->

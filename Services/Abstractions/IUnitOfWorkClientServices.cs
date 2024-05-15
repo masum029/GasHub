@@ -13,5 +13,7 @@
         ITraderClientServices traderClientServices { get; }
         IUserClientServices userClientServices { get; }
         IValveClientServices valveClientServices { get; }
+        IRegisterUserClientServices registerUserClientServices { get; }
+        ILoginUserClientServices loginUserClientServices { get; }
     }
 }

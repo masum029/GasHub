@@ -5,6 +5,8 @@ namespace GasHub.Services.Implemettions
     public class UnitOfWorkClientServices : IUnitOfWorkClientServices
     {
         private readonly IHttpClientFactory _httpClientFactory;
+        private readonly IHttpContextAccessor _contextAccessor;
+        private readonly ITokenService _tokenService;
         public ICompanyClientServices companyClientServices { get; private set; }
 
         public IDeliveryAddressClientServices deliveryAddressClientServices { get; private set; }
@@ -27,20 +29,31 @@ namespace GasHub.Services.Implemettions
 
         public IValveClientServices valveClientServices { get; private set; }
 
-        public UnitOfWorkClientServices(IHttpClientFactory httpClientFactory)
+        public IRegisterUserClientServices registerUserClientServices { get; private set; }
+
+        public ILoginUserClientServices loginUserClientServices { get; private set; }
+
+        public ITokenService tokenServices { get; private set; }
+
+        public UnitOfWorkClientServices(IHttpClientFactory httpClientFactory, IHttpContextAccessor contextAccessor, ITokenService tokenService)
         {
             _httpClientFactory = httpClientFactory;
-            companyClientServices = new CompanyClientServices(httpClientFactory);
-            deliveryAddressClientServices = new DeliveryAddressClientServices(httpClientFactory);
-            orderClientServices = new OrderClientServices(httpClientFactory);
-            productSizeClientServices = new ProductSizeClientServices(httpClientFactory);
-            productClientServices = new ProductClientServices(httpClientFactory);
-            prodReturnClientServices = new ProdReturnClientServices(httpClientFactory);
-            retailerClientServices = new RetailerClientServices(httpClientFactory);
-            stockClientServices = new StockClientServices(httpClientFactory);
-            traderClientServices = new TraderClientServices(httpClientFactory);
-            userClientServices = new UserClientServices(httpClientFactory);
-            valveClientServices = new ValveClientServices(httpClientFactory);
+            _contextAccessor = contextAccessor;
+            _tokenService = tokenService;
+            companyClientServices = new CompanyClientServices(httpClientFactory, tokenService);
+            deliveryAddressClientServices = new DeliveryAddressClientServices(httpClientFactory, tokenService);
+            orderClientServices = new OrderClientServices(httpClientFactory, tokenService);
+            productSizeClientServices = new ProductSizeClientServices(httpClientFactory,tokenService);
+            productClientServices = new ProductClientServices(httpClientFactory, tokenService);
+            prodReturnClientServices = new ProdReturnClientServices(httpClientFactory, tokenService);
+            retailerClientServices = new RetailerClientServices(httpClientFactory, tokenService);
+            stockClientServices = new StockClientServices(httpClientFactory, tokenService);
+            traderClientServices = new TraderClientServices(httpClientFactory, tokenService);
+            userClientServices = new UserClientServices(httpClientFactory, tokenService);
+            valveClientServices = new ValveClientServices(httpClientFactory, tokenService);
+            registerUserClientServices = new RegisterUserClientServices(httpClientFactory, tokenService);
+            loginUserClientServices = new LoginUserClientServices(httpClientFactory, tokenService);
+            
         }
     }
 }

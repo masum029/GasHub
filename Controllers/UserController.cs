@@ -12,11 +12,9 @@ namespace GasHub.Controllers
         {
             _unitOfWorkClientServices = unitOfWorkClientServices;
         }
-        [HttpGet]
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            var result = await _unitOfWorkClientServices.userClientServices.GetAllAsync("User/GetAll");
-            return View(result);
+            return View();
         }
         [HttpGet]
         public async Task<IActionResult> GetallUser()
@@ -24,46 +22,6 @@ namespace GasHub.Controllers
             var users = await _unitOfWorkClientServices.userClientServices.GetAllAsync("User/GetAllUserDetails");
             return Json(new { data = users });
         }
-        [HttpGet]
-        public IActionResult Create()
-        {
-            return View();
-        }
-        [HttpPost]
-        public async Task<IActionResult> Create(User model)
-        {
-            bool result = await _unitOfWorkClientServices.userClientServices.AddAsync(model, "User/CreateUser");
-            return result ? RedirectToAction("Index") : View(default);
-        }
-        [HttpGet]
-        public async Task<IActionResult> Details(Guid id)
-        {
-            var result = await _unitOfWorkClientServices.userClientServices.GetByIdAsync(id, "User/getUser");
-            return View(result);
-        }
-        [HttpGet]
-        public async Task<IActionResult> Edit(Guid id)
-        {
-            var result = await _unitOfWorkClientServices.userClientServices.GetByIdAsync(id, "User/getUser");
-            return View(result);
-        }
-        [HttpPost]
-        public async Task<IActionResult> Edit(Guid id, User model)
-        {
-            await _unitOfWorkClientServices.userClientServices.UpdateAsync(id, model, "User/UpdateUser");
-            return RedirectToAction("Index");
-        }
-        [HttpGet]
-        public async Task<IActionResult> Delete(Guid id)
-        {
-            var result = await _unitOfWorkClientServices.userClientServices.GetByIdAsync(id, "User/getUser");
-            return View(result);
-        }
-        [HttpPost, ActionName("Delete")]
-        public async Task<IActionResult> DeleteSuccessfull(Guid id)
-        {
-            await _unitOfWorkClientServices.userClientServices.DeleteAsync(id, "User/DeleteUser");
-            return RedirectToAction("Index");
-        }
+        
     }
 }

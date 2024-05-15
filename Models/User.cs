@@ -12,6 +12,8 @@ namespace GasHub.Models
         public string PhoneNumber { get; set; }
         public string Email { get; set; }
         public string? UserImg { get; set; }
+        public string Password { get; set; }
+        public string ConfirmPassword { get; set; }
         public bool? IsActive { get; set; }
         public DateTime? DeactivatedDate { get; set; }
         public string? DeactiveBy { get; set; }

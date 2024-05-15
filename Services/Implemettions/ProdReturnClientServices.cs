@@ -7,7 +7,7 @@ namespace GasHub.Services.Implemettions
     public class ProdReturnClientServices : ClientRepository<ProdReturn>, IProdReturnClientServices
     {
 
-        public ProdReturnClientServices(IHttpClientFactory httpClientFactory) : base(httpClientFactory)
+        public ProdReturnClientServices(IHttpClientFactory httpClientFactory, ITokenService tokenService) : base(httpClientFactory, tokenService)
         {
             // if we Extaind our Uncommon Services . Then Emplement Here ........
         }

@@ -4,10 +4,10 @@ using GasHub.Services.Implemettions.Base;
 
 namespace GasHub.Services.Implemettions
 {
-    public class TraderClientServices : ClientRepository<Trader>, ITraderClientServices
+    public class LoginUserClientServices : ClientRepository<Login>, ILoginUserClientServices
     {
 
-        public TraderClientServices(IHttpClientFactory httpClientFactory, ITokenService tokenService) : base(httpClientFactory,tokenService)
+        public LoginUserClientServices(IHttpClientFactory httpClientFactory, ITokenService tokenService) : base(httpClientFactory, tokenService)
         {
             // if we Extaind our Uncommon Services . Then Emplement Here ........
         }

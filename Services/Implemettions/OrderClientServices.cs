@@ -7,7 +7,7 @@ namespace GasHub.Services.Implemettions
     public class OrderClientServices : ClientRepository<Order>, IOrderClientServices
     {
 
-        public OrderClientServices(IHttpClientFactory httpClientFactory) : base(httpClientFactory)
+        public OrderClientServices(IHttpClientFactory httpClientFactory, ITokenService tokenService) : base(httpClientFactory, tokenService)
         {
             // if we Extaind our Uncommon Services . Then Emplement Here ........
         }

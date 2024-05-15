@@ -1,7 +1,8 @@
-﻿@model IEnumerable<GasHub.Models.User>
+﻿@model GasHub.Models.Register
 
 @{
     ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_AdminLayoutPage.cshtml";
 }
 
 <section class="content-header">
@@ -19,97 +20,38 @@
         </div>
     </div><!-- /.container-fluid -->
 </section>
+
+
+
 <section class="content">
     <div class="container-fluid">
         <div class="row">
             <div class="col-12">
-
                 <!-- /.card -->
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title font-weight-bold fs-1 color-primary">User  List</h3>
+                        <h3 class="card-title font-weight-bold fs-1 color-primary">User List</h3>
                     </div>
+                    <div id="successMessage" class="alert alert-success" role="alert" style="display: none;">
+                        <strong>Holy guacamole!</strong>   Your company was successfully saved.
+                        <button id="btnClose" type="button" class="btn-close" aria-label="Close"></button>
+                    </div>
+
                     <!-- /.card-header -->
+
                     <div class="card-body">
-                        <table id="example3" class="table table-bordered table-striped">
-                            <p> <a asp-action="Create" class="btn btn-success"> <i class="fa fa-plus"></i> Create New User</a> </p>
+                        <table id="CompanyTable" class="table table-bordered table-striped">
+                            <p> <a id="btn-Create" class="btn btn-success"> <i class="fa fa-plus"></i> Add New User</a> </p>
                             <thead>
                                 <tr>
-                                    
-                                    <th>
-                                        @Html.DisplayNameFor(model => model.IsActive)
-                                    </th>
-                                    <th>
-                                        @Html.DisplayNameFor(model => model.DeactivatedDate)
-                                    </th>
-                                    <th>
-                                        @Html.DisplayNameFor(model => model.DeactiveBy)
-                                    </th>
-                                    <th>
-                                        @Html.DisplayNameFor(model => model.TIN)
-                                    </th>
-                                    <th>
-                                        @Html.DisplayNameFor(model => model.IsBlocked)
-                                    </th>
-                                   
-                                    <th>
-                                        @Html.DisplayNameFor(model => model.CreationDate)
-                                    </th>
-                                    <th>
-                                        @Html.DisplayNameFor(model => model.UpdateDate)
-                                    </th>
-                                    <th>
-                                        @Html.DisplayNameFor(model => model.CreatedBy)
-                                    </th>
-                                    <th>
-                                        @Html.DisplayNameFor(model => model.UpdatedBy)
-                                    </th>
+                                    <th>Image</th>
+                                    <th>Full Name</th>
+                                    <th>User Name</th>
+                                    <th>Email</th>
+                                    <th>Phone</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                @foreach (var item in Model)
-                                {
-                                    <tr>
-                                        
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.IsActive)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.DeactivatedDate)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.DeactiveBy)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.TIN)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.IsBlocked)
-                                        </td>
-                                       
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.CreationDate)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.UpdateDate)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.CreatedBy)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.UpdatedBy)
-                                        </td>
-                                        <td>
-                                            @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { @class = "btn btn-sm btn-primary" })
-                                            @Html.ActionLink("Details", "Details", new { id = item.Id }, new { @class = "btn btn-sm btn-info" })
-                                            @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { @class = "btn btn-sm btn-danger" })
-                                        </td>
-
-                                    </tr>
-                                }
-
-                            </tbody>
 
                         </table>
                     </div>
@@ -126,3 +68,117 @@
 </section>
 
 
+
+<div class="modal  fade " id="modelCreate" tabindex="-1" role="dialog" aria-labelledby="myModalLabelAddEmployee" aria-hidden="true">
+    <div class="modal-dialog modal-xl ">
+        <div class="modal-content w-auto">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabelAddEmployee">Add Company</h4>
+                <h4 class="modal-title" style="display:none;" id="myModalLabelUpdateEmployee">Update Company</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="CompanyForm">
+                    <div class="card-body">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label asp-for="FirstName" class="control-label"></label>
+                                            <input asp-for="FirstName" class="form-control" name="FirstName" />
+                                            <span asp-validation-for="FirstName" class="text-danger"></span>
+                                        </div>
+                                        <div class="form-group">
+                                            <label asp-for="LaststName" class="control-label"></label>
+                                            <input asp-for="LaststName" class="form-control" name="LastName" />
+                                            <span asp-validation-for="LaststName" class="text-danger"></span>
+                                        </div>
+                                        <div class="form-group">
+                                            <label asp-for="UserName" class="control-label"></label>
+                                            <input asp-for="UserName" class="form-control" name="LastName" />
+                                            <span asp-validation-for="UserName" class="text-danger"></span>
+                                        </div>
+                                        <div class="form-group">
+                                            <label asp-for="Email" class="control-label"></label>
+                                            <input asp-for="Email" class="form-control" name="Email" />
+                                            <span asp-validation-for="Email" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+
+                                        <div class="form-group">
+                                            <label asp-for="PhoneNumber" class="control-label"></label>
+                                            <input asp-for="PhoneNumber" class="form-control" name="PhoneNumber" />
+                                            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                                        </div>
+                                        <div class="form-group">
+                                            <label asp-for="Password" class="control-label"></label>
+                                            <input asp-for="Password" class="form-control" name="Password" />
+                                            <span asp-validation-for="Password" class="text-danger"></span>
+                                        </div>
+                                        <div class="form-group">
+                                            <label asp-for="ConfirmationPassword" class="control-label"></label>
+                                            <input asp-for="ConfirmationPassword" class="form-control" name="ConfirmationPassword" />
+                                            <span asp-validation-for="ConfirmationPassword" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            @* <div class="col-md-6">
+                            <div class="row">
+                            <div class="col-md-6">
+
+
+                            </div>
+                            <div class="col-md-6">
+
+                            </div>
+                            </div>
+                            </div> *@
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="btnSave">Save</button>
+                <button type="button" class="btn btn-primary" id="btnUpdate">Update</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteAndDetailsModel" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                Are you sure you want to delete the following Company ?
+            </div>
+
+            <div class="modal-body" id="companyDetails">
+                <!-- Company details will be populated dynamically by jQuery -->
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" id="btnDelete">Delete</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script src="~/js/administration/user.js"></script>
+}

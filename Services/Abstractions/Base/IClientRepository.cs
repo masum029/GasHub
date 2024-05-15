@@ -7,5 +7,6 @@
         Task<bool> AddAsync(T model, string EndPoint);
         Task<bool> UpdateAsync(Guid id, T model, string EndPoint);
         Task<bool> DeleteAsync(Guid id, string EndPoint);
+        Task<(bool Success, string ErrorMessage , string token)> LoginAsync(T model, string EndPoint);
     }
 }
