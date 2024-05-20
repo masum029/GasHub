@@ -1,9 +1,11 @@
 ﻿using GasHub.Models;
 using GasHub.Services.Abstractions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GasHub.Controllers
 {
+    [Authorize]
     public class UserController : Controller
     {
         private readonly IUnitOfWorkClientServices _unitOfWorkClientServices;
@@ -22,6 +24,11 @@ namespace GasHub.Controllers
             var users = await _unitOfWorkClientServices.userClientServices.GetAllAsync("User/GetAllUserDetails");
             return Json(new { data = users });
         }
-        
+        [HttpPost]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            var deleted = await _unitOfWorkClientServices.traderClientServices.DeleteAsync(id, "User/Delete");
+            return Json(deleted);
+        }
     }
 }

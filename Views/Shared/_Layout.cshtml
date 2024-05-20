@@ -209,28 +209,7 @@
 
     <!-- Header Area Start -->
     <header class="section-bg">
-        <div class="header-top">
-            <div class="container">
-                <div class="header-top-wrapper">
-                    <ul>
-                        <li><span>100%</span> Secure delivery without contacting the courier</li>
-                        <li><i class="fas fa-truck"></i>Track Your Order</li>
-                    </ul>
-                    <div class="top-right">
-                        <div class="search-wrp">
-                            <button><i class="far fa-search"></i></button>
-                            <input placeholder="Search" aria-label="Search">
-                        </div>
-                        <div class="social-icon d-flex align-items-center">
-                            <a href="#"><i class="fab fa-facebook-f"></i></a>
-                            <a href="#"><i class="fab fa-twitter"></i></a>
-                            <a href="#"><i class="fab fa-vimeo-v"></i></a>
-                            <a href="#"><i class="fab fa-pinterest-p"></i></a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+       
         <div id="header-sticky" class="header-1">
             <div class="container">
                 <div class="mega-menu-wrapper">
@@ -245,7 +224,7 @@
                                 <div class="main-menu">
                                     <nav id="mobile-menu">
                                         <ul>
-                                            <li class="has-dropdown active">
+                                            @* <li class="has-dropdown active">
                                                 <a href="index.html">
                                                     Home Page
                                                     <i class="fas fa-angle-down"></i>
@@ -333,78 +312,22 @@
                                                             </div>
                                                         </div>
                                                     </li>
-                                                </ul>
-                                            </li>
-                                            <li class="has-dropdown">
-                                                <a href="shop.html">
-                                                    Shop
-                                                    <i class="fas fa-angle-down"></i>
-                                                </a>
-                                                <ul class="submenu">
-                                                    <li><a href="shop.html">Shop Grid</a></li>
-                                                    <li><a href="shop-list.html">Shop List</a></li>
-                                                    <li><a href="shop-left-sidebar.html">Shop Left SideBar</a></li>
-                                                    <li><a href="shop-right-sidebar.html">Shop Right SideBar</a></li>
-                                                    <li><a href="shop-single.html">Shop Single</a></li>
-                                                    <li><a href="shop-single-2.html">Shop Single 2</a></li>
-                                                    <li><a href="shop-cart.html">Shop Cart</a></li>
-                                                    <li><a href="checkout.html">checkout</a></li>
-                                                </ul>
-                                            </li>
+                                                </ul> *@
+                                            @* </li> *@
                                             <li>
-                                                <a href="news.html">
-                                                    Blog
-                                                    <i class="fas fa-angle-down"></i>
-                                                </a>
-                                                <ul class="submenu">
-                                                    <li><a href="news.html">Blog</a></li>
-                                                    <li><a href="news-details.html">Blog Details</a></li>
-                                                </ul>
-                                            </li>
-                                            <li class="has-dropdown">
-                                                <a href="news.html">
-                                                    Pages
-                                                    <i class="fas fa-angle-down"></i>
-                                                </a>
-                                                <ul class="submenu">
-                                                    <li><a href="about.html">About Us</a></li>
-                                                    <li class="has-dropdown">
-                                                        <a href="team.html">
-                                                            Chef Page
-                                                            <i class="fas fa-angle-down"></i>
-                                                        </a>
-                                                        <ul class="submenu">
-                                                            <li><a href="team.html">Chef</a></li>
-                                                            <li><a href="team-details.html">Chef Details</a></li>
-                                                        </ul>
-                                                    </li>
-                                                    <li class="has-dropdown">
-                                                        <a href="food-menu.html">
-                                                            Food Menu
-                                                            <i class="fas fa-angle-down"></i>
-                                                        </a>
-                                                        <ul class="submenu">
-                                                            <li><a href="food-menu.html"> Food Menu 01</a></li>
-                                                            <li><a href="food-menu-2.html"> Food Menu 02</a></li>
-                                                        </ul>
-                                                    </li>
-                                                    <li><a href="gallery.html">Gallery</a></li>
-                                                    <li><a href="testimonial.html">testimonial</a></li>
-                                                    <li><a href="reservation.html">Reservation</a></li>
-                                                    <li><a href="faq.html">Faq's</a></li>
-                                                    <li><a href="404.html">404 Page</a></li>
-                                                </ul>
+                                                <a href="contact.html">Home</a>
                                             </li>
                                             <li>
                                                 <a href="contact.html">Contact</a>
                                             </li>
-                                            <li>
-                                                <a asp-action="LogOut" asp-controller="Public">LogOut</a>
-                                            </li>
+                                           
                                             
                                             @{
                                                 if (User.Identity.IsAuthenticated)
                                                 {
+                                                    <li>
+                                                        <a asp-action="LogOut" asp-controller="Public">LogOut</a>
+                                                    </li>
                                                     <li>
                                                         <a asp-action="Index" asp-controller="Default">@User.Identity.Name</a>
                                                     </li>

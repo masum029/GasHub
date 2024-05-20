@@ -329,17 +329,18 @@ async function showDetails(id) {
 }
 
 function deleteCompany(id) {
+    debugger
     $('#deleteAndDetailsModel').modal('show');
 
     $('#companyDetails').empty();
     $('#btnDelete').click(function () {
         $.ajax({
-            url: '/Company/Delete',
+            url: '/User/Delete',
             type: 'POST',
             data: { id: id },
             success: function (response) {
                 $('#deleteAndDetailsModel').modal('hide');
-                GetCompanyList();
+                GetUserList();
             },
             error: function (xhr, status, error) {
                 console.log(error);

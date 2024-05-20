@@ -30,24 +30,36 @@ namespace GasHub.Controllers
             var register = await _unitOfWorkClientServices.registerUserClientServices.AddAsync(model, "User/Create");
             return Json(register);
         }
-        public IActionResult Login()
+        [HttpGet]
+        public IActionResult Login(string? ReturnUrl = null)
         {
+            ViewData["ReturnUrl"] = ReturnUrl;
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> LoginUser(Login model)
+        public async Task<IActionResult> LoginUser(Login model, string? ReturnUrl)
         {
             var loginResponse = await _unitOfWorkClientServices.loginUserClientServices.LoginAsync(model, "Auth/Login");
             if (loginResponse.token == null)
             {
-                return View(loginResponse);
+                // Pass the ReturnUrl back to the view in case of an error
+                ViewData["ReturnUrl"] = ReturnUrl;
+                return View("Login", model);
             }
 
             var tokenConfiger = new TokenConfig { Token = loginResponse.token };
             _tokenService.SaveToken(loginResponse.token);
             await UserLogin(tokenConfiger);
+            if (!string.IsNullOrEmpty(ReturnUrl) && Url.IsLocalUrl(ReturnUrl))
+            {
+                return Redirect(ReturnUrl);
+            }
+            else
+            {
+                // Redirect to default page
+                return RedirectToAction("Index", "Home");
+            }
 
-            return RedirectToAction("Index", "Home");
         }
         public async Task<IActionResult> LogOut()
         {

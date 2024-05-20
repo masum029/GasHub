@@ -19,6 +19,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     {
         options.LoginPath = "/Public/Login";
         options.ExpireTimeSpan = TimeSpan.FromDays(1);
+        options.ReturnUrlParameter = "ReturnUrl";
     });
 
 builder.Services.AddSession();
