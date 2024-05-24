@@ -1,4 +1,5 @@
-﻿@{
+﻿@model IEnumerable<GasHub.Models.Product>
+@{
     ViewData["Title"] = "Home Page";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
@@ -7,11 +8,11 @@
 
 
 <partial name="_HeroPartialView" />
-<partial name="_FoodCatagory1PartialView" />
+<partial name="_FoodCatagory1PartialView" model="Model" />
 <partial name="_FoodBanner1PartialView" />
 <partial name="_BrandSectionPartialView" />
 
-<partial name="_FoodCatagoryPartialView" />
+<partial name="_FoodCatagoryPartialView" model="Model" />
 
 <partial name="_MarquePartialView" />
 <partial name="_ChooseUsPartialView" />

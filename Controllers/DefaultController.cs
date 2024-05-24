@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace GasHub.Controllers
 {
-    [Authorize(Roles = "Administrator")]
+    //[Authorize(Roles = "Administrator")]
     public class DefaultController : Controller
     {
         

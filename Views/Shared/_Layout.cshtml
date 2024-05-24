@@ -33,7 +33,7 @@
     <!-- ======== Page title ============ -->
 
     <!--<< Favcion >>-->
-    <link rel="shortcut icon" href="~/Users/assets/img/logo/favicon.svg">
+    <link rel="shortcut icon" href="~/project/logo.png">
     <!--<< Bootstrap min.css >>-->
     <link rel="stylesheet" href="~/Users/assets/css/bootstrap.min.css">
     <!--<< Font Awesome.css >>-->
@@ -60,30 +60,25 @@
             <div class="spinner">
             </div>
             <div class="txt-loading">
-                <span data-text-preloader="F" class="letters-loading">
-                    F
-                </span>
-                <span data-text-preloader="O" class="letters-loading">
-                    O
-                </span>
-                <span data-text-preloader="0" class="letters-loading">
-                    O
-                </span>
-                <span data-text-preloader="D" class="letters-loading">
-                    D
-                </span>
-                <span data-text-preloader="K" class="letters-loading">
-                    K
-                </span>
-                <span data-text-preloader="I" class="letters-loading">
-                    I
-                </span>
-                <span data-text-preloader="N" class="letters-loading">
-                    N
-                </span>
                 <span data-text-preloader="G" class="letters-loading">
                     G
                 </span>
+                <span data-text-preloader="A" class="letters-loading">
+                    A
+                </span>
+                <span data-text-preloader="S" class="letters-loading">
+                    S
+                </span>
+                <span data-text-preloader="H" class="letters-loading">
+                    H
+                </span>
+                <span data-text-preloader="U" class="letters-loading">
+                    U
+                </span>
+                <span data-text-preloader="B" class="letters-loading">
+                    B
+                </span>
+               
             </div>
             <p class="text-center">Loading</p>
         </div>
@@ -137,17 +132,7 @@
                                 <img src="~/Users/assets/img/header/03.jpg" alt="gallery-img">
                             </a>
                         </div>
-                        <div class="offcanvas-gallery-items">
-                            <a href="assets/img/header/04.jpg" class="offcanvas-image img-popup">
-                                <img src="~/Users/assets/img/header/04.jpg" alt="gallery-img">
-                            </a>
-                            <a href="assets/img/header/05.jpg" class="offcanvas-image img-popup">
-                                <img src="~/Users/assets/img/header/05.jpg" alt="gallery-img">
-                            </a>
-                            <a href="assets/img/header/06.jpg" class="offcanvas-image img-popup">
-                                <img src="~/Users/assets/img/header/06.jpg" alt="gallery-img">
-                            </a>
-                        </div>
+                        
                     </div>
                     <div class="mobile-menu fix mb-3"></div>
                     <div class="offcanvas__contact">
@@ -186,7 +171,43 @@
                                 </div>
                             </li>
                         </ul>
-                        <div class="header-button mt-4">
+                        <div class="d-flex justify-content-between header-button mt-4">
+                            @{
+                                if (User.Identity.IsAuthenticated)
+                                {
+                                    <a asp-action="LogOut" asp-controller="Public" class="theme-btn me-1">
+                                        <span class="button-content-wrapper d-flex align-items-center justify-content-center">
+                                            <span class="button-icon"><i class="fas fa-sign-in-alt"></i></span>
+                                            <span class="button-text">LogOut</span>
+                                        </span>
+                                    </a>
+                                    <a asp-action="Register" asp-controller="Public" class="theme-btn ms-1">
+                                        <span class="button-content-wrapper d-flex align-items-center justify-content-center">
+                                            <span class="button-icon"></span>
+                                            <span class="button-text">@User.Identity.Name</span>
+                                        </span>
+                                    </a>
+                                }
+                                else 
+                                {
+                                    <a asp-action="Login" asp-controller="Public" class="theme-btn me-1">
+                                        <span class="button-content-wrapper d-flex align-items-center justify-content-center">
+                                            <span class="button-icon"><i class="fas fa-sign-in-alt"></i></span>
+                                            <span class="button-text">Login</span>
+                                        </span>
+                                    </a>
+                                    <a asp-action="Register" asp-controller="Public" class="theme-btn ms-1">
+                                        <span class="button-content-wrapper d-flex align-items-center justify-content-center">
+                                            <span class="button-icon"><i class="fas fa-user-plus"></i></span>
+                                            <span class="button-text">Registration</span>
+                                        </span>
+                                    </a>
+                                }
+                            }
+                           
+                           
+                        </div>
+                        <div class="header-button mt-1">
                             <a href="shop-single.html" class="theme-btn">
                                 <span class="button-content-wrapper d-flex align-items-center justify-content-center">
                                     <span class="button-icon"><i class="flaticon-delivery"></i></span>
@@ -213,10 +234,11 @@
         <div id="header-sticky" class="header-1">
             <div class="container">
                 <div class="mega-menu-wrapper">
+                    
                     <div class="header-main">
                         <div class="logo">
                             <a href="index.html" class="header-logo">
-                                <img src="~/Users/assets/img/logo/logo.svg" alt="logo-img">
+                                <img src="~/project/logo.png" alt="logo-img">
                             </a>
                         </div>
                         <div class="header-left">
@@ -318,27 +340,11 @@
                                                 <a href="contact.html">Home</a>
                                             </li>
                                             <li>
-                                                <a href="contact.html">Contact</a>
+                                                <a asp-action="Product" asp-controller="Home">Product</a>
                                             </li>
                                            
                                             
-                                            @{
-                                                if (User.Identity.IsAuthenticated)
-                                                {
-                                                    <li>
-                                                        <a asp-action="LogOut" asp-controller="Public">LogOut</a>
-                                                    </li>
-                                                    <li>
-                                                        <a asp-action="Index" asp-controller="Default">@User.Identity.Name</a>
-                                                    </li>
-                                                }
-                                                else
-                                                {
-                                                    <li>
-                                                        <a asp-action="Register" asp-controller="Public">Register</a>
-                                                    </li>
-                                                }
-                                            }
+                                            
 
                                         </ul>
                                     </nav>

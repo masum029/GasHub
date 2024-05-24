@@ -78,7 +78,7 @@ function onSuccess(orders, usersData, productsData, returnProductsData) {
             if (order ) {
                 return {
                     id: order.id,
-                    fullName: user.firstName + ' ' + user.lastName,
+                    fullName: user?.firstName + ' ' + user?.lastName,
                     phone: user ? user.phoneNumber : "No Number",
                     productOrder: product ? product.name : "No Order",
                     productReturn: returnProduct ? returnProduct.name : "No Return",

@@ -1,4 +1,5 @@
-﻿        <!-- Food Catagory Section Start -->
+﻿@model IEnumerable<GasHub.Models.Product>
+       <!-- Food Catagory Section Start -->
 <section class="food-category-section fix section-padding section-bg">
     <div class="tomato-shape">
         <img src="~/Users/assets/img/shape/tomato-shape.png" alt="shape-img">
@@ -22,127 +23,12 @@
             </div>
         </div>
         <div class="swiper food-catagory-slider">
-            <div class="swiper-wrapper">
-                <div class="swiper-slide">
-                    <div class="catagory-product-card bg-cover" style="background-image: url('users/assets/img/shape/catagory-card-shape.jpg');">
-                        <h5>5 products</h5>
-                        <div class="catagory-product-image text-center">
-                            <a href="shop.html">
-                                <img src="~/Users/assets/img/food/pizza.png" alt="product-img">
-                                <div class="decor-leaf">
-                                    <img src="~/Users/assets/img/shape/decor-leaf.svg" alt="shape-img">
-                                </div>
-                                <div class="decor-leaf-2">
-                                    <img src="~/Users/assets/img/shape/decor-leaf-2.svg" alt="shape-img">
-                                </div>
-                                <div class="burger-shape">
-                                    <img src="~/Users/assets/img/shape/burger-shape.png" alt="shape-img">
-                                </div>
-                            </a>
-                        </div>
-                        <div class="catagory-product-content text-center">
-                            <div class="catagory-product-icon">
-                                <img src="~/Users/assets/img/shape/food-shape.svg" alt="shape-text">
-                            </div>
-                            <h3>
-                                <a href="shop-single.html">
-                                    pro pizza
-                                </a>
-                            </h3>
-                            <p>5 products</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="swiper-slide">
-                    <div class="catagory-product-card bg-cover" style="background-image: url('users/assets/img/shape/catagory-card-shape.jpg');">
-                        <h5>5 products</h5>
-                        <div class="catagory-product-image text-center">
-                            <a href="shop.html">
-                                <img src="~/Users/assets/img/food/pasta.png" alt="product-img">
-                                <div class="decor-leaf">
-                                    <img src="~/Users/assets/img/shape/decor-leaf.svg" alt="shape-img">
-                                </div>
-                                <div class="decor-leaf-2">
-                                    <img src="~/Users/assets/img/shape/decor-leaf-2.svg" alt="shape-img">
-                                </div>
-                                <div class="burger-shape">
-                                    <img src="~/Users/assets/img/shape/burger-shape.png" alt="shape-img">
-                                </div>
-                            </a>
-                        </div>
-                        <div class="catagory-product-content text-center">
-                            <div class="catagory-product-icon">
-                                <img src="~/Users/assets/img/shape/food-shape.svg" alt="shape-text">
-                            </div>
-                            <h3>
-                                <a href="shop-single.html">
-                                    pro pizza
-                                </a>
-                            </h3>
-                            <p>5 products</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="swiper-slide">
-                    <div class="catagory-product-card bg-cover" style="background-image: url('users/assets/img/shape/catagory-card-shape.jpg');">
-                        <h5>5 products</h5>
-                        <div class="catagory-product-image text-center">
-                            <a href="shop.html">
-                                <img src="~/Users/assets/img/food/burger.png" alt="product-img">
-                                <div class="decor-leaf">
-                                    <img src="~/Users/assets/img/shape/decor-leaf.svg" alt="shape-img">
-                                </div>
-                                <div class="decor-leaf-2">
-                                    <img src="~/Users/assets/img/shape/decor-leaf-2.svg" alt="shape-img">
-                                </div>
-                                <div class="burger-shape">
-                                    <img src="~/Users/assets/img/shape/burger-shape.png" alt="shape-img">
-                                </div>
-                            </a>
-                        </div>
-                        <div class="catagory-product-content text-center">
-                            <div class="catagory-product-icon">
-                                <img src="~/Users/assets/img/shape/food-shape.svg" alt="shape-text">
-                            </div>
-                            <h3>
-                                <a href="shop-single.html">
-                                    pro pizza
-                                </a>
-                            </h3>
-                            <p>5 products</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="swiper-slide">
-                    <div class="catagory-product-card bg-cover" style="background-image: url('users/assets/img/shape/catagory-card-shape.jpg');">
-                        <h5>5 products</h5>
-                        <div class="catagory-product-image text-center">
-                            <a href="shop.html">
-                                <img src="~/Users/assets/img/food/french-fry.png" alt="product-img">
-                                <div class="decor-leaf">
-                                    <img src="~/Users/assets/img/shape/decor-leaf.svg" alt="shape-img">
-                                </div>
-                                <div class="decor-leaf-2">
-                                    <img src="~/Users/assets/img/shape/decor-leaf-2.svg" alt="shape-img">
-                                </div>
-                                <div class="burger-shape">
-                                    <img src="~/Users/assets/img/shape/burger-shape.png" alt="shape-img">
-                                </div>
-                            </a>
-                        </div>
-                        <div class="catagory-product-content text-center">
-                            <div class="catagory-product-icon">
-                                <img src="~/Users/assets/img/shape/food-shape.svg" alt="shape-text">
-                            </div>
-                            <h3>
-                                <a href="shop-single.html">
-                                    pro pizza
-                                </a>
-                            </h3>
-                            <p>5 products</p>
-                        </div>
-                    </div>
-                </div>
+            <div class="swiper-wrapper" id="products-container">
+
+                @foreach (var product in Model)
+                {
+                    <partial name="_productCard" model="product" />
+                }
             </div>
         </div>
     </div>

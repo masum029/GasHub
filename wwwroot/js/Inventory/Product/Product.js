@@ -23,7 +23,7 @@ async function GetProductList() {
             dataType: 'json',
             contentType: 'application/json;charset=utf-8'
         });
-        const productValv = await $.ajax({
+        const productValv = await $.ajax({ 
             url: '/Valve/GetallValve',
             type: 'get',
             dataType: 'json',
@@ -81,6 +81,7 @@ function onSuccess(companys, products, productSize, productValv) {
                     productName: product.name,
                     productSize: productSize.size,
                     productValve: productValv.unit,
+                    productImages: product.prodImage,
                 };
 
             }
@@ -98,6 +99,13 @@ function onSuccess(companys, products, productSize, productValv) {
             paging: true,
             data: mergedData,
             columns: [
+                {
+                    data: 'productImages',
+                    render: function (data, type, row, meta) {
+                        console.log("img of datra"+data);
+                        return '<img src="images/' + data + '" alt="Image" style="width: 50px;" />';
+                    }
+                },
                 {
                     data: 'productName',
                     render: function (data, type, row, meta) {
@@ -254,21 +262,25 @@ $('#modelCreate').on('shown.bs.modal', function () {
 $('#modelCreate').on('keypress', 'input', handleEnterKey);
 
 //======================================================================
-// Submit button click event
 $('#btnSave').click(async function () {
     console.log("Save");
-    debugger
-    // Check if the form is valid
+    debugger;
+
+    // Check if the form is valid (including image file size and type)
     if ($('#CompanyForm').valid()) {
-        // Proceed with form submission
-        var formData = $('#CompanyForm').serialize();
-        console.log(formData);
+        // Prepare form data using FormData object to handle file uploads
+        var formData = new FormData($('#CompanyForm')[0]);
+
+        console.log(formData); // This will now include FormFile data
         try {
             var response = await $.ajax({
                 url: '/Product/Create',
                 type: 'post',
-                contentType: 'application/x-www-form-urlencoded',
-                data: formData
+                // No need for contentType as FormData handles it
+                data: formData,
+                processData: false, // Prevent jQuery from processing data (handled by FormData)
+                contentType: false,   // Set to false to allow FormData to set headers
+                cache: false         // Disable caching for file uploads
             });
 
             $('#modelCreate').modal('hide');
@@ -284,6 +296,37 @@ $('#btnSave').click(async function () {
         }
     }
 });
+// Submit button click event
+//$('#btnSave').click(async function () {
+//    console.log("Save");
+//    debugger
+//    // Check if the form is valid
+//    if ($('#CompanyForm').valid()) {
+//        // Proceed with form submission
+//        var formData = $('#CompanyForm').serialize();
+
+//        console.log(formData);
+//        try {
+//            var response = await $.ajax({
+//                url: '/Product/Create',
+//                type: 'post',
+//                contentType: 'application/x-www-form-urlencoded',
+//                data: formData
+//            });
+
+//            $('#modelCreate').modal('hide');
+//            if (response === true) {
+//                // Show success message
+//                $('#successMessage').text('Your Product was successfully saved.');
+//                $('#successMessage').show();
+//                await GetProductList();
+//                $('#CompanyForm')[0].reset();
+//            }
+//        } catch (error) {
+//            console.log('Error:', error);
+//        }
+//    }
+//});
 
 async function popuprodValveDropdown() {
     debugger

@@ -44,6 +44,7 @@
                             <p> <a id="btn-Create" class="btn btn-success"> <i class="fa fa-plus"></i> Create New Product</a> </p>
                             <thead>
                                 <tr>
+                                    <th>Product Images</th>
                                     <th>Product Name</th>
                                     <th>Company Name</th>
                                     <th>Product Size</th>
@@ -51,7 +52,6 @@
                                     <th>Action</th>
                                 </tr>
                             </thead>
-
                         </table>
                     </div>
                     <!-- /.card-body -->
@@ -77,7 +77,7 @@
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
             <div class="modal-body">
-                <form id="CompanyForm">
+                <form id="CompanyForm" enctype="multipart/form-data">
                     <div class="card-body">
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                         <div class="row">
@@ -90,9 +90,9 @@
                                             <span asp-validation-for="Name" class="text-danger"></span>
                                         </div>
                                         <div class="form-group">
-                                            <label asp-for="ProdImage" class="control-label"></label>
-                                            <input asp-for="ProdImage" class="form-control" name="ProdImage" />
-                                            <span asp-validation-for="ProdImage" class="text-danger"></span>
+                                            <label asp-for="FormFile" class="control-label"></label>
+                                            <input asp-for="FormFile" class="form-control" name="FormFile" />
+                                            <span asp-validation-for="FormFile" class="text-danger"></span>
                                         </div>
 
                                         <div class="form-group">

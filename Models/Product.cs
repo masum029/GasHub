@@ -8,11 +8,10 @@ namespace GasHub.Models
        
         public Guid CompanyId { get; set; }
         public string? Name { get; set; }
-        
         public Guid ProdSizeId { get; set; }
-       
         public Guid ProdValveId { get; set; }
         public string? ProdImage { get; set; }
+        public IFormFile ? FormFile { get; set; }
         public bool IsActive { get; set; }
 
         // Navigation properties
