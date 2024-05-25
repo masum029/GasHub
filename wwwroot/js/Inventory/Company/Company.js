@@ -11,7 +11,7 @@ async function GetCompanyList() {
             dataType: 'json',
             contentType: 'application/json;charset=utf-8'
         });
-
+        
         if (data && data.data && data.data.length > 0) {
             const companies = data.data;
             console.log('companies:', companies);
