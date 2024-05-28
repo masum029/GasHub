@@ -353,32 +353,44 @@
                             </div>
                         </div>
                         <div class="header-right d-flex justify-content-end align-items-center">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                             <div class="menu-cart">
                                 <div class="cart-box">
-                                    <ul>
-                                        <li>
-                                            <img src="~/Users/assets/img/shop-food/s2.png" alt="image">
-                                            <div class="cart-product">
-                                                <a href="#0">grilled chiken</a>
-                                                <span>168$</span>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                    <ul>
-                                        <li class="border-none">
+                                    <ul id="cart-items">
+                                        @*  <li class="border-none">
                                             <img src="~/Users/assets/img/shop-food/s3.png" alt="image">
                                             <div class="cart-product">
                                                 <a href="#0">grilled chiken</a>
                                                 <span>168$</span>
                                             </div>
-                                        </li>
+                                        </li>  *@
                                     </ul>
+
                                     <div class="shopping-items d-flex align-items-center justify-content-between">
-                                        <span>Shopping : $20.00</span>
-                                        <span>Total : $168.00</span>
+                                        <span id="shopping-total">Shopping: Tk:0.00</span>
+                                        <span id="total-price">Total: Tk:0.00</span>
                                     </div>
                                     <div class="cart-button d-flex justify-content-between mb-4">
-                                        <a href="shop-cart.html" class="theme-btn">
+                                        <a asp-action="CheckOut" asp-controller="Home" class="theme-btn">
                                             View Cart
                                         </a>
                                         <a href="checkout.html" class="theme-btn bg-red-2">
@@ -386,10 +398,27 @@
                                         </a>
                                     </div>
                                 </div>
-                                <a href="shop-cart.html" class="cart-icon">
+                                <a  class="cart-icon">
                                     <i class="far fa-shopping-basket"></i>
                                 </a>
                             </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                             <div class="header-button">
                                 <a href="contact.html" class="theme-btn bg-red-2">contact us</a>
                             </div>
@@ -644,13 +673,13 @@
     <script src="~/Users/assets/js/wow.min.js"></script>
     <!--<< Main.js >>-->
     <script src="~/Users/assets/js/main.js"></script>
-
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 
  @*    <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script> *@
-
     @await RenderSectionAsync("Scripts", required: false)
+    <script src="~/js/inventory/product/layoutproduct.js"></script>
 </body>
 </html>

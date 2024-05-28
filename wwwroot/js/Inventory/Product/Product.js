@@ -82,6 +82,7 @@ function onSuccess(companys, products, productSize, productValv) {
                     productSize: productSize.size,
                     productValve: productValv.unit,
                     productImages: product.prodImage,
+                    productPrice : product.prodPrice,
                 };
 
             }
@@ -131,6 +132,12 @@ function onSuccess(companys, products, productSize, productValv) {
                     }
                 },
                 {
+                    data: 'productPrice',
+                    render: function (data, type, row, meta) {
+                        return data;
+                    }
+                },
+                {
                     data: 'id',
                     render: function (data) {
                         return '<button class="btn btn-primary btn-sm ms-1" onclick="editCompany(\'' + data + '\')">Edit</button>' + ' ' +
@@ -174,6 +181,9 @@ const companyForm = $('#CompanyForm').validate({
         ,
         ProdSizeId: {
             required: true,
+        },
+        ProdPrice: {
+            required: true,
         }
     },
     messages: {
@@ -195,6 +205,9 @@ const companyForm = $('#CompanyForm').validate({
         }
         ,
         ProdSizeId: {
+            required: " Product Name is required.",
+        },
+        ProdPrice: {
             required: " Product Name is required.",
         }
     },
@@ -433,6 +446,7 @@ async function editCompany(id) {
         $('#prodValveDropdown').val(data.prodValveId);
         $('#companyDropdown').val(data.companyId);
         $('#prodSizeDropdown').val(data.prodSizeId);
+        $('#ProdPrice').val(data.prodPrice);
 
 
         debugger

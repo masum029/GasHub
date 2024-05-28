@@ -1,28 +1,18 @@
 ﻿ @model GasHub.Models.Product
 <div class="swiper-slide">
-    <div class="catagory-product-card bg-cover" style="background-image: url('users/assets/img/shape/catagory-card-shape.jpg');">
+    <div class="catagory-product-card bg-cover" style="background-image: url('husers/assets/img/shape/catagory-card-shape.jpg');">
         <h5>@Model.Name</h5>
         <div class="catagory-product-image text-center">
-            <a href="shop.html">
+            <a asp-action="Product" asp-controller="Home">
                 <img src="@Url.Content("~/images/" + Model.ProdImage)" alt="product-img" style="width: 100%;">
-
-                <div class="decor-leaf">
-                    <img src="~/Users/assets/img/shape/decor-leaf.svg" alt="shape-img">
-                </div>
-                <div class="decor-leaf-2">
-                    <img src="~/Users/assets/img/shape/decor-leaf-2.svg" alt="shape-img">
-                </div>
-                <div class="burger-shape">
-                    <img src="~/Users/assets/img/shape/burger-shape.png" alt="shape-img">
-                </div>
             </a>
         </div>
         <div class="catagory-product-content text-center">
-            <div class="catagory-product-icon">
-                <img src="~/Users/assets/img/shape/food-shape.svg" alt="shape-text">
-            </div>
+             <div class="catagory-product-icon">
+                 <img src="~/Users/assets/img/shape/food-shape.svg" alt="shape-text"> 
+            </div> 
             <h3>
-                <a href="shop-single.html">
+                <a asp-action="Product" asp-controller="Home">
                     @Model.Name
                 </a>
             </h3>

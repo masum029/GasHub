@@ -1,4 +1,4 @@
-﻿@model IEnumerable<GasHub.Models.Product>
+﻿@model GasHub.Models.ViewModels.ProductViewModel
        <!-- Food Catagory Section Start -->
 <section class="food-category-section fix section-padding section-bg">
     <div class="tomato-shape">
@@ -24,11 +24,19 @@
         </div>
         <div class="swiper food-catagory-slider">
             <div class="swiper-wrapper" id="products-container">
-
-                @foreach (var product in Model)
-                {
-                    <partial name="_productCard" model="product" />
+                @{
+                    var products = Model.ProductList;
+                    var companies = Model.companiList;
+                    @foreach (var company in companies)
+                    {
+                        var product = products.FirstOrDefault(x => x.CompanyId == company.Id);
+                        if (product != null)
+                        {
+                            <partial name="_productCard" model="product" />
+                        }
+                    }
                 }
+                
             </div>
         </div>
     </div>

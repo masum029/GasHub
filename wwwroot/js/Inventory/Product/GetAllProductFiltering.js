@@ -6,12 +6,20 @@
     let selectedCompanyId = null;
     let selectedSizes = [];
 
-    // Event listener for company filter
     // Add event listener for company filter
     $('#category-list').on('click', 'a', function (e) {
         e.preventDefault();
         debugger
-        const selectedCompanyId = $(this).data('company-id');
+
+        // Get the selected company ID from the clicked link
+        selectedCompanyId = $(this).data('company-id');
+
+        // Change the color of the selected company name to success color
+        $('#all-products-btn').removeClass('text-success');
+        $('#category-list a').removeClass('text-success'); // Remove success color from all links
+        $(this).addClass('text-success'); // Add success color to the clicked link
+
+        // Fetch the product list based on the selected company and sizes
         GetProductList(selectedCompanyId, selectedSizes);
     });
 
@@ -24,7 +32,24 @@
         console.log('Selected sizes:', selectedSizes);  // Debugging statement
         GetProductList(selectedCompanyId, selectedSizes);
     });
+
+    // Reset selected company
+    // Reset selected company and make "All Products" active
+    $('#all-products-btn').on('click', function () {
+        debugger
+        selectedCompanyId = null; // Reset selected company
+
+        // Remove success color from all company links
+        $('#category-list a').removeClass('text-success');
+
+        // Add success color to "All Products" button
+        $(this).addClass('text-success');
+
+        // Fetch all products
+        GetProductList(selectedCompanyId, selectedSizes);
+    });
 });
+// Add custom style to style the selected link
 
 async function GetCompanyList() {
     debugger
@@ -128,6 +153,7 @@ async function GetProductList(companyId = null, sizeIds = []) {
                 var button = $('<a></a>')
                     .attr('href', 'shop-cart.html')
                     .addClass('theme-btn-2')
+                    .attr('order-product-id', product.id)
                     .html('<i class="far fa-shopping-basket"></i>Order Now');
                 var priceDiv = $('<div></div>').addClass('info-price d-flex align-items-center justify-content-center');
 
@@ -189,8 +215,9 @@ async function GetProductList1() {
                 var contentDiv = $('<div></div>').addClass('catagory-product-content');
                 var buttonDiv = $('<div></div>').addClass('catagory-button');
                 var button = $('<a></a>')
-                    .attr('href', 'shop-cart.html')
+                    //.attr('href', 'shop-cart.html')
                     .addClass('theme-btn-2')
+                    .attr('order-product-id', product.id)
                     .html('<i class="far fa-shopping-basket"></i>Order Now');
                 var priceDiv = $('<div></div>').addClass('info-price d-flex align-items-center justify-content-center');
 
@@ -228,5 +255,43 @@ async function GetProductList1() {
 
     }
 }
+
+$(document).on('click', '.theme-btn-2', async function (e) {
+    e.preventDefault();
+
+    // Get the product ID from the button's data attribute
+    var productId = $(this).attr('order-product-id');
+
+    // Retrieve the existing product IDs from local storage
+    var storedProducts = JSON.parse(localStorage.getItem('productIds')) || {};
+
+    // Add the new product ID to the list
+    // Check if the product ID already exists in the stored products
+    if (storedProducts[productId]) {
+        // If it exists, increment the count
+        storedProducts[productId]++;
+    } else {
+        // If it doesn't exist, add the product ID with a count of 1
+        storedProducts[productId] = 1;
+    }
+
+    // Store the updated list back to local storage
+    localStorage.setItem('productIds', JSON.stringify(storedProducts));
+
+    // Call the addToCard function
+    await addToCard();
+
+    // Show a success alert with SweetAlert
+    Swal.fire({
+        title: 'Success!',
+        text: 'Product added to cart.',
+        icon: 'success',
+        timer: 1500,
+        showConfirmButton: false
+    });
+});
+
+
+
 
 

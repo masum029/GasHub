@@ -1,4 +1,5 @@
 using GasHub.Models;
+using GasHub.Models.ViewModels;
 using GasHub.Services.Abstractions;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
@@ -17,10 +18,16 @@ namespace GasHub.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var products = await _unitOfWorkClientServices.productClientServices.GetAllAsync("Product/getAllProduct");
-            return View(products);
+            var productsVm = new ProductViewModel();
+            productsVm.ProductList = await _unitOfWorkClientServices.productClientServices.GetAllAsync("Product/getAllProduct");
+            productsVm.companiList= await _unitOfWorkClientServices.companyClientServices.GetAllAsync("Company/getAllCompany");
+            return View(productsVm);
         }
         public async Task<IActionResult> Product()
+        {
+            return View();
+        }
+        public async Task<IActionResult> CheckOut()
         {
             return View();
         }

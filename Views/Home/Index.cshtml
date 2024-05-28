@@ -1,4 +1,4 @@
-﻿@model IEnumerable<GasHub.Models.Product>
+﻿@model GasHub.Models.ViewModels.ProductViewModel
 @{
     ViewData["Title"] = "Home Page";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -21,3 +21,6 @@
 
 <partial name="_MainCtaBannerPartialView" />
 <partial name="_BookingPartialView" />
+@section Scripts {
+    <script src="~/js/inventory/product/getallproductfiltering.js"></script>
+}

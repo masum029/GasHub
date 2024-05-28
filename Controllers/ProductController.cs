@@ -44,6 +44,12 @@ namespace GasHub.Controllers
         public async Task<IActionResult> Update(Guid id, Product model)
         {
             model.UpdatedBy = "mamun";
+            var productbyId = await _unitOfWorkClientServices.productClientServices.GetByIdAsync(id, "Product/getProduct");
+            if (model.ProdImage != null)
+            {
+              model.ProdImage = model.ProdImage;
+            }
+            model.ProdImage = productbyId.ProdImage;
             var product = await _unitOfWorkClientServices.productClientServices.UpdateAsync(id, model, "Product/UpdateProduct");
             return Json(product);
         }
