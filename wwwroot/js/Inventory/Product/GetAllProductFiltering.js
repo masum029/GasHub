@@ -126,6 +126,16 @@ async function GetProductList(companyId = null, sizeIds = []) {
             dataType: 'json',
             contentType: 'application/json;charset=utf-8'
         });
+        const productDiscuns = await $.ajax({
+            url: '/ProductDiscun/GetallProductDiscun',
+            type: 'get',
+            dataType: 'json',
+            contentType: 'application/json;charset=utf-8'
+        });
+        var productDiscunMap = {};
+        productDiscuns.data.forEach(function (discount) {
+            productDiscunMap[discount.productId] = discount;
+        });
 
         if (products && products.data) {
             var productSection = $('#product-section');
@@ -142,6 +152,12 @@ async function GetProductList(companyId = null, sizeIds = []) {
             }
 
             $.each(filteredProducts, function (index, product) {
+
+
+                debugger
+                var discount = productDiscunMap[product.id];
+
+
                 var colDiv = $('<div></div>').addClass('col-xl-3 col-lg-3 col-md-3');
                 var cardDiv = $('<div></div>').addClass('catagory-product-card-2 shadow-style text-center');
                 var imgDiv = $('<div></div>').addClass('catagory-product-image');
@@ -156,12 +172,21 @@ async function GetProductList(companyId = null, sizeIds = []) {
                     .attr('order-product-id', product.id)
                     .html('<i class="far fa-shopping-basket"></i>Order Now');
                 var priceDiv = $('<div></div>').addClass('info-price d-flex align-items-center justify-content-center');
+                buttonDiv.append(button);
 
-                var discountText = product.discount ? '-' + product.discount + '%' : '00';
-                var originalPriceText = product.originalPrice ? '$' + product.originalPrice : '00';
-                var discountedPriceText = product.discountedPrice ? '$' + product.discountedPrice : '00';
+                if (discount) {
+                    var discountedProce = product.prodPrice - discount.discountedPrice;
+                    var originalPriceText = product.prodPrice ? 'TK' + product.prodPrice : '00';
+                    var discountedPriceText = discountedProce ? 'TK' + discountedProce : '00';
+                    var originalPrice = $('<del></del>').text(originalPriceText);
+                    var discountedPrice = $('<span></span>').text(discountedPriceText);
+                    priceDiv.append(originalPrice).append(discountedPrice);
+                } else {
+                    var originalPriceText = product.prodPrice ? 'TK' + product.prodPrice : '00';
+                    var originalPrice = $('<h5></h5>').text(originalPriceText);
+                    priceDiv.append(originalPrice);
+                }
 
-                var discount = $('<p></p>').text(discountText);
                 var originalPrice = $('<h6></h6>').text(originalPriceText);
                 var discountedPrice = $('<span></span>').text(discountedPriceText);
 
@@ -176,8 +201,7 @@ async function GetProductList(companyId = null, sizeIds = []) {
                     starDiv.append(star);
                 }
 
-                buttonDiv.append(button);
-                priceDiv.append(discount).append(originalPrice).append(discountedPrice);
+
                 contentDiv.append(buttonDiv).append(priceDiv).append(title).append(starDiv);
                 cardDiv.append(imgDiv.append(img)).append(contentDiv);
                 colDiv.append(cardDiv);
@@ -197,12 +221,28 @@ async function GetProductList1() {
             dataType: 'json',
             contentType: 'application/json;charset=utf-8'
         });
-
+        const productDiscuns = await $.ajax({
+            url: '/ProductDiscun/GetallProductDiscun',
+            type: 'get',
+            dataType: 'json',
+            contentType: 'application/json;charset=utf-8'
+        });
+        var productDiscunMap = {};
+        productDiscuns.data.forEach(function (discount) {
+            productDiscunMap[discount.productId] = discount;
+        });
         if (products && products.data) { 
             var productSection = $('#product-section');
             productSection.empty(); // Clear any existing product cards
 
             $.each(products.data, function (index, product) {
+                
+
+
+                debugger
+                var discount = productDiscunMap[product.id];
+
+
                 // Create a new product card for each product
                 var colDiv = $('<div></div>').addClass('col-xl-3 col-lg-3 col-md-3');
                 var cardDiv = $('<div></div>').addClass('catagory-product-card-2 shadow-style text-center');
@@ -222,13 +262,21 @@ async function GetProductList1() {
                 var priceDiv = $('<div></div>').addClass('info-price d-flex align-items-center justify-content-center');
 
                 // Check for discount, original price, and discounted price
-                var discountText = product.discount ? '-' + product.discount + '%' : '00';
-                var originalPriceText = product.originalPrice ? '$' + product.originalPrice : '00';
-                var discountedPriceText = product.discountedPrice ? '$' + product.discountedPrice : '00';
+                buttonDiv.append(button);
 
-                var discount = $('<p></p>').text(discountText);
-                var originalPrice = $('<h6></h6>').text(originalPriceText);
-                var discountedPrice = $('<span></span>').text(discountedPriceText);
+                if (discount) {
+                    var discountedProce = product.prodPrice - discount.discountedPrice;
+                    var originalPriceText = product.prodPrice ? 'TK' + product.prodPrice : '00';
+                    var discountedPriceText = discountedProce ? 'TK' + discountedProce : '00';
+                    var originalPrice = $('<del></del>').text(originalPriceText);
+                    var discountedPrice = $('<span></span>').text(discountedPriceText);
+                    priceDiv.append(originalPrice).append(discountedPrice);
+                } else {
+                    var originalPriceText = product.prodPrice ? 'TK' + product.prodPrice : '00';
+                    var originalPrice = $('<h5></h5>').text(originalPriceText);
+                    priceDiv.append(originalPrice);
+                }
+               
 
                 var title = $('<h4></h4>').append($('<a></a>').attr('href', 'shop-single.html').text(product.name));
                 var starDiv = $('<div></div>').addClass('star');
@@ -242,8 +290,7 @@ async function GetProductList1() {
                     starDiv.append(star);
                 }
 
-                buttonDiv.append(button);
-                priceDiv.append(discount).append(originalPrice).append(discountedPrice);
+               
                 contentDiv.append(buttonDiv).append(priceDiv).append(title).append(starDiv);
                 cardDiv.append(imgDiv.append(img)).append(contentDiv);
                 colDiv.append(cardDiv);

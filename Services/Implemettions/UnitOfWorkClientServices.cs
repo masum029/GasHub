@@ -35,6 +35,8 @@ namespace GasHub.Services.Implemettions
 
         public ITokenService tokenServices { get; private set; }
 
+        public IProductDiscunClientServices productDiscunClientServices { get; private set; }
+
         public UnitOfWorkClientServices(IHttpClientFactory httpClientFactory, IHttpContextAccessor contextAccessor, ITokenService tokenService)
         {
             _httpClientFactory = httpClientFactory;
@@ -53,6 +55,7 @@ namespace GasHub.Services.Implemettions
             valveClientServices = new ValveClientServices(httpClientFactory, tokenService);
             registerUserClientServices = new RegisterUserClientServices(httpClientFactory, tokenService);
             loginUserClientServices = new LoginUserClientServices(httpClientFactory, tokenService);
+            productDiscunClientServices = new ProductDiscunClientServices(httpClientFactory, tokenService);
             
         }
     }

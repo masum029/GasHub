@@ -9,8 +9,15 @@
         <div class="row">
             @{
                 var products = Model.ProductList.Take(8);
-                @foreach (var product in products)
+                var discounts = Model.productDiscunts.ToDictionary(d => d.ProductId, d => d.DiscountedPrice);
+
+                foreach (var product in products)
                 {
+                    if (discounts.TryGetValue(product.Id, out var discountPrice))
+                    {
+                        product.DiscountPrice =  discountPrice;
+                    }
+
                     <partial name="_PopularProductCard" model="product" />
                 }
             }

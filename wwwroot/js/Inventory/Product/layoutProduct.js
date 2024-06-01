@@ -34,7 +34,16 @@ async function addToCard() {
 
     // Populate the cart with the products
     var totalPrice = 0;
-
+    const productDiscuns = await $.ajax({
+        url: '/ProductDiscun/GetallProductDiscun',
+        type: 'get',
+        dataType: 'json',
+        contentType: 'application/json;charset=utf-8'
+    });
+    var productDiscunMap = {};
+    productDiscuns.data.forEach(function (discount) {
+        productDiscunMap[discount.productId] = discount;
+    });
     // Create a product map for easy access
     var productMap = {};
     products.forEach(function (product) {
@@ -44,13 +53,20 @@ async function addToCard() {
     Object.keys(storedProductIds).forEach(function (id) {
         debugger
         var product = productMap[id];
+        var discount = productDiscunMap[id];
         if (product) {
             var count = storedProductIds[id];
             var cartItem = $('<li></li>').addClass('list-group-item d-flex justify-content-between align-items-center');
             var productImage = '<img src="/images/' + product.prodImage + '" alt="Image" class="img-fluid" style="width: 60px;" />';
             var cartProduct = $('<div></div>').addClass('cart-product ms-3');
             var productLink = $('<p></p>').text(product.name + ' x ' + count);
+            if (discount) {
+                var productPrice = $('<span></span>').text(formatPrice((product.prodPrice - discount.discountedPrice) * count)).addClass('ms-3');
+            } else {
+
             var productPrice = $('<span></span>').text(formatPrice(product.prodPrice * count)).addClass('ms-3');
+            }
+            
 
             // Increase, Decrease, and Cancel buttons
             var cancelButton = $('<button></button>').addClass('btn text-danger fw-bold ms-2').html('&#10006;').css('font-weight', 'bold');

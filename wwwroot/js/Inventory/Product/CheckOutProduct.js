@@ -1,6 +1,7 @@
 ﻿$(document).ready(async function () {
     await getLocalStorageList();
     updateTotals();
+    addressOptions();
 });
 
 async function getLocalStorageList() {
@@ -15,10 +16,21 @@ async function getLocalStorageList() {
 
     var $productList = $('#product-list');
     $productList.empty(); // Clear the current list
-
+    const productDiscuns = await $.ajax({
+        url: '/ProductDiscun/GetallProductDiscun',
+        type: 'get',
+        dataType: 'json',
+        contentType: 'application/json;charset=utf-8'
+    });
+    var productDiscunMap = {};
+    productDiscuns.data.forEach(function (discount) {
+        productDiscunMap[discount.productId] = discount;
+    });
     Object.keys(storedProducts).forEach(function (id) {
         var product = productMap[id];
         var quantity = storedProducts[id];
+        var discount = productDiscunMap[id];
+        var discounted = discount ? discount.discountedPrice : 0; // Check if discountedPrice exists
         debugger
         var productHtml = `
             <div class="d-flex justify-content-between mb-2" data-product-id="${id}">
@@ -38,7 +50,7 @@ async function getLocalStorageList() {
                 </div>
                 <div>
                     <div class="d-flex align-items-start flex-column">
-                        <h5 class="fs-4"> Tk : <span>${product.prodPrice * quantity}</span> </h5>
+                        <h5 class="fs-4"> Tk : <span>${(product.prodPrice - discounted) * quantity}</span> </h5>
                         <a class="remove-btn">Remove</a>
                     </div>
                 </div>
@@ -71,23 +83,25 @@ async function updateTotals() {
     var products = await getProduct();
     var productMap = {};
     var subtotal = 0;
+    var total = 0;
 
     // Create a product map for easy access
     products.forEach(function (product) {
         productMap[product.id] = product;
     });
- 
+
     // Calculate the subtotal
     Object.keys(storedProducts).forEach(function (id) {
         var product = productMap[id];
         if (product) {
             subtotal += product.prodPrice * storedProducts[id]; // Assuming the product price is stored in `product.price`
         }
+        total = subtotal;
     });
 
     // Update the HTML
     $('#subtotal').text(subtotal);
-    $('#total').text(subtotal);
+    $('#total').text(total);
 }
 
 // Ensure to call updateTotals() when necessary, e.g., after adding/removing/updating products in the cart
@@ -154,3 +168,94 @@ $(document).on('click', '.remove-btn', function () {
         }
     });
 });
+
+async function addressOptions() {
+    try {
+        debugger
+        const userId = $('#address-container').data('user-id');
+
+
+        const deliveryAddressList = await getAddressList();
+        const loginUser = await GetLoginUserById(userId);
+        const deliveryAddress = deliveryAddressList.find(x => x.userId === userId);
+        console.log(loginUser);
+        if (deliveryAddress) {
+            const { mobile, address } = deliveryAddress;
+
+            if (mobile && address) {
+                $('#address-container').html(`
+                        
+                       <p>Delivery Address </p>
+                        <div class="d-flex w-100 flex-column p-2" id="address-details" style="background-color: #dcdcdc;">
+                            <span id="Name">${loginUser?.firstName} ${loginUser?.lastName}</span>
+                            <span id="phonNumber">${mobile}</span>
+                            <span id="addressDetails" class="w-100">${address}</span>
+                        </div>
+                `);
+            } else if (mobile) {
+                $('#address-container').html(`
+                    <p>Delivery Address </p>
+                        <div class="d-flex w-100 flex-column p-2" id="address-details" style="background-color: #dcdcdc;">
+                            <span id="Name">${loginUser?.firstName} ${loginUser?.lastName}</span>
+                            <span id="phonNumber">${mobile}</span>
+                            <span id="addressDetails" class="w-50">${address}</span>
+                        </div>
+                `);
+            } else {
+                $('#address-container').html(`
+                     <div class="d-flex w-100 flex-column justify-content-center" id="address-details">
+                        <p class="mx-auto">Please add your address before order</p>
+                        <button  id="add-address-btn" class="btn btn-sm w-50 btn-dark mx-auto mt-2 text-white">Add Address</button>
+                    </div>
+                `);
+            }
+        } else {
+            $('#address-container').html(`
+                 <div class="d-flex w-100 flex-column justify-content-center" id="address-details">
+                        <p class="mx-auto">Please add your address before order</p>
+                        <button  id="add-address-btn" class="btn btn-sm w-50 btn-dark mx-auto mt-2 text-white">Add Address</button>
+                    </div>
+            `);
+        }
+    } catch (error) {
+        console.error('Error fetching address details:', error);
+    }
+}
+$(document).on('click', '#add-address-btn', function (e) {
+    e.preventDefault(); // Prevent the default form submission
+    window.location.href = "/Home/AddAddress";
+});
+
+
+async function getAddressList() {
+    debugger
+    try {
+        const response = await $.ajax({
+            url: '/DeliveryAddress/GetDeliveryAddressList',
+            type: 'get',
+            dataType: 'json',
+            contentType: 'application/json;charset=utf-8'
+        });
+
+        return response.data || [];
+    } catch (error) {
+        console.log('Error:', error);
+        return [];
+    }
+}
+async function GetLoginUserById(id) {
+    debugger
+    try {
+        const response = await $.ajax({
+            url: '/User/GetById/' + id,
+            type: 'get',
+            dataType: 'json',
+            contentType: 'application/json;charset=utf-8'
+        });
+
+        return response || [];
+    } catch (error) {
+        console.log('Error:', error);
+        return [];
+    }
+}

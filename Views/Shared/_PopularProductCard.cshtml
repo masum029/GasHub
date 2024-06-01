@@ -1,4 +1,10 @@
-﻿ @model GasHub.Models.Product
+﻿@model GasHub.Models.Product
+
+@{
+    var discountprice = Model.DiscountPrice.HasValue ? Model.ProdPrice - Model.DiscountPrice.Value : Model.ProdPrice;
+    var hasDiscount = Model.DiscountPrice.HasValue && Model.DiscountPrice.Value > 0;
+}
+
 <div class="col-xl-3 col-lg-6 col-md-6 wow fadeInUp" data-wow-delay=".8s">
     <div class="catagory-product-card-2 text-center">
         <div class="catagory-product-image">
@@ -11,12 +17,18 @@
                 </a>
             </div>
             <div class="info-price d-flex align-items-center justify-content-center">
-                <p>-5%</p>
-                <h6>$30.52</h6>
-                <span>$28.52</span>
+                @if (hasDiscount)
+                {
+                    <del>Tk:<span>@Model.ProdPrice</span></del>
+                    <span class="text-success">Tk:<span>@discountprice</span></span>
+                }
+                else
+                {
+                    <span>Tk:<span>@Model.ProdPrice</span></span>
+                }
             </div>
             <h4>
-                <a href="shop-single.html">@Model.Name </a>
+                <a href="shop-single.html">@Model.Name</a>
             </h4>
             <div class="star">
                 <span class="fas fa-star"></span>
@@ -28,4 +40,3 @@
         </div>
     </div>
 </div>
-

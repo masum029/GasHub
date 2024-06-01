@@ -6,5 +6,6 @@
         public List<Company> companiList { get; set; }
         public List<Valve> ValveList { get; set; }
         public List<ProductSize> productSizeList { get; set; }
+        public List<ProductDiscunt> productDiscunts { get; set; }
     }
 }

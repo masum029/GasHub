@@ -15,5 +15,6 @@
         IValveClientServices valveClientServices { get; }
         IRegisterUserClientServices registerUserClientServices { get; }
         ILoginUserClientServices loginUserClientServices { get; }
+        IProductDiscunClientServices productDiscunClientServices { get; }
     }
 }
