@@ -62,9 +62,10 @@ async function addToCard() {
             var productLink = $('<p></p>').text(product.name + ' x ' + count);
             if (discount) {
                 var productPrice = $('<span></span>').text(formatPrice((product.prodPrice - discount.discountedPrice) * count)).addClass('ms-3');
+                totalPrice += (product.prodPrice - discount.discountedPrice) * count;
             } else {
-
-            var productPrice = $('<span></span>').text(formatPrice(product.prodPrice * count)).addClass('ms-3');
+                var productPrice = $('<span></span>').text(formatPrice(product.prodPrice * count)).addClass('ms-3');
+                totalPrice += product.prodPrice * count;
             }
             
 
@@ -83,7 +84,7 @@ async function addToCard() {
             cartItem.append(productImage).append(cartProduct).append(cancelButton);
             cartItemsContainer.append(cartItem);
 
-            totalPrice += product.prodPrice * count;
+           
         }
     });
 

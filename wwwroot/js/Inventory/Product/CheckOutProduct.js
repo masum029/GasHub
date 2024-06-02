@@ -84,7 +84,17 @@ async function updateTotals() {
     var productMap = {};
     var subtotal = 0;
     var total = 0;
-
+    var totalDiscount = 0;
+    const productDiscuns = await $.ajax({
+        url: '/ProductDiscun/GetallProductDiscun',
+        type: 'get',
+        dataType: 'json',
+        contentType: 'application/json;charset=utf-8'
+    });
+    var productDiscunMap = {};
+    productDiscuns.data.forEach(function (discount) {
+        productDiscunMap[discount.productId] = discount;
+    });
     // Create a product map for easy access
     products.forEach(function (product) {
         productMap[product.id] = product;
@@ -93,14 +103,20 @@ async function updateTotals() {
     // Calculate the subtotal
     Object.keys(storedProducts).forEach(function (id) {
         var product = productMap[id];
-        if (product) {
-            subtotal += product.prodPrice * storedProducts[id]; // Assuming the product price is stored in `product.price`
+        debugger
+        var discount = productDiscunMap[id];
+        if (discount) {
+            subtotal += (product.prodPrice - discount.discountedPrice )* storedProducts[id]; // Assuming the product price is stored in `product.price`
+            totalDiscount += discount.discountedPrice * storedProducts[id];
+        } else {
+            subtotal += product.prodPrice * storedProducts[id];
         }
         total = subtotal;
     });
 
     // Update the HTML
     $('#subtotal').text(subtotal);
+    $('#discount').text(totalDiscount);
     $('#total').text(total);
 }
 
