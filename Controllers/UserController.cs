@@ -24,6 +24,12 @@ namespace GasHub.Controllers
             var users = await _unitOfWorkClientServices.userClientServices.GetAllAsync("User/GetAllUserDetails");
             return Json(new { data = users });
         }
+        [HttpPost]
+        public async Task<IActionResult> Create(Register model)
+        {
+            var user = await _unitOfWorkClientServices.registerUserClientServices.AddAsync(model, "User/Create");
+            return Json(user);
+        }
         [HttpGet]
         public async Task<IActionResult> GetById(Guid id)
         {

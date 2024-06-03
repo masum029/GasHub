@@ -40,6 +40,7 @@ function onSuccess(users) {
                     phone: user.phoneNumber,
                     image: user.userImg,
                     userName: user.userName,
+                    
                 };
             }
             return null; // Skip if user not found
@@ -215,13 +216,14 @@ $('#modelCreate').on('keypress', 'input', handleEnterKey);
 
 // Submit button click event
 $('#btnSave').click(async function () {
+    debugger
     // Check if the form is valid
     if ($('#CompanyForm').valid()) {
         // Proceed with form submission
         var formData = $('#CompanyForm').serialize();
         try {
             const response = await $.ajax({
-                url: '/Company/Create',
+                url: '/User/Create',
                 type: 'post',
                 contentType: 'application/x-www-form-urlencoded',
                 data: formData
@@ -232,7 +234,7 @@ $('#btnSave').click(async function () {
                 // Show success message
                 $('#successMessage').text('Your company was successfully saved.');
                 $('#successMessage').show();
-                await GetCompanyList();
+                await GetUserList();
                 $('#CompanyForm')[0].reset();
             }
         } catch (error) {

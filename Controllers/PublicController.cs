@@ -29,7 +29,11 @@ namespace GasHub.Controllers
         {
             model.Roles = ["User"];
             var register = await _unitOfWorkClientServices.registerUserClientServices.AddAsync(model, "User/Create");
-            return Json(register);
+            if (register)
+            {
+                return RedirectToAction("Login");
+            }
+            return View(model);
         }
         [HttpGet]
         public IActionResult Login(string? ReturnUrl = null)

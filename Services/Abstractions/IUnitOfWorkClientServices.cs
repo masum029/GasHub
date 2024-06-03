@@ -16,5 +16,7 @@
         IRegisterUserClientServices registerUserClientServices { get; }
         ILoginUserClientServices loginUserClientServices { get; }
         IProductDiscunClientServices productDiscunClientServices { get; }
+        IRoleClientServices roleClientServices { get; }
+        IByAdminRegisterClientServices byAdminRegisterClientServices { get; }
     }
 }
