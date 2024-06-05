@@ -253,7 +253,7 @@ $('#btnSave').click(async function () {
             $('#modelCreate').modal('hide');
             if (response === true) {
                 // Show success message
-                $('#successMessage').text('Your Delivery Address was successfully saved.');
+                $('#successMessage').text('Your Trader was successfully saved.');
                 $('#successMessage').show();
                 await GetTraderList()
                 $('#CompanyForm')[0].reset();
@@ -276,7 +276,7 @@ async function populateCompanyDropdown() {
         // Clear existing options
         $('#companyDropdown').empty();
         // Add default option
-        $('#companyDropdown').append('<option value="">Select User</option>');
+        $('#companyDropdown').append('<option value="">Select Company</option>');
         // Add user options
         console.log(data.data);
         $.each(data.data, function (index, company) {
@@ -292,6 +292,8 @@ async function populateCompanyDropdown() {
 // Edit Company
 async function editCompany(id) {
     console.log("Edit company with id:", id);
+    $('#myModalLabelUpdateEmployee').show();
+    $('#myModalLabelAddEmployee').hide();
     await populateCompanyDropdown();
     // Reset form validation
     debugger
@@ -342,7 +344,7 @@ async function updateCompany(id) {
             $('#modelCreate').modal('hide');
             if (response === true) {
                 // Show success message
-                $('#successMessage').text('Your Delivery Address was successfully updated.');
+                $('#successMessage').text('Your Trader was successfully updated.');
                 $('#successMessage').show();
                 // Reset the form
                 $('#CompanyForm')[0].reset();
@@ -390,6 +392,8 @@ async function deleteCompany(id) {
             });
 
             $('#deleteAndDetailsModel').modal('hide');
+            $('#successMessage').text('Your Trader was successfully Delete.');
+            $('#successMessage').show();
             await GetTraderList()
         } catch (error) {
             console.log(error);

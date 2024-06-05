@@ -258,7 +258,7 @@ async function popuprodValveDropdown() {
         // Clear existing options
         $('#prodValveDropdown').empty();
         // Add default option
-        $('#prodValveDropdown').append('<option value="">Select User</option>');
+        $('#prodValveDropdown').append('<option value="">Select Valve </option>');
         // Add user options
         console.log(data.data);
         $.each(data.data, function (index, valv) {
@@ -282,7 +282,7 @@ async function populateProductDropdown() {
         // Clear existing options
         $('#productDropdown').empty();
         // Add default option
-        $('#productDropdown').append('<option value="">Select User</option>');
+        $('#productDropdown').append('<option value="">Select Product Name</option>');
         // Add user options
         console.log(data.data);
         $.each(data.data, function (index, product) {
@@ -328,6 +328,8 @@ $('#refreshButton').click(function () {
 // Edit Company
 async function editCompany(id) {
     console.log("Edit company with id:", id);
+    $('#myModalLabelUpdateEmployee').show();
+    $('#myModalLabelAddEmployee').hide();
     await populateProductDropdown();
     await popuprodValveDropdown();
     await populateprodSizeDropdown();
@@ -379,7 +381,7 @@ async function updateCompany(id) {
             $('#modelCreate').modal('hide');
             if (response === true) {
                 // Show success message
-                $('#successMessage').text('Your Delivery Address was successfully updated.');
+                $('#successMessage').text('Your Product Return was successfully updated.');
                 $('#successMessage').show();
                 // Reset the form
                 $('#CompanyForm')[0].reset();
@@ -428,6 +430,8 @@ async function deleteCompany(id) {
             });
 
             $('#deleteAndDetailsModel').modal('hide');
+            $('#successMessage').text('Your Product Return was successfully Delete .');
+            $('#successMessage').show();
             await GetProdReturnList();
         } catch (error) {
             console.log(error);

@@ -207,7 +207,7 @@ $('#btnSave').click(async function () {
             $('#modelCreate').modal('hide');
             if (response === true) {
                 // Show success message
-                $('#successMessage').text('Your Delivery Address was successfully saved.');
+                $('#successMessage').text('Your Product Discun was successfully saved.');
                 $('#successMessage').show();
                 await GetProductDiscunList();
                 $('#CompanyForm')[0].reset();
@@ -230,7 +230,7 @@ async function populateProductDropdown() {
         // Clear existing options
         $('#productDropdown').empty();
         // Add default option
-        $('#productDropdown').append('<option value="">Select User</option>');
+        $('#productDropdown').append('<option value="">Select Product</option>');
         // Add user options
         console.log(data.data);
         $.each(data.data, function (index, product) {
@@ -246,6 +246,8 @@ async function populateProductDropdown() {
 // Edit Company
 async function editCompany(id) {
     console.log("Edit company with id:", id);
+    $('#myModalLabelUpdateEmployee').show();
+    $('#myModalLabelAddEmployee').hide();
     await populateProductDropdown();
 
     // Reset form validation
@@ -296,7 +298,7 @@ async function updateCompany(id) {
             $('#modelCreate').modal('hide');
             if (response === true) {
                 // Show success message
-                $('#successMessage').text('Your Delivery Address was successfully updated.');
+                $('#successMessage').text('Your Product Discun was successfully updated.');
                 $('#successMessage').show();
                 // Reset the form
                 $('#CompanyForm')[0].reset();
@@ -345,6 +347,8 @@ async function deleteCompany(id) {
             });
 
             $('#deleteAndDetailsModel').modal('hide');
+            $('#successMessage').text('Your Product Discun was successfully updated.');
+            $('#successMessage').show();
             await GetProductDiscunList();
         } catch (error) {
             console.log(error);

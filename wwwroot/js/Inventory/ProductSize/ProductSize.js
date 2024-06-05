@@ -157,7 +157,7 @@ $('#btnSave').click(async function () {
             $('#modelCreate').modal('hide');
             if (response === true) {
                 // Show success message
-                $('#successMessage').text('Your company was successfully saved.');
+                $('#successMessage').text('Your Product Size was successfully saved.');
                 $('#successMessage').show();
                 await GetProductSizeList();
                 $('#CompanyForm')[0].reset();
@@ -171,6 +171,8 @@ $('#btnSave').click(async function () {
 // Edit Company
 async function editCompany(id) {
     console.log("Edit company with id:", id);
+    $('#myModalLabelUpdateEmployee').show();
+    $('#myModalLabelAddEmployee').hide();
 
     // Reset form validation
     debugger
@@ -265,6 +267,8 @@ function deleteCompany(id) {
             success: function (response) {
                 $('#deleteAndDetailsModel').modal('hide');
                 GetProductSizeList();
+                $('#successMessage').text('Your Product Size was successfully Delete.');
+                $('#successMessage').show();
             },
             error: function (xhr, status, error) {
                 console.log(error);

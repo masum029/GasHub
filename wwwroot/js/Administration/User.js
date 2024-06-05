@@ -104,57 +104,68 @@ const companyForm = $('#CompanyForm').validate({
         $(element).valid();
     },
     rules: {
-        Name: {
+        FirstName: {
             required: true,
             minlength: 2,
             maxlength: 50
         },
-        Contactperson: {
+        LaststName: {
             required: true,
             minlength: 2,
             maxlength: 50
         },
-        ContactPerNum: {
+        UserName: {
             required: true,
-            digits: true,
-            minlength: 11,
-            maxlength: 11
         },
-        ContactNumber: {
+        Email: {
             required: true,
-            digits: true,
-            minlength: 11,
-            maxlength: 11
         },
-        BIN: {
+        PhoneNumber: {
+            required: true
+        },
+        Password: {
+            required: true
+        },
+        ConfirmationPassword: {
+            required: true
+        },
+        Roles: {
             required: true
         }
     },
     messages: {
-        Name: {
-            required: "Name is required.",
-            minlength: "Name must be between 2 and 50 characters.",
-            maxlength: "Name must be between 2 and 50 characters."
+        FirstName: {
+            required: " first Name is required.",
+            minlength: "first Name must be between 2 and 50 characters.",
+            maxlength: "first Name must be between 2 and 50 characters."
         },
-        Contactperson: {
-            required: "Contact Person is required.",
-            minlength: "Contact Person must be between 2 and 50 characters.",
-            maxlength: "Contact Person must be between 2 and 50 characters."
+        LaststName: {
+            required: "Lastst Name  is required.",
+            minlength: "Lastst Name  must be between 2 and 50 characters.",
+            maxlength: "Lastst Name  must be between 2 and 50 characters."
         },
-        ContactPerNum: {
-            required: "Contact Person Number is required.",
-            digits: "Contact Person Number must contain only digits.",
-            minlength: "Contact Person Number must be exactly 11 digits.",
-            maxlength: "Contact Person Number must be exactly 11 digits."
+        UserName: {
+            required: "User Name  is required.",
+            minlength: "User Name   must be between 2 and 50 characters.",
+            maxlength: "User Name   must be between 2 and 50 characters."
         },
-        ContactNumber: {
-            required: "Contact Number is required.",
-            digits: "Contact Number must contain only digits.",
-            minlength: "Contact Number must be exactly 11 digits.",
-            maxlength: "Contact Number must be exactly 11 digits."
+        Email: {
+            required: "Email is required.",
+           
         },
-        BIN: {
-            required: "BIN is required."
+        PhoneNumber: {
+            required: "Phone Number is required."
+        }
+        ,
+        Password: {
+            required: "Password is required."
+        }
+        ,
+        ConfirmationPassword: {
+            required: "Confirmation Your Password ."
+        },
+        Roles: {
+            required: "Must be select Roles "
         }
     },
     errorElement: 'div',
@@ -184,13 +195,38 @@ function resetValidation() {
 }
 
 
-$('#btn-Create').click(function () {
+$('#btn-Create').click(async function () {
     $('#modelCreate input[type="text"]').val('');
     $('#modelCreate').modal('show');
     $('#btnSave').show();
     $('#btnUpdate').hide();
+    await populateRoleDropdown();
 });
 
+async function populateRoleDropdown() {
+    debugger
+    try {
+        const data = await $.ajax({
+            url: '/Role/GetallRole',
+            type: 'get',
+            dataType: 'json',
+            contentType: 'application/json;charset=utf-8'
+        });
+
+        // Clear existing options
+        $('#RolesDropdown').empty();
+        // Add default option
+        //$('#RolesDropdown').append('<option value="">Select role</option>');
+        // Add user options
+        console.log(data.data);
+        $.each(data.data, function (index, role) {
+            $('#RolesDropdown').append('<option value="' + role.id + '">' + role.roleName + '</option>');
+        });
+    } catch (error) {
+        console.error(error);
+        // Handle error
+    }
+}
 
 
 // Function to handle Enter key press
@@ -232,7 +268,7 @@ $('#btnSave').click(async function () {
             $('#modelCreate').modal('hide');
             if (response === true) {
                 // Show success message
-                $('#successMessage').text('Your company was successfully saved.');
+                $('#successMessage').text(' New User was successfully saved.');
                 $('#successMessage').show();
                 await GetUserList();
                 $('#CompanyForm')[0].reset();
@@ -246,7 +282,8 @@ $('#btnSave').click(async function () {
 // Edit Company
 async function editCompany(id) {
     console.log("Edit company with id:", id);
-
+    $('#myModalLabelUpdateEmployee').show();
+    $('#myModalLabelAddEmployee').hide();
     // Reset form validation
     debugger
 
@@ -342,6 +379,8 @@ function deleteCompany(id) {
             data: { id: id },
             success: function (response) {
                 $('#deleteAndDetailsModel').modal('hide');
+                $('#successMessage').text('  User was successfully Delete....');
+                $('#successMessage').show();
                 GetUserList();
             },
             error: function (xhr, status, error) {

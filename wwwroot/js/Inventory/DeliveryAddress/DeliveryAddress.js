@@ -298,6 +298,8 @@ $('#refreshButton').click(function () {
 // Edit Company
 async function editCompany(id) {
     console.log("Edit company with id:", id);
+    $('#myModalLabelUpdateEmployee').show();
+    $('#myModalLabelAddEmployee').hide();
     await populateUserDropdown();
     // Reset form validation
     debugger
@@ -394,6 +396,8 @@ async function deleteCompany(id) {
             });
 
             $('#deleteAndDetailsModel').modal('hide');
+            $('#successMessage').text('Your Delivery Address was successfully Delete.');
+            $('#successMessage').show();
             await GetDeliveryAddressList()
         } catch (error) {
             console.log(error);

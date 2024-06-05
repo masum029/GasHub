@@ -73,8 +73,8 @@
     <div class="modal-dialog modal-xl ">
         <div class="modal-content w-auto">
             <div class="modal-header">
-                <h4 class="modal-title" id="myModalLabelAddEmployee">Add Company</h4>
-                <h4 class="modal-title" style="display:none;" id="myModalLabelUpdateEmployee">Update Company</h4>
+                <h4 class="modal-title" id="myModalLabelAddEmployee">Add User</h4>
+                <h4 class="modal-title" style="display:none;" id="myModalLabelUpdateEmployee">Update User</h4>
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
             <div class="modal-body">
@@ -87,22 +87,22 @@
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label asp-for="FirstName" class="control-label"></label>
-                                            <input asp-for="FirstName" class="form-control" name="FirstName" />
+                                            <input asp-for="FirstName" placeholder="Enter your First Name" class="form-control" name="FirstName" />
                                             <span asp-validation-for="FirstName" class="text-danger"></span>
                                         </div>
                                         <div class="form-group">
                                             <label asp-for="LaststName" class="control-label"></label>
-                                            <input asp-for="LaststName" class="form-control" name="LaststName" />
+                                            <input asp-for="LaststName" placeholder="Enter your Last Name" class="form-control" name="LaststName" />
                                             <span asp-validation-for="LaststName" class="text-danger"></span>
                                         </div>
                                         <div class="form-group">
                                             <label asp-for="UserName" class="control-label"></label>
-                                            <input asp-for="UserName" class="form-control" name="UserName" />
+                                            <input asp-for="UserName" placeholder="Enter your User Name" class="form-control" name="UserName" />
                                             <span asp-validation-for="UserName" class="text-danger"></span>
                                         </div>
                                         <div class="form-group">
                                             <label asp-for="Email" class="control-label"></label>
-                                            <input asp-for="Email" class="form-control" name="Email" />
+                                            <input asp-for="Email" placeholder="Enter your Email" class="form-control" name="Email" />
                                             <span asp-validation-for="Email" class="text-danger"></span>
                                         </div>
                                     </div>
@@ -110,26 +110,23 @@
 
                                         <div class="form-group">
                                             <label asp-for="PhoneNumber" class="control-label"></label>
-                                            <input asp-for="PhoneNumber" class="form-control" name="PhoneNumber" />
+                                            <input asp-for="PhoneNumber" placeholder="Enter your Phone Number" class="form-control" name="PhoneNumber" />
                                             <span asp-validation-for="PhoneNumber" class="text-danger"></span>
                                         </div>
                                         <div class="form-group">
                                             <label asp-for="Password" class="control-label"></label>
-                                            <input asp-for="Password" class="form-control" name="Password" />
+                                            <input asp-for="Password" placeholder="Enter Password" class="form-control" name="Password" />
                                             <span asp-validation-for="Password" class="text-danger"></span>
                                         </div>
                                         <div class="form-group">
                                             <label asp-for="ConfirmationPassword" class="control-label"></label>
-                                            <input asp-for="ConfirmationPassword" class="form-control" name="ConfirmationPassword" />
+                                            <input asp-for="ConfirmationPassword" placeholder="Confirm your Password" class="form-control" name="ConfirmationPassword" />
                                             <span asp-validation-for="ConfirmationPassword" class="text-danger"></span>
                                         </div>
                                         <div class="form-group">
                                             <label asp-for="Roles"></label>
-                                            <select class="form-control" asp-for="Roles" id="Roles">
-                                                @foreach (var role in Enum.GetValues(typeof(ByAdminRole)))
-                                                {
-                                                    <option value="@role">@role</option>
-                                                }
+                                            <select class="form-control" asp-for="Roles" id="RolesDropdown">
+                                                <option value="">Select role</option>
                                             </select>
                                         </div>
                                     </div>
@@ -172,7 +169,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                Are you sure you want to delete the following Company ?
+                Are you sure you want to delete the following User ?
             </div>
 
             <div class="modal-body" id="companyDetails">

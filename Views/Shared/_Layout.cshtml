@@ -3,15 +3,33 @@
 
 @{
     var userName = string.Empty;
+    var userId = string.Empty;
+    var userRole = string.Empty;
+
     if (User.Identity.IsAuthenticated)
     {
         var claimsIdentity = User.Identity as ClaimsIdentity;
         if (claimsIdentity != null)
         {
+            // Extract the username from claims
             var userNameClaim = claimsIdentity.FindFirst(ClaimTypes.Name);
             if (userNameClaim != null)
             {
                 userName = userNameClaim.Value;
+            }
+
+            // Extract the user ID from claims
+            var userIdClaim = claimsIdentity.FindFirst("UserId") ?? claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+            if (userIdClaim != null)
+            {
+                userId = userIdClaim.Value;
+            }
+
+            // Extract the user role from claims
+            var userRoleClaim = claimsIdentity.FindFirst(ClaimTypes.Role);
+            if (userRoleClaim != null)
+            {
+                userRole = userRoleClaim.Value;
             }
         }
     }
@@ -207,14 +225,29 @@
                            
                            
                         </div>
+
                         <div class="header-button mt-1">
-                            <a href="shop-single.html" class="theme-btn">
-                                <span class="button-content-wrapper d-flex align-items-center justify-content-center">
-                                    <span class="button-icon"><i class="flaticon-delivery"></i></span>
-                                    <span class="button-text">order now</span>
-                                </span>
-                            </a>
+                            @if (userRole == "Admin" || userRole == "Administrator")
+                            {
+                                <a asp-action="Index" asp-controller="Default" class="theme-btn">
+                                    <span class="button-content-wrapper d-flex align-items-center justify-content-center">
+                                        <span class="button-icon"><i class="flaticon-delivery"></i></span>
+                                        <span class="button-text">Dashboard</span>
+                                    </span>
+                                </a>
+                            }
+                            else
+                            {
+                                <a href="shop-single.html" class="theme-btn">
+                                    <span class="button-content-wrapper d-flex align-items-center justify-content-center">
+                                        <span class="button-icon"><i class="flaticon-delivery"></i></span>
+                                        <span class="button-text">Order Now</span>
+                                    </span>
+                                </a>
+                            }
                         </div>
+
+                       
                         <div class="social-icon d-flex align-items-center">
                             <a href="#"><i class="fab fa-facebook-f"></i></a>
                             <a href="#"><i class="fab fa-twitter"></i></a>

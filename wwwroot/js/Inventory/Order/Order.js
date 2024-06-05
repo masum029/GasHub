@@ -249,7 +249,7 @@ $('#btnSave').click(async function () {
             $('#modelCreate').modal('hide');
             if (response === true) {
                 // Show success message
-                $('#successMessage').text('Your Delivery Address was successfully saved.');
+                $('#successMessage').text('Your Order was successfully saved.');
                 $('#successMessage').show();
                 await GetOrderList();
                 $('#CompanyForm')[0].reset();
@@ -345,6 +345,8 @@ $('#refreshButton').click(function () {
 // Edit Company
 async function editCompany(id) {
     console.log("Edit company with id:", id);
+    $('#myModalLabelUpdateEmployee').show();
+    $('#myModalLabelAddEmployee').hide();
     await populateUserDropdown();
     await populateProductDropdown();
     await populateReturnProductDropdown();
@@ -395,7 +397,7 @@ async function updateCompany(id) {
             $('#modelCreate').modal('hide');
             if (response === true) {
                 // Show success message
-                $('#successMessage').text('Your Delivery Address was successfully updated.');
+                $('#successMessage').text('Your Order was successfully updated.');
                 $('#successMessage').show();
                 // Reset the form
                 $('#CompanyForm')[0].reset();
@@ -444,6 +446,8 @@ async function deleteCompany(id) {
             });
 
             $('#deleteAndDetailsModel').modal('hide');
+            $('#successMessage').text('Your Order was successfully Delete...');
+            $('#successMessage').show();
             await GetOrderList();
         } catch (error) {
             console.log(error);

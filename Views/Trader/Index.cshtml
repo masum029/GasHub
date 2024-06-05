@@ -85,8 +85,8 @@
     <div class="modal-dialog modal-xl ">
         <div class="modal-content w-auto">
             <div class="modal-header">
-                <h4 class="modal-title" id="myModalLabelAddEmployee">Add Company</h4>
-                <h4 class="modal-title" style="display:none;" id="myModalLabelUpdateEmployee">Update Company</h4>
+                <h4 class="modal-title" id="myModalLabelAddEmployee">Add Trader</h4>
+                <h4 class="modal-title" style="display:none;" id="myModalLabelUpdateEmployee">Update Trader</h4>
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
             <div class="modal-body">
@@ -105,25 +105,25 @@
                                         </div>
                                         <div class="form-group">
                                             <label asp-for="Name" class="control-label"></label>
-                                            <input asp-for="Name" class="form-control" name="Name" />
+                                            <input asp-for="Name" placeholder="Enter Trader Name" class="form-control" name="Name" />
                                             <span asp-validation-for="Name" class="text-danger"></span>
                                         </div>
                                         <div class="form-group">
                                             <label asp-for="ContactNumber" class="control-label"></label>
-                                            <input asp-for="ContactNumber" class="form-control" name="ContactNumber" />
+                                            <input asp-for="ContactNumber" placeholder="Enter Phone(Office)" class="form-control" name="ContactNumber" />
                                             <span asp-validation-for="ContactNumber" class="text-danger"></span>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label asp-for="Contactperson" class="control-label"></label>
-                                            <input asp-for="Contactperson" class="form-control" name="Contactperson" />
+                                            <input asp-for="Contactperson" placeholder="Enter Contact Person " class="form-control" name="Contactperson" />
                                             <span asp-validation-for="Contactperson" class="text-danger"></span>
                                         </div>
                                         
                                          <div class="form-group">
                                             <label asp-for="ContactPerNum" class="control-label"></label>
-                                            <input asp-for="ContactPerNum" class="form-control" name="ContactPerNum" />
+                                            <input asp-for="ContactPerNum" placeholder="Enter Phone(Personal) " class="form-control" name="ContactPerNum" />
                                             <span asp-validation-for="ContactPerNum" class="text-danger"></span>
                                         </div>
                                     </div>
@@ -166,7 +166,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                Are you sure you want to delete the following Company ?
+                Are you sure you want to delete the following Trader ?
             </div>
 
             <div class="modal-body" id="companyDetails">

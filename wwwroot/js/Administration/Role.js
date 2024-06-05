@@ -163,7 +163,7 @@ $('#btnSave').click(async function () {
             $('#modelCreate').modal('hide');
             if (response === true) {
                 // Show success message
-                $('#successMessage').text('Your Delivery Address was successfully saved.');
+                $('#successMessage').text('Your Role Was successfully saved....');
                 $('#successMessage').show();
                 await GetRoleList();
                 $('#CompanyForm')[0].reset();
@@ -186,9 +186,12 @@ async function deleteCompany(id) {
                 type: 'POST',
                 data: { id: id }
             });
-
-            $('#deleteAndDetailsModel').modal('hide');
-            await GetRoleList();
+            if (response) {
+                $('#successMessage').text('Your Role Was successfully Delete....');
+                $('#successMessage').show();
+                $('#deleteAndDetailsModel').modal('hide');
+                await GetRoleList();
+            }
         } catch (error) {
             console.log(error);
             $('#deleteAndDetailsModel').modal('hide');

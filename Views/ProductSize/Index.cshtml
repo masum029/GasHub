@@ -67,8 +67,8 @@
     <div class="modal-dialog modal-xl ">
         <div class="modal-content w-auto">
             <div class="modal-header">
-                <h4 class="modal-title" id="myModalLabelAddEmployee">Add Company</h4>
-                <h4 class="modal-title" style="display:none;" id="myModalLabelUpdateEmployee">Update Company</h4>
+                <h4 class="modal-title" id="myModalLabelAddEmployee">Add Product Size</h4>
+                <h4 class="modal-title" style="display:none;" id="myModalLabelUpdateEmployee">Update Product Size</h4>
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
             <div class="modal-body">
@@ -81,14 +81,14 @@
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label asp-for="Size" class="control-label"></label>
-                                            <input asp-for="Size" class="form-control" name="Size" />
+                                            <input asp-for="Size" placeholder="Enter Product Size" class="form-control" name="Size" />
                                             <span asp-validation-for="Size" class="text-danger"></span>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label asp-for="Unit" class="control-label"></label>
-                                            <input asp-for="Unit" class="form-control" name="Unit" />
+                                            <input asp-for="Unit" placeholder="Enter Product unit" class="form-control" name="Unit" />
                                             <span asp-validation-for="Unit" class="text-danger"></span>
                                         </div>
                                     </div>
@@ -131,7 +131,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                Are you sure you want to delete the following Company ?
+                Are you sure you want to delete the following Product Size ?
             </div>
 
             <div class="modal-body" id="companyDetails">

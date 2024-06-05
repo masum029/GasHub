@@ -233,6 +233,8 @@ $('#btnSave').click(async function () {
 // Edit Company
 async function editCompany(id) {
     console.log("Edit company with id:", id);
+    $('#myModalLabelUpdateEmployee').show();
+    $('#myModalLabelAddEmployee').hide();
 
     // Reset form validation
     debugger
@@ -328,6 +330,8 @@ function deleteCompany(id) {
             data: { id: id },
             success: function (response) {
                 $('#deleteAndDetailsModel').modal('hide');
+                $('#successMessage').text('Your company was successfully delete.');
+                $('#successMessage').show();
                 GetCompanyList();
             },
             error: function (xhr, status, error) {

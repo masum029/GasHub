@@ -8,37 +8,19 @@ namespace GasHub.Models
         [Required(ErrorMessage ="mast select User ")]
         [DisplayName("User Name")]
         public Guid UserId { get; set; }
+        [DisplayName("Address")]
         public string? Address { get; set; }
+        [DisplayName("Phone")]
         public string? Phone { get; set; }
+        [DisplayName("Mobile")]
         public string? Mobile { get; set; }
+        [DisplayName("Status")]
         public bool? IsActive { get; set; }
+        [DisplayName("Deactivated Date")]
         public DateTime? DeactivatedDate { get; set; }
+        [DisplayName("Deactive")]
         public string? DeactiveBy { get; set; }
+        [DisplayName("Default")]
         public bool? IsDefault { get; set; }
-        [Required]
-        [DisplayName("Contact Number")]
-        public string ContactNumber { get; set; }
-        [Required]
-        [DisplayName("Division")]
-        public string Division { get; set; }
-        [Required]
-        [DisplayName("District")]
-        public string District { get; set; }
-        [Required]
-        [DisplayName("Sub-district (Upazilla)")]
-        public string Subdistrict { get; set; }
-        [Required]
-        [DisplayName("Area (Nearest area)")]
-        public string Area { get; set; }
-        [Required]
-        [DisplayName("House/Holding")]
-        public string HouseHolding { get; set; }
-        [Required]
-        [DisplayName("Street Address")]
-        public string StreetAddress { get; set; }
-        [Required]
-        [DisplayName("Postal Code")]
-        public string postCode { get; set; }
-
     }
 }

@@ -10,12 +10,12 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1>DeliveryAddress</h1>
+                <h1>Delivery Address</h1>
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item"><a asp-action="index" asp-controller="Home">Home</a></li>
-                    <li class="breadcrumb-item active">DeliveryAddress</li>
+                    <li class="breadcrumb-item active">Delivery Address</li>
                 </ol>
             </div>
         </div>
@@ -73,8 +73,8 @@
     <div class="modal-dialog modal-xl ">
         <div class="modal-content w-auto">
             <div class="modal-header">
-                <h4 class="modal-title" id="myModalLabelAddEmployee">Add Company</h4>
-                <h4 class="modal-title" style="display:none;" id="myModalLabelUpdateEmployee">Update Company</h4>
+                <h4 class="modal-title" id="myModalLabelAddEmployee">Add Delivery Address</h4>
+                <h4 class="modal-title" style="display:none;" id="myModalLabelUpdateEmployee">Update Delivery Address</h4>
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
             <div class="modal-body">
@@ -93,7 +93,7 @@
                                         </div>
                                         <div class="form-group">
                                             <label asp-for="Address" class="control-label"></label>
-                                            <input asp-for="Address" class="form-control" id="address" />
+                                            <input asp-for="Address" placeholder="Enter Your Address" class="form-control" id="address" />
                                             <span asp-validation-for="Address" class="text-danger"></span>
                                         </div>
                                        
@@ -102,12 +102,12 @@
 
                                         <div class="form-group">
                                             <label asp-for="Phone" class="control-label"></label>
-                                            <input asp-for="Phone" class="form-control" id="phone" />
+                                            <input asp-for="Phone" placeholder="Enter Phone Number" class="form-control" id="phone" />
                                             <span asp-validation-for="Phone" class="text-danger"></span>
                                         </div>
                                         <div class="form-group">
                                             <label asp-for="Mobile" class="control-label"></label>
-                                            <input asp-for="Mobile" class="form-control" id="mobile" />
+                                            <input asp-for="Mobile" placeholder="Enter Mobile Number" class="form-control" id="mobile" />
                                             <span asp-validation-for="Mobile" class="text-danger"></span>
                                         </div>
                                     </div>
@@ -150,7 +150,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                Are you sure you want to delete the following Company ?
+                Are you sure you want to delete the following Delivery Address ?
             </div>
 
             <div class="modal-body" id="companyDetails">

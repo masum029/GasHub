@@ -68,8 +68,8 @@
     <div class="modal-dialog modal-xl ">
         <div class="modal-content w-auto">
             <div class="modal-header">
-                <h4 class="modal-title" id="myModalLabelAddEmployee">Add Company</h4>
-                <h4 class="modal-title" style="display:none;" id="myModalLabelUpdateEmployee">Update Company</h4>
+                <h4 class="modal-title" id="myModalLabelAddEmployee">Add Stock</h4>
+                <h4 class="modal-title" style="display:none;" id="myModalLabelUpdateEmployee">Update Stock</h4>
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
             <div class="modal-body">
@@ -97,7 +97,7 @@
 
                                         <div class="form-group">
                                             <label asp-for="Quantity" class="control-label"></label>
-                                            <input asp-for="Quantity" class="form-control" name="Quantity" />
+                                            <input asp-for="Quantity" placeholder="Enter Quantity" class="form-control" name="Quantity" />
                                             <span asp-validation-for="Quantity" class="text-danger"></span>
                                         </div>
 
@@ -141,7 +141,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                Are you sure you want to delete the following Company ?
+                Are you sure you want to delete the following Stock ?
             </div>
 
             <div class="modal-body" id="companyDetails">
