@@ -12,7 +12,7 @@ async function GetUserList() {
             contentType: 'application/json;charset=utf-8'
         });
 
-        if (users && users.data && users.data.length > 0) {
+        if (users && users.data) {
             console.log('companies:', users.data);
             onSuccess(users.data);
         }
@@ -23,7 +23,7 @@ async function GetUserList() {
 
 function onSuccess(users) {
     debugger
-    if (users.length > 0 ) {
+    if (users) {
         if ($.fn.DataTable.isDataTable('#CompanyTable')) {
             // If initialized, destroy the DataTable first
             $('#CompanyTable').DataTable().destroy();
@@ -98,6 +98,11 @@ function onSuccess(users) {
     }
 }
 
+// Define a custom method for Bangladeshi phone number validation
+$.validator.addMethod("phoneBD", function (value, element) {
+    return this.optional(element) || /^01[0-9]{9}$/.test(value);
+}, "Please enter a valid Bangladeshi phone number.");
+
 // Initialize validation
 const companyForm = $('#CompanyForm').validate({
     onkeyup: function (element) {
@@ -109,25 +114,31 @@ const companyForm = $('#CompanyForm').validate({
             minlength: 2,
             maxlength: 50
         },
-        LaststName: {
+        LastName: {
             required: true,
             minlength: 2,
             maxlength: 50
         },
         UserName: {
             required: true,
+            minlength: 2,
+            maxlength: 50
         },
         Email: {
             required: true,
+            email: true
         },
         PhoneNumber: {
-            required: true
+            required: true,
+            phoneBD: true // Use the custom validation method
         },
         Password: {
-            required: true
+            required: true,
+            minlength: 6
         },
         ConfirmationPassword: {
-            required: true
+            required: true,
+            equalTo: "#Password"
         },
         Roles: {
             required: true
@@ -135,37 +146,38 @@ const companyForm = $('#CompanyForm').validate({
     },
     messages: {
         FirstName: {
-            required: " first Name is required.",
-            minlength: "first Name must be between 2 and 50 characters.",
-            maxlength: "first Name must be between 2 and 50 characters."
+            required: "First Name is required.",
+            minlength: "First Name must be between 2 and 50 characters.",
+            maxlength: "First Name must be between 2 and 50 characters."
         },
-        LaststName: {
-            required: "Lastst Name  is required.",
-            minlength: "Lastst Name  must be between 2 and 50 characters.",
-            maxlength: "Lastst Name  must be between 2 and 50 characters."
+        LastName: {
+            required: "Last Name is required.",
+            minlength: "Last Name must be between 2 and 50 characters.",
+            maxlength: "Last Name must be between 2 and 50 characters."
         },
         UserName: {
-            required: "User Name  is required.",
-            minlength: "User Name   must be between 2 and 50 characters.",
-            maxlength: "User Name   must be between 2 and 50 characters."
+            required: "User Name is required.",
+            minlength: "User Name must be between 2 and 50 characters.",
+            maxlength: "User Name must be between 2 and 50 characters."
         },
         Email: {
             required: "Email is required.",
-           
+            email: "Please enter a valid email address."
         },
         PhoneNumber: {
-            required: "Phone Number is required."
-        }
-        ,
+            required: "Phone Number is required.",
+            phoneBD: "Please enter a valid Bangladeshi phone number."
+        },
         Password: {
-            required: "Password is required."
-        }
-        ,
+            required: "Password is required.",
+            minlength: "Password must be at least 6 characters long."
+        },
         ConfirmationPassword: {
-            required: "Confirmation Your Password ."
+            required: "Please confirm your password.",
+            equalTo: "Password and Confirmation Password do not match."
         },
         Roles: {
-            required: "Must be select Roles "
+            required: "You must select a role."
         }
     },
     errorElement: 'div',
@@ -180,6 +192,7 @@ const companyForm = $('#CompanyForm').validate({
         $(element).removeClass('is-invalid');
     }
 });
+
 
 // Bind validation on change
 $('#CompanyForm input[type="text"]').on('change', function () {
@@ -220,7 +233,7 @@ async function populateRoleDropdown() {
         // Add user options
         console.log(data.data);
         $.each(data.data, function (index, role) {
-            $('#RolesDropdown').append('<option value="' + role.id + '">' + role.roleName + '</option>');
+            $('#RolesDropdown').append('<option value="' + role.roleName + '">' + role.roleName + '</option>');
         });
     } catch (error) {
         console.error(error);
@@ -265,16 +278,24 @@ $('#btnSave').click(async function () {
                 data: formData
             });
 
-            $('#modelCreate').modal('hide');
+            
             if (response === true) {
                 // Show success message
                 $('#successMessage').text(' New User was successfully saved.');
                 $('#successMessage').show();
                 await GetUserList();
                 $('#CompanyForm')[0].reset();
+
             }
-        } catch (error) {
-            console.log('Error:', error);
+        } catch (jqXHR) {
+            // Extract and display the error message
+            var errorMessage = jqXHR || "Unknown error occurred";
+            console.log('Error:', errorMessage);
+            // Optionally display the error message to the user
+            $('#ErrorMessage').text('Failed to save the user: ' + errorMessage);
+            $('#ErrorMessage').show();
+            $('#modelCreate').modal('hide');
+            $('#CompanyForm')[0].reset();
         }
     }
 });

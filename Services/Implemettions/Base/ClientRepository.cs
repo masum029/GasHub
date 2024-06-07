@@ -39,7 +39,8 @@ namespace GasHub.Services.Implemettions.Base
                 }
                 else
                 {
-                    throw new HttpRequestException($"Failed to add resource. Status code: {response.StatusCode}");
+                    var responseContent = await response.Content.ReadAsStringAsync();
+                    throw new HttpRequestException($"Failed to add resource. Status code: {response.StatusCode}, Error: {responseContent}");
                 }
             }
             catch (Exception)
