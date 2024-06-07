@@ -1,17 +1,18 @@
 ﻿using GasHub.Models;
-using GasHub.Services.Abstractions;
+using GasHub.Services.Interface;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GasHub.Controllers
 {
     public class OrderController : Controller
     {
-        private readonly IUnitOfWorkClientServices _unitOfWorkClientServices;
+        private readonly IClientServices<Order> _orderServices;
 
-        public OrderController(IUnitOfWorkClientServices unitOfWorkClientServices)
+        public OrderController(IClientServices<Order> orderServices)
         {
-            _unitOfWorkClientServices = unitOfWorkClientServices;
+            _orderServices = orderServices;
         }
+
         public IActionResult Index()
         {
             return View();
@@ -19,33 +20,33 @@ namespace GasHub.Controllers
         [HttpGet]
         public async Task<IActionResult> GetOrderList()
         {
-            var orders = await _unitOfWorkClientServices.orderClientServices.GetAllAsync("Order/getAllOrder");
+            var orders = await _orderServices.GetAllClientsAsync("Order/getAllOrder");
             return Json(new { data = orders });
         }
         [HttpPost]
         public async Task<IActionResult> Create(Order model)
         {
             model.CreatedBy = "mamun";
-            var orders = await _unitOfWorkClientServices.orderClientServices.AddAsync(model, "Order/CreateOrder");
+            var orders = await _orderServices.PostClientAsync( "Order/CreateOrder", model);
             return Json(orders);
         }
         [HttpGet]
         public async Task<IActionResult> GetById(Guid id)
         {
-            var order = await _unitOfWorkClientServices.orderClientServices.GetByIdAsync(id, "Order/getOrder");
+            var order = await _orderServices.GetClientByIdAsync($"Order/getOrder/{id}" );
             return Json(order);
         }
         [HttpPut]
         public async Task<IActionResult> Update(Guid id, Order model)
         {
             model.UpdatedBy = "mamun";
-            var order = await _unitOfWorkClientServices.orderClientServices.UpdateAsync(id, model, "Order/UpdateOrder");
+            var order = await _orderServices.UpdateClientAsync($"Order/UpdateOrder/{id}", model);
             return Json(order);
         }
         [HttpPost]
         public async Task<IActionResult> Delete(Guid id)
         {
-            var deleted = await _unitOfWorkClientServices.orderClientServices.DeleteAsync(id, "Order/DeleteOrder");
+            var deleted = await _orderServices.DeleteClientAsync($"Order/DeleteOrder/{id}");
             return Json(deleted);
         }
     }

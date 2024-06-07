@@ -1,7 +1,7 @@
 using GasHub.Dtos;
 using GasHub.Models;
 using GasHub.Models.ViewModels;
-using GasHub.Services.Abstractions;
+using GasHub.Services.Interface;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
 using Microsoft.AspNetCore.Authorization;
@@ -12,20 +12,29 @@ namespace GasHub.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
-        private readonly IUnitOfWorkClientServices _unitOfWorkClientServices;
-        public HomeController(ILogger<HomeController> logger , IUnitOfWorkClientServices unitOfWorkClientServices)
+        private readonly IClientServices<Product> _productServices;
+        private readonly IClientServices<Company> _companyServices;
+        private readonly IClientServices<ProductDiscunt> _productDiscuntServices;
+        private readonly IClientServices<DeliveryAddress> _deliveryAddressServices;
+
+        public HomeController(IClientServices<Product> productServices, 
+            IClientServices<Company> companyServices,
+            IClientServices<ProductDiscunt> productDiscuntServices,
+            IClientServices<DeliveryAddress> deliveryAddressServices)
         {
-            _logger = logger;
-            _unitOfWorkClientServices=unitOfWorkClientServices;
+            _productServices = productServices;
+            _companyServices = companyServices;
+            _productDiscuntServices = productDiscuntServices;
+            _deliveryAddressServices = deliveryAddressServices;
         }
+
         [HttpGet]
         public async Task<IActionResult> Index()
         {
             var productsVm = new ProductViewModel();
-            var products = await _unitOfWorkClientServices.productClientServices.GetAllAsync("Product/getAllProduct");
-            var companies = await _unitOfWorkClientServices.companyClientServices.GetAllAsync("Company/getAllCompany");
-            var discounts = await _unitOfWorkClientServices.productDiscunClientServices.GetAllAsync("ProductDiscunt/getAllProductDiscunt");
+            var products = await _productServices.GetAllClientsAsync("Product/getAllProduct");
+            var companies = await _companyServices.GetAllClientsAsync("Company/getAllCompany");
+            var discounts = await _productDiscuntServices.GetAllClientsAsync("ProductDiscunt/getAllProductDiscunt");
 
             if (products != null)
             {
@@ -83,13 +92,11 @@ namespace GasHub.Controllers
             deliveryAddress.Phone = model.ContactNumber;
             deliveryAddress.Mobile = model.ContactNumber;
             deliveryAddress.Address = $"{model.District}  {model.StreetAddress}";
-            //$"{model.Division} {model.District} {model.Subdistrict} {model.Area} {model.HouseHolding} {model.StreetAddress} {model.postCode}"
-
 
             if (!string.IsNullOrEmpty(deliveryAddress.Address))
             {
-                var result = await _unitOfWorkClientServices.deliveryAddressClientServices.AddAsync(deliveryAddress, "DeliveryAddress/CreateDeliveryAddress");
-                if (result)
+                var result = await _deliveryAddressServices.PostClientAsync( "DeliveryAddress/CreateDeliveryAddress", deliveryAddress);
+                if (result.Success)
                 {
                     return RedirectToAction("CheckOut", "Home");
                 }

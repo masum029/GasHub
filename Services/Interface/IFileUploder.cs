@@ -1,4 +1,4 @@
-﻿namespace GasHub.Services.Abstractions
+﻿namespace GasHub.Services.Interface
 {
     public interface IFileUploader
     {

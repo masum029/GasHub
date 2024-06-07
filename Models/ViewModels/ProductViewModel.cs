@@ -2,10 +2,10 @@
 {
     public class ProductViewModel
     {
-        public List<Product> ProductList { get; set; }
-        public List<Company> companiList { get; set; }
-        public List<Valve> ValveList { get; set; }
-        public List<ProductSize> productSizeList { get; set; }
-        public List<ProductDiscunt> productDiscunts { get; set; }
+        public IEnumerable<Product> ProductList { get; set; }
+        public IEnumerable<Company> companiList { get; set; }
+        public IEnumerable<Valve> ValveList { get; set; }
+        public IEnumerable<ProductSize> productSizeList { get; set; }
+        public IEnumerable<ProductDiscunt> productDiscunts { get; set; }
     }
 }

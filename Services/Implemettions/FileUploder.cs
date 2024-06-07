@@ -1,5 +1,4 @@
-﻿using GasHub.Services.Abstractions;
-
+﻿using GasHub.Services.Interface;
 
 public class FileUploader : IFileUploader
 {

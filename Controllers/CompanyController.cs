@@ -1,17 +1,17 @@
 ﻿using GasHub.Models;
-using GasHub.Services.Abstractions;
+using GasHub.Services.Interface;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GasHub.Controllers
 {
     public class CompanyController : Controller
     {
-        private readonly IUnitOfWorkClientServices _unitOfWorkClientServices;
-
-        public CompanyController(IUnitOfWorkClientServices unitOfWorkClientServices)
+        private readonly IClientServices<Company> _companyServices;
+        public CompanyController(IClientServices<Company> companyServices)
         {
-            _unitOfWorkClientServices = unitOfWorkClientServices;
+            _companyServices = companyServices;
         }
+
         public IActionResult Index()
         {
             return View();
@@ -19,32 +19,32 @@ namespace GasHub.Controllers
         [HttpGet]
         public async Task<IActionResult> GetCompanyList()
         {
-            var companys = await _unitOfWorkClientServices.companyClientServices.GetAllAsync("Company/getAllCompany");
+            var companys = await _companyServices.GetAllClientsAsync("Company/getAllCompany");
             return Json(new { data = companys });
         }
         [HttpPost]
-        public async Task<IActionResult> Create(Company company)
+        public async Task<IActionResult> Create(Company model)
         {
-            company.CreatedBy = "";
-            var result = await _unitOfWorkClientServices.companyClientServices.AddAsync(company, "Company/CreateCompany");
+            model.CreatedBy = "";
+            var result = await _companyServices.PostClientAsync("Company/CreateCompany",model);
             return Json(result);
         }
         [HttpGet]
         public async Task<IActionResult> GetCompany(Guid id)
         {
-            var customer = await _unitOfWorkClientServices.companyClientServices.GetByIdAsync(id, "Company/getCompany");
+            var customer = await _companyServices.GetClientByIdAsync($"Company/getCompany/{id}");
             return Json(customer);
         }
         [HttpPut]
-        public async Task<IActionResult> Update(Guid id, Company company)
+        public async Task<IActionResult> Update(Guid id, Company model)
         {
-            var result = await _unitOfWorkClientServices.companyClientServices.UpdateAsync(id, company, "Company/UpdateCompany");
+            var result = await _companyServices.UpdateClientAsync($"Company/UpdateCompany/{id}", model);
             return Json(result);
         }
         [HttpPost]
         public async Task<IActionResult> Delete(Guid id)
         {
-            var deleted = await _unitOfWorkClientServices.companyClientServices.DeleteAsync(id, "Company/DeleteCompany");
+            var deleted = await _companyServices.DeleteClientAsync($"Company/DeleteCompany/{id}");
             return Json(deleted);
         }
     }

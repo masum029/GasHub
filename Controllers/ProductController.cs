@@ -1,19 +1,20 @@
 ﻿using GasHub.Models;
-using GasHub.Services.Abstractions;
+using GasHub.Services.Interface;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GasHub.Controllers
 {
     public class ProductController : Controller
     {
-        private readonly IUnitOfWorkClientServices _unitOfWorkClientServices;
+        private readonly IClientServices<Product> _productServices;
         private readonly IFileUploader _fileUploder;
 
-        public ProductController(IUnitOfWorkClientServices unitOfWorkClientServices, IFileUploader fileUploder)
+        public ProductController(IClientServices<Product> productServices, IFileUploader fileUploder)
         {
-            _unitOfWorkClientServices = unitOfWorkClientServices;
+            _productServices = productServices;
             _fileUploder = fileUploder;
         }
+
         public async Task<IActionResult> Index()
         {
             return View();
@@ -21,7 +22,7 @@ namespace GasHub.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllProduct()
         {
-            var products = await _unitOfWorkClientServices.productClientServices.GetAllAsync("Product/getAllProduct");
+            var products = await _productServices.GetAllClientsAsync("Product/getAllProduct");
             return Json(new { data = products });
         }
        
@@ -31,33 +32,33 @@ namespace GasHub.Controllers
             var prdI = await _fileUploder.ImgUploader(model.FormFile);
             model.CreatedBy = "mamun";
             model.ProdImage = prdI;
-            var product = await _unitOfWorkClientServices.productClientServices.AddAsync(model, "Product/CreateProduct");
+            var product = await _productServices.PostClientAsync( "Product/CreateProduct" , model);
             return Json(product);
         }
         [HttpGet]
         public async Task<IActionResult> GetById(Guid id)
         {
-            var product = await _unitOfWorkClientServices.productClientServices.GetByIdAsync(id, "Product/getProduct");
+            var product = await _productServices.GetClientByIdAsync($"Product/getProduct/{id}");
             return Json(product);
         }
         [HttpPut]
         public async Task<IActionResult> Update(Guid id, Product model)
         {
             model.UpdatedBy = "mamun";
-            var productbyId = await _unitOfWorkClientServices.productClientServices.GetByIdAsync(id, "Product/getProduct");
+            var productbyId = await _productServices.GetClientByIdAsync($"Product/getProduct/{id}");
             if (model.ProdImage != null)
             {
               model.ProdImage = model.ProdImage;
             }
             model.ProdImage = productbyId.ProdImage;
-            var product = await _unitOfWorkClientServices.productClientServices.UpdateAsync(id, model, "Product/UpdateProduct");
+            var product = await _productServices.UpdateClientAsync($"Product/UpdateProduct/{id}", model);
             return Json(product);
         }
         [HttpPost]
         public async Task<IActionResult> Delete(Guid id)
         {
             // Get the product by ID
-            var product = await _unitOfWorkClientServices.productClientServices.GetByIdAsync(id, "Product/getProduct");
+            var product = await _productServices.GetClientByIdAsync($"Product/getProduct/{id}");
 
             if (product.ProdImage == null)
             {
@@ -72,9 +73,9 @@ namespace GasHub.Controllers
             }
 
             // Delete the product
-            var deleted = await _unitOfWorkClientServices.productClientServices.DeleteAsync(id, "Product/DeleteProduct");
+            var deleted = await _productServices.DeleteClientAsync($"Product/DeleteProduct/{id}" );
 
-            if (!deleted)
+            if (!deleted.Success)
             {
                 return StatusCode(500, new { Message = "Error deleting product" });
             }

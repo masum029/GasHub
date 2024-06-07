@@ -1,17 +1,12 @@
 ﻿using GasHub.Models;
-using GasHub.Services.Abstractions;
+using GasHub.Services.Interface;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GasHub.Controllers
 {
     public class StockController : Controller
     {
-        private readonly IUnitOfWorkClientServices _unitOfWorkClientServices;
-
-        public StockController(IUnitOfWorkClientServices unitOfWorkClientServices)
-        {
-            _unitOfWorkClientServices = unitOfWorkClientServices;
-        }
+        private readonly IClientServices<Stock> _stockServices;
         public IActionResult Index()
         {
             return View();
@@ -19,33 +14,33 @@ namespace GasHub.Controllers
         [HttpGet]
         public async Task<IActionResult> GetallStock()
         {
-            var stock = await _unitOfWorkClientServices.stockClientServices.GetAllAsync("Stock/getAllStock");
+            var stock = await _stockServices.GetAllClientsAsync("Stock/getAllStock");
             return Json(new { data = stock });
         }
         [HttpPost]
         public async Task<IActionResult> Create(Stock model)
         {
             model.CreatedBy = "mamun";
-            var stock = await _unitOfWorkClientServices.stockClientServices.AddAsync(model, "Stock/CreateStock");
+            var stock = await _stockServices.PostClientAsync( "Stock/CreateStock", model);
             return Json(stock);
         }
         [HttpGet]
         public async Task<IActionResult> GetById(Guid id)
         {
-            var stock = await _unitOfWorkClientServices.stockClientServices.GetByIdAsync(id, "Stock/getStock");
+            var stock = await _stockServices.GetClientByIdAsync($"Stock/getStock/{id}");
             return Json(stock);
         }
         [HttpPut]
         public async Task<IActionResult> Update(Guid id, Stock model)
         {
             model.UpdatedBy = "mamun";
-            var stock = await _unitOfWorkClientServices.stockClientServices.UpdateAsync(id, model, "Stock/UpdateStock");
+            var stock = await _stockServices.UpdateClientAsync($"Stock/UpdateStock/{id}", model );
             return Json(stock);
         }
         [HttpPost]
         public async Task<IActionResult> Delete(Guid id)
         {
-            var deleted = await _unitOfWorkClientServices.stockClientServices.DeleteAsync(id, "Stock/DeleteStock");
+            var deleted = await _stockServices.DeleteClientAsync($"Stock/DeleteStock/{id}");
             return Json(deleted);
         }
     }

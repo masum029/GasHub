@@ -1,9 +1,9 @@
-﻿namespace GasHub.Services.Abstractions
+﻿namespace GasHub.Services.Interface
 {
     public interface ITokenService
     {
         void SaveToken(string token);
-        string ? GetToken();
+        string? GetToken();
         void ClearToken();
     }
 }

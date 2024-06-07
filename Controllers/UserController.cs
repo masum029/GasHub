@@ -1,5 +1,6 @@
 ﻿using GasHub.Models;
-using GasHub.Services.Abstractions;
+using GasHub.Services.Interface;
+using iTextSharp.text;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,12 +9,16 @@ namespace GasHub.Controllers
     [Authorize]
     public class UserController : Controller
     {
-        private readonly IUnitOfWorkClientServices _unitOfWorkClientServices;
+        private readonly IClientServices<User> _userServices;
+        private readonly IClientServices<Register> _registerServices;
 
-        public UserController(IUnitOfWorkClientServices unitOfWorkClientServices)
+
+        public UserController(IClientServices<User> userServices, IClientServices<Register> registerServices)
         {
-            _unitOfWorkClientServices = unitOfWorkClientServices;
+            _userServices = userServices;
+            _registerServices = registerServices;
         }
+
         public IActionResult Index()
         {
             return View();
@@ -21,19 +26,19 @@ namespace GasHub.Controllers
         [HttpGet]
         public async Task<IActionResult> GetallUser()
         {
-            var users = await _unitOfWorkClientServices.userClientServices.GetAllAsync("User/GetAllUserDetails");
+            var users = await _userServices.GetAllClientsAsync("User/GetAllUserDetails");
             return Json(new { data = users });
         }
         [HttpPost]
         public async Task<IActionResult> Create(Register model)
         {
-            var user = await _unitOfWorkClientServices.registerUserClientServices.AddAsync(model, "User/Create");
+            var user = await _registerServices.PostClientAsync( "User/Create" , model);
             return Json(user);
         }
         [HttpGet]
         public async Task<IActionResult> GetById(Guid id)
         {
-            var user = await _unitOfWorkClientServices.userClientServices.GetByIdAsync(id, "User/GetUserDetails");
+            var user = await _userServices.GetClientByIdAsync($"User/GetUserDetails/{id}");
             return Json(user);
         }
 
@@ -42,7 +47,7 @@ namespace GasHub.Controllers
         [HttpPost]
         public async Task<IActionResult> Delete(Guid id)
         {
-            var deleted = await _unitOfWorkClientServices.traderClientServices.DeleteAsync(id, "User/Delete");
+            var deleted = await _userServices.DeleteClientAsync($"User/Delete/{id}");
             return Json(deleted);
         }
     }

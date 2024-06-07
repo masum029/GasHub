@@ -1,17 +1,18 @@
 ﻿using GasHub.Models;
-using GasHub.Services.Abstractions;
+using GasHub.Services.Interface;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GasHub.Controllers
 {
     public class ProdReturnController : Controller
     {
-        private readonly IUnitOfWorkClientServices _unitOfWorkClientServices;
+        private readonly IClientServices<ProdReturn> _prodReturnServices;
 
-        public ProdReturnController(IUnitOfWorkClientServices unitOfWorkClientServices)
+        public ProdReturnController(IClientServices<ProdReturn> prodReturnServices)
         {
-            _unitOfWorkClientServices = unitOfWorkClientServices;
+            _prodReturnServices = prodReturnServices;
         }
+
         public IActionResult Index()
         {
             return View();
@@ -19,33 +20,33 @@ namespace GasHub.Controllers
         [HttpGet]
         public async Task<IActionResult> GetallProdReturn()
         {
-            var ProdReturn = await _unitOfWorkClientServices.prodReturnClientServices.GetAllAsync("ProdReturn/getAllProdReturn");
+            var ProdReturn = await _prodReturnServices.GetAllClientsAsync("ProdReturn/getAllProdReturn");
             return Json(new { data = ProdReturn });
         }
         [HttpPost]
         public async Task<IActionResult> Create(ProdReturn model)
         {
             model.CreatedBy = "mamun";
-            var ProdReturn = await _unitOfWorkClientServices.prodReturnClientServices.AddAsync(model, "ProdReturn/CreateProdReturn");
+            var ProdReturn = await _prodReturnServices.PostClientAsync( "ProdReturn/CreateProdReturn" , model);
             return Json(ProdReturn);
         }
         [HttpGet]
         public async Task<IActionResult> GetById(Guid id)
         {
-            var ProdReturn = await _unitOfWorkClientServices.prodReturnClientServices.GetByIdAsync(id, "ProdReturn/getProdReturn");
+            var ProdReturn = await _prodReturnServices.GetClientByIdAsync($"ProdReturn/getProdReturn/{id}"); 
             return Json(ProdReturn);
         }
         [HttpPut]
         public async Task<IActionResult> Update(Guid id, ProdReturn model)
         {
             model.UpdatedBy = "mamun";
-            var productReturn = await _unitOfWorkClientServices.prodReturnClientServices.UpdateAsync(id, model, "ProdReturn/UpdateProdReturn");
+            var productReturn = await _prodReturnServices.UpdateClientAsync($"ProdReturn/UpdateProdReturn/{id}", model);
             return Json(productReturn);
         }
         [HttpPost]
         public async Task<IActionResult> Delete(Guid id)
         {
-            var deleted = await _unitOfWorkClientServices.prodReturnClientServices.DeleteAsync(id, "ProdReturn/DeleteProdReturn");
+            var deleted = await _prodReturnServices.DeleteClientAsync($"ProdReturn/DeleteProdReturn/{id}" );
             return Json(deleted);
         }
     }

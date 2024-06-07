@@ -1,5 +1,5 @@
 ﻿using GasHub.Models;
-using GasHub.Services.Abstractions;
+using GasHub.Services.Interface;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
@@ -10,16 +10,20 @@ namespace GasHub.Controllers
 {
     public class PublicController : Controller
     {
-        private readonly IUnitOfWorkClientServices _unitOfWorkClientServices;
+        private readonly IClientServices<Register> _registerServices;
         private readonly ITokenService _tokenService;
+        private readonly IAuthService _authenticationService;
 
-
-
-        public PublicController(IUnitOfWorkClientServices unitOfWorkClientServices, ITokenService tokenService)
+        public PublicController(IClientServices<Register> registerServices,
+            ITokenService tokenService,
+            IAuthService authenticationService
+            )
         {
-            _unitOfWorkClientServices = unitOfWorkClientServices;
+            _registerServices = registerServices;
             _tokenService = tokenService;
+            _authenticationService = authenticationService;
         }
+
         public IActionResult Register()
         {
             return View();
@@ -28,8 +32,8 @@ namespace GasHub.Controllers
         public async Task<IActionResult> CreateUser(Register model)
         {
             model.Roles = ["User"];
-            var register = await _unitOfWorkClientServices.registerUserClientServices.AddAsync(model, "User/Create");
-            if (register)
+            var register = await _registerServices.PostClientAsync( "User/Create" , model);
+            if (register.Success)
             {
                 return RedirectToAction("Login");
             }
@@ -44,26 +48,30 @@ namespace GasHub.Controllers
         [HttpPost]
         public async Task<IActionResult> LoginUser(Login model, string? ReturnUrl)
         {
-            var loginResponse = await _unitOfWorkClientServices.loginUserClientServices.LoginAsync(model, "Auth/Login");
-            if (loginResponse.token == null)
+            if (!ModelState.IsValid)
             {
-                // Pass the ReturnUrl back to the view in case of an error
                 ViewData["ReturnUrl"] = ReturnUrl;
                 return View("Login", model);
             }
 
-            var tokenConfiger = new TokenConfig { Token = loginResponse.token };
+            var loginResponse = await _authenticationService.Login(model);
+
+            if (loginResponse.token == null)
+            {
+                ModelState.AddModelError("", "Invalid login attempt.");
+                ViewData["ReturnUrl"] = ReturnUrl;
+                return View("Login", model);
+            }
+
             _tokenService.SaveToken(loginResponse.token);
-            await UserLogin(tokenConfiger);
+            await UserLogin(loginResponse.token);
+
             if (!string.IsNullOrEmpty(ReturnUrl) && Url.IsLocalUrl(ReturnUrl))
             {
                 return Redirect(ReturnUrl);
             }
-            else
-            {
-                // Redirect to default page
-                return RedirectToAction("Index", "Home");
-            }
+
+            return RedirectToAction("Index", "Home");
 
         }
         public async Task<IActionResult> LogOut()
@@ -73,10 +81,10 @@ namespace GasHub.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        private async Task<UserDetails> UserLogin(TokenConfig tokenConfig)
+        private async Task UserLogin(string token)
         {
             var handler = new JwtSecurityTokenHandler();
-            var jwt = handler.ReadJwtToken(tokenConfig.Token);
+            var jwt = handler.ReadJwtToken(token);
 
             var identity = new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationScheme);
 
@@ -86,21 +94,12 @@ namespace GasHub.Controllers
             }
 
             var principal = new ClaimsPrincipal(identity);
-
-            // Set the user principal in HttpContext
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
 
-            // Extracting user details from claims
+            // Optionally extract and log user details
             var userId = jwt.Claims.FirstOrDefault(c => c.Type == "UserId")?.Value;
             var userName = jwt.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Name)?.Value;
             var roles = jwt.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value).ToList();
-
-            return new UserDetails
-            {
-                UserId = userId,
-                UserName = userName,
-                Roles = roles
-            };
         }
 
     }
