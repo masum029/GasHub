@@ -36,6 +36,9 @@ namespace GasHub.Controllers
             var user = await _unitOfWorkClientServices.userClientServices.GetByIdAsync(id, "User/GetUserDetails");
             return Json(user);
         }
+
+
+
         [HttpPost]
         public async Task<IActionResult> Delete(Guid id)
         {
