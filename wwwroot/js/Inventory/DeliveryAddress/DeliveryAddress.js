@@ -4,7 +4,7 @@
 
 async function GetDeliveryAddressList() {
     try {
-        const data = await $.ajax({
+        const deliveryAddress = await $.ajax({
             url: '/DeliveryAddress/GetDeliveryAddressList',
             type: 'get',
             dataType: 'json',
@@ -16,18 +16,17 @@ async function GetDeliveryAddressList() {
             dataType: 'json',
             contentType: 'application/json;charset=utf-8'
         });
-        if (data && data.data && data.data.length > 0) {
-            const companies = data.data;
-            onSuccess(companies, userData.data);
+        if (deliveryAddress && deliveryAddress.data) {
+            onSuccess(deliveryAddress.data, userData.data);
         }
     } catch (error) {
         console.log('Error:', error);
     }
 }
 
-function onSuccess(companies, users) {
+function onSuccess(deliveryAddress, users) {
     debugger
-    if (companies.length > 0 && users.length > 0) {
+    if (deliveryAddress) {
         if ($.fn.DataTable.isDataTable('#CompanyTable')) {
             // If initialized, destroy the DataTable first
             $('#CompanyTable').DataTable().destroy();
@@ -40,19 +39,17 @@ function onSuccess(companies, users) {
         });
 
         // Merge company and user data
-        var mergedData = companies.map(function (company) {
-            var user = usersMap[company.userId];
-            console.log('company:', company);
-            console.log('user:', user);
+        var mergedData = deliveryAddress.map(function (deliveryAddres) {
+            var user = usersMap[deliveryAddres.userId];
             if (user) {
                 return {
-                    id: company.id,
+                    id: deliveryAddres.id,
                     email: user.email,
                     fullName: user.firstName + ' ' + user.lastName,
-                    phone: company.phone,
-                    mobile: company.mobile,
-                    address: company.address,
-                    isActive: company.isActive
+                    phone: deliveryAddres.phone,
+                    mobile: deliveryAddres.mobile,
+                    address: deliveryAddres.address,
+                    isActive: deliveryAddres.isActive
                 };
             }
             return null; // Skip if user not found
@@ -249,13 +246,13 @@ $('#btnSave').click(async function () {
                 data: formData
             });
 
-            $('#modelCreate').modal('hide');
-            if (response === true) {
+            if (response.success === true && response.status === 200) {
                 // Show success message
                 $('#successMessage').text('Your Delivery Address was successfully saved.');
                 $('#successMessage').show();
                 await GetDeliveryAddressList()
                 $('#CompanyForm')[0].reset();
+                $('#modelCreate').modal('hide');
             }
         } catch (error) {
             console.log('Error:', error);
@@ -334,6 +331,7 @@ async function editCompany(id) {
 }
 
 async function updateCompany(id) {
+    debugger
     if ($('#CompanyForm').valid()) {
         const formData = $('#CompanyForm').serialize();
         console.log(formData);
@@ -345,15 +343,16 @@ async function updateCompany(id) {
                 data: formData
             });
 
-            $('#modelCreate').modal('hide');
-            if (response === true) {
+            
+            if (response.success === true && response.status === 200) {
                 // Show success message
                 $('#successMessage').text('Your Delivery Address was successfully updated.');
                 $('#successMessage').show();
                 // Reset the form
                 $('#CompanyForm')[0].reset();
                 // Update the company list
-                await GetCompanyList();
+                $('#modelCreate').modal('hide');
+                await GetDeliveryAddressList();
             }
         } catch (error) {
             console.log('Error:', error);
@@ -394,11 +393,13 @@ async function deleteCompany(id) {
                 type: 'POST',
                 data: { id: id }
             });
-
-            $('#deleteAndDetailsModel').modal('hide');
-            $('#successMessage').text('Your Delivery Address was successfully Delete.');
-            $('#successMessage').show();
-            await GetDeliveryAddressList()
+            if (response.success === true && response.status === 200) {
+                $('#deleteAndDetailsModel').modal('hide');
+                $('#successMessage').text('Your Delivery Address was successfully Delete.');
+                $('#successMessage').show();
+                await GetDeliveryAddressList()
+            }
+            
         } catch (error) {
             console.log(error);
             $('#deleteAndDetailsModel').modal('hide');

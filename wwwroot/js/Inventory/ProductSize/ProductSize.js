@@ -12,7 +12,7 @@ async function GetProductSizeList() {
             contentType: 'application/json;charset=utf-8'
         });
 
-        if (data && data.data && data.data.length > 0) {
+        if (data && data.data) {
             const companies = data.data;
             console.log('companies:', companies);
             onSuccess(companies);
@@ -23,7 +23,7 @@ async function GetProductSizeList() {
 }
 
 function onSuccess(companies) {
-    if (companies.length > 0) {
+    if (companies) {
         if ($.fn.DataTable.isDataTable('#CompanyTable')) {
             // If initialized, destroy the DataTable first
             $('#CompanyTable').DataTable().destroy();
@@ -154,13 +154,14 @@ $('#btnSave').click(async function () {
                 data: formData
             });
 
-            $('#modelCreate').modal('hide');
-            if (response === true) {
+            
+            if (response.success === true && response.status === 200) {
                 // Show success message
                 $('#successMessage').text('Your Product Size was successfully saved.');
                 $('#successMessage').show();
                 await GetProductSizeList();
                 $('#CompanyForm')[0].reset();
+                $('#modelCreate').modal('hide');
             }
         } catch (error) {
             console.log('Error:', error);
@@ -217,8 +218,8 @@ async function updateCompany(id) {
                 data: formData
             });
 
-            $('#modelCreate').modal('hide');
-            if (response === true) {
+            
+            if (response.success === true && response.status === 200) {
                 // Show success message
                 $('#successMessage').text('Your Product Size was successfully updated.');
                 $('#successMessage').show();
@@ -226,6 +227,7 @@ async function updateCompany(id) {
                 $('#CompanyForm')[0].reset();
                 // Update the company list
                 await GetProductSizeList();
+                $('#modelCreate').modal('hide');
             }
         } catch (error) {
             console.log('Error:', error);
@@ -277,3 +279,6 @@ function deleteCompany(id) {
         });
     });
 }
+
+
+

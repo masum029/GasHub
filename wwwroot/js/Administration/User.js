@@ -12,7 +12,7 @@ async function GetUserList() {
             contentType: 'application/json;charset=utf-8'
         });
 
-        if (users && users.data && users.data.length > 0) {
+        if (users && users.data) {
             console.log('companies:', users.data);
             onSuccess(users.data);
         }
@@ -23,7 +23,7 @@ async function GetUserList() {
 
 function onSuccess(users) {
     debugger
-    if (users.length > 0 ) {
+    if (users) {
         if ($.fn.DataTable.isDataTable('#CompanyTable')) {
             // If initialized, destroy the DataTable first
             $('#CompanyTable').DataTable().destroy();
@@ -220,7 +220,7 @@ async function populateRoleDropdown() {
         // Add user options
         console.log(data.data);
         $.each(data.data, function (index, role) {
-            $('#RolesDropdown').append('<option value="' + role.id + '">' + role.roleName + '</option>');
+            $('#RolesDropdown').append('<option value="' + role.roleName + '">' + role.roleName + '</option>');
         });
     } catch (error) {
         console.error(error);
@@ -265,56 +265,70 @@ $('#btnSave').click(async function () {
                 data: formData
             });
 
-            $('#modelCreate').modal('hide');
-            if (response === true) {
+            $('#successMessage').text('New User was successfully saved.').hide();
+            $('#UserError').text('Username is already taken.').hide();
+            $('#EmailError').text('Email is already taken.').hide();
+            if (response.success && response.status === 200) {
                 // Show success message
-                $('#successMessage').text(' New User was successfully saved.');
+                $('#successMessage').text('New User was successfully saved.');
                 $('#successMessage').show();
                 await GetUserList();
                 $('#CompanyForm')[0].reset();
+                $('#modelCreate').modal('hide');
+            } else if (response.errorMessage) {
+                // Display specific error messages
+                if (response.errorMessage.includes("DuplicateUserName")) {
+                    $('#UserError').text('Username is already taken.').show();
+                } else if (response.errorMessage.includes("DuplicateEmail")) {
+                    $('#EmailError').text('Email is already taken.').show();
+                } else {
+                    $('#GeneralError').text('Failed to save the user: ' + response.errorMessage).show();
+                }
             }
-        } catch (error) {
-            console.log('Error:', error);
+        } catch (jqXHR) {
+            var errorMessage = jqXHR.responseText || "Unknown error occurred";
+            console.log('Error:', errorMessage);
+            $('#GeneralError').text('An unexpected error occurred. Please try again.').show();
         }
     }
 });
 
 // Edit Company
-async function editCompany(id) {
-    console.log("Edit company with id:", id);
-    $('#myModalLabelUpdateEmployee').show();
-    $('#myModalLabelAddEmployee').hide();
-    // Reset form validation
-    debugger
+//async function editCompany(id) {
+//    console.log("Edit company with id:", id);
+//    $('#myModalLabelUpdateEmployee').show();
+//    $('#myModalLabelAddEmployee').hide();
+//    // Reset form validation
+//    debugger
 
-    try {
-        const data = await $.ajax({
-            url: '/Company/GetCompany/' + id,
-            type: 'get',
-            dataType: 'json',
-            contentType: 'application/json;charset=utf-8'
-        });
+//    try {
+//        const data = await $.ajax({
+//            url: '/Company/GetCompany/' + id,
+//            type: 'get',
+//            dataType: 'json',
+//            contentType: 'application/json;charset=utf-8'
+//        });
 
-        // Populate form fields with company data
-        $('#btnSave').hide();
-        $('#btnUpdate').show();
-        $('#Name').val(data.name);
-        $('#Contactperson').val(data.contactperson);
-        $('#ContactPerNum').val(data.contactPerNum);
-        $('#ContactNumber').val(data.contactNumber);
-        $('#BIN').val(data.bin);
-        debugger
-        resetValidation()
-        // Show modal for editing
-        $('#modelCreate').modal('show');
-        // Update button click event handler
-        $('#btnUpdate').off('click').on('click', function () {
-            updateCompany(id);
-        });
-    } catch (error) {
-        console.log('Error:', error);
-    }
-}
+//        // Populate form fields with company data
+//        $('#btnSave').hide();
+//        $('#btnUpdate').show();
+//        $('#Name').val(data.name);
+//        $('#Contactperson').val(data.contactperson);
+//        $('#ContactPerNum').val(data.contactPerNum);
+//        $('#ContactNumber').val(data.contactNumber);
+//        $('#BIN').val(data.bin);
+//        debugger
+//        resetValidation()
+//        // Show modal for editing
+//        $('#modelCreate').modal('show');
+//        // Update button click event handler
+//        $('#btnUpdate').off('click').on('click', function () {
+//            updateCompany(id);
+//        });
+//    } catch (error) {
+//        console.log('Error:', error);
+//    }
+//}
 
 
 async function updateCompany(id) {

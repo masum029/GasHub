@@ -296,13 +296,14 @@ $('#btnSave').click(async function () {
                 cache: false         // Disable caching for file uploads
             });
 
-            $('#modelCreate').modal('hide');
-            if (response === true) {
+            
+            if (response.success === true && response.status === 200) {
                 // Show success message
                 $('#successMessage').text('Your Product was successfully saved.');
                 $('#successMessage').show();
                 await GetProductList();
                 $('#CompanyForm')[0].reset();
+                $('#modelCreate').modal('hide');
             }
         } catch (error) {
             console.log('Error:', error);
@@ -476,8 +477,8 @@ async function updateCompany(id) {
                 data: formData
             });
 
-            $('#modelCreate').modal('hide');
-            if (response === true) {
+            
+            if (response.success === true && response.status === 200) {
                 // Show success message
                 $('#successMessage').text('Your Product was successfully updated.');
                 $('#successMessage').show();
@@ -485,6 +486,7 @@ async function updateCompany(id) {
                 $('#CompanyForm')[0].reset();
                 // Update the company list
                 await GetProductList();
+                $('#modelCreate').modal('hide');
             }
         } catch (error) {
             console.log('Error:', error);

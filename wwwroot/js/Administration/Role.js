@@ -160,13 +160,13 @@ $('#btnSave').click(async function () {
                 data: formData
             });
 
-            $('#modelCreate').modal('hide');
-            if (response === true) {
+            if (response.success === true && response.status === 200 ) {
                 // Show success message
                 $('#successMessage').text('Your Role Was successfully saved....');
                 $('#successMessage').show();
                 await GetRoleList();
                 $('#CompanyForm')[0].reset();
+                $('#modelCreate').modal('hide');
             }
         } catch (error) {
             console.log('Error:', error);

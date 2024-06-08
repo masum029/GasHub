@@ -204,13 +204,14 @@ $('#btnSave').click(async function () {
                 data: formData
             });
 
-            $('#modelCreate').modal('hide');
-            if (response === true) {
+            
+            if (response.success === true && response.status === 200) {
                 // Show success message
                 $('#successMessage').text('Your Product Discun was successfully saved.');
                 $('#successMessage').show();
                 await GetProductDiscunList();
                 $('#CompanyForm')[0].reset();
+                $('#modelCreate').modal('hide');
             }
         } catch (error) {
             console.log('Error:', error);
@@ -295,8 +296,8 @@ async function updateCompany(id) {
                 data: formData
             });
 
-            $('#modelCreate').modal('hide');
-            if (response === true) {
+            
+            if (response.success === true && response.status === 200) {
                 // Show success message
                 $('#successMessage').text('Your Product Discun was successfully updated.');
                 $('#successMessage').show();
@@ -304,6 +305,7 @@ async function updateCompany(id) {
                 $('#CompanyForm')[0].reset();
                 // Update the company list
                 await GetProductDiscunList();
+                $('#modelCreate').modal('hide');
             }
         } catch (error) {
             console.log('Error:', error);
@@ -345,6 +347,7 @@ async function deleteCompany(id) {
                 type: 'POST',
                 data: { id: id }
             });
+            if (response.success === true && response.status === 200) 
 
             $('#deleteAndDetailsModel').modal('hide');
             $('#successMessage').text('Your Product Discun was successfully updated.');

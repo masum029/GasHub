@@ -250,13 +250,14 @@ $('#btnSave').click(async function () {
                 data: formData
             });
 
-            $('#modelCreate').modal('hide');
-            if (response === true) {
+            
+            if (response.success === true && response.status === 200) {
                 // Show success message
                 $('#successMessage').text('Your Trader was successfully saved.');
                 $('#successMessage').show();
                 await GetTraderList()
                 $('#CompanyForm')[0].reset();
+                $('#modelCreate').modal('hide');
             }
         } catch (error) {
             console.log('Error:', error);
@@ -341,8 +342,8 @@ async function updateCompany(id) {
                 data: formData
             });
 
-            $('#modelCreate').modal('hide');
-            if (response === true) {
+            
+            if (response.success === true && response.status === 200) {
                 // Show success message
                 $('#successMessage').text('Your Trader was successfully updated.');
                 $('#successMessage').show();
@@ -350,6 +351,7 @@ async function updateCompany(id) {
                 $('#CompanyForm')[0].reset();
                 // Update the company list
                 await GetTraderList();
+                $('#modelCreate').modal('hide');
             }
         } catch (error) {
             console.log('Error:', error);
@@ -390,11 +392,13 @@ async function deleteCompany(id) {
                 type: 'POST',
                 data: { id: id }
             });
-
-            $('#deleteAndDetailsModel').modal('hide');
-            $('#successMessage').text('Your Trader was successfully Delete.');
-            $('#successMessage').show();
-            await GetTraderList()
+            if (response.success === true && response.status === 200) {
+                $('#deleteAndDetailsModel').modal('hide');
+                $('#successMessage').text('Your Trader was successfully Delete.');
+                $('#successMessage').show();
+                await GetTraderList()
+            }
+            
         } catch (error) {
             console.log(error);
             $('#deleteAndDetailsModel').modal('hide');

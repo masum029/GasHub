@@ -231,13 +231,14 @@ $('#btnSave').click(async function () {
                 data: formData
             });
 
-            $('#modelCreate').modal('hide');
-            if (response === true) {
+            
+            if (response.success === true && response.status === 200) {
                 // Show success message
                 $('#successMessage').text('Your Prod Return was successfully saved.');
                 $('#successMessage').show();
                 await GetProdReturnList();
                 $('#CompanyForm')[0].reset();
+                $('#modelCreate').modal('hide');
             }
         } catch (error) {
             console.log('Error:', error);
@@ -378,8 +379,8 @@ async function updateCompany(id) {
                 data: formData
             });
 
-            $('#modelCreate').modal('hide');
-            if (response === true) {
+           
+            if (response.success === true && response.status === 200) {
                 // Show success message
                 $('#successMessage').text('Your Product Return was successfully updated.');
                 $('#successMessage').show();
@@ -387,6 +388,7 @@ async function updateCompany(id) {
                 $('#CompanyForm')[0].reset();
                 // Update the company list
                 await GetProdReturnList();
+                $('#modelCreate').modal('hide');
             }
         } catch (error) {
             console.log('Error:', error);
@@ -428,11 +430,13 @@ async function deleteCompany(id) {
                 type: 'POST',
                 data: { id: id }
             });
-
-            $('#deleteAndDetailsModel').modal('hide');
-            $('#successMessage').text('Your Product Return was successfully Delete .');
-            $('#successMessage').show();
-            await GetProdReturnList();
+            if (response.success === true && response.status === 200) {
+                $('#deleteAndDetailsModel').modal('hide');
+                $('#successMessage').text('Your Product Return was successfully Delete .');
+                $('#successMessage').show();
+                await GetProdReturnList();
+            }
+           
         } catch (error) {
             console.log(error);
             $('#deleteAndDetailsModel').modal('hide');

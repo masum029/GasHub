@@ -12,7 +12,7 @@ async function GetCompanyList() {
             contentType: 'application/json;charset=utf-8'
         });
         
-        if (data && data.data && data.data.length > 0) {
+        if (data && data.data) {
             const companies = data.data;
             console.log('companies:', companies);
             onSuccess(companies);
@@ -23,7 +23,7 @@ async function GetCompanyList() {
 }
 
 function onSuccess(companies) {
-    if (companies.length > 0) {
+    if (companies) {
         if ($.fn.DataTable.isDataTable('#CompanyTable')) {
             // If initialized, destroy the DataTable first
             $('#CompanyTable').DataTable().destroy();
@@ -204,6 +204,7 @@ $('#modelCreate').on('keypress', 'input', handleEnterKey);
 
 // Submit button click event
 $('#btnSave').click(async function () {
+
     // Check if the form is valid
     if ($('#CompanyForm').valid()) {
         // Proceed with form submission
@@ -216,13 +217,14 @@ $('#btnSave').click(async function () {
                 data: formData
             });
 
-            $('#modelCreate').modal('hide');
-            if (response === true) {
+            
+            if (response.success === true && response.status === 200) {
                 // Show success message
                 $('#successMessage').text('Your company was successfully saved.');
                 $('#successMessage').show();
                 await GetCompanyList();
                 $('#CompanyForm')[0].reset();
+                $('#modelCreate').modal('hide');
             }
         } catch (error) {
             console.log('Error:', error);
@@ -281,8 +283,8 @@ async function updateCompany(id) {
                 data: formData
             });
 
-            $('#modelCreate').modal('hide');
-            if (response === true) {
+            
+            if (response.success === true && response.status === 200) {
                 // Show success message
                 $('#successMessage').text('Your company was successfully updated.');
                 $('#successMessage').show();
@@ -290,6 +292,7 @@ async function updateCompany(id) {
                 $('#CompanyForm')[0].reset();
                 // Update the company list
                 await GetCompanyList();
+                $('#modelCreate').modal('hide');
             }
         } catch (error) {
             console.log('Error:', error);

@@ -38,7 +38,7 @@ async function GetStockList() {
 function onSuccess(stocks, products, traders) {
     debugger
 
-    if (stocks && products && traders) {
+    if (stocks ) {
         // Convert users array to a map for easy lookup
         var productsMap = {};
         products.forEach(function (stock) {
@@ -219,13 +219,14 @@ $('#btnSave').click(async function () {
                 data: formData
             });
 
-            $('#modelCreate').modal('hide');
-            if (response === true) {
+            
+            if (response.success === true && response.status === 200) {
                 // Show success message
                 $('#successMessage').text('Your Stock was successfully saved.');
                 $('#successMessage').show();
                 await GetStockList();
                 $('#CompanyForm')[0].reset();
+                $('#modelCreate').modal('hide');
             }
         } catch (error) {
             console.log('Error:', error);
@@ -335,8 +336,8 @@ async function updateCompany(id) {
                 data: formData
             });
 
-            $('#modelCreate').modal('hide');
-            if (response === true) {
+            
+            if (response.success === true && response.status === 200) {
                 // Show success message
                 $('#successMessage').text('Your Stock was successfully updated.');
                 $('#successMessage').show();
@@ -344,6 +345,7 @@ async function updateCompany(id) {
                 $('#CompanyForm')[0].reset();
                 // Update the company list
                 await GetStockList();
+                $('#modelCreate').modal('hide');
             }
         } catch (error) {
             console.log('Error:', error);
@@ -385,11 +387,13 @@ async function deleteCompany(id) {
                 type: 'POST',
                 data: { id: id }
             });
-
-            $('#deleteAndDetailsModel').modal('hide');
-            $('#successMessage').text('Your Stock was successfully Delete..');
-            $('#successMessage').show();
-            await GetStockList();
+            if (response.success === true && response.status === 200) {
+                $('#deleteAndDetailsModel').modal('hide');
+                $('#successMessage').text('Your Stock was successfully Delete..');
+                $('#successMessage').show();
+                await GetStockList();
+            }
+            
         } catch (error) {
             console.log(error);
             $('#deleteAndDetailsModel').modal('hide');

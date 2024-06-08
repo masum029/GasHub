@@ -7,6 +7,12 @@ namespace GasHub.Controllers
     public class StockController : Controller
     {
         private readonly IClientServices<Stock> _stockServices;
+
+        public StockController(IClientServices<Stock> stockServices)
+        {
+            _stockServices = stockServices;
+        }
+
         public IActionResult Index()
         {
             return View();

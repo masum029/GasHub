@@ -12,7 +12,7 @@ async function GetValveList() {
             contentType: 'application/json;charset=utf-8'
         });
 
-        if (data && data.data && data.data.length > 0) {
+        if (data && data.data) {
             const companies = data.data;
             console.log('companies:', companies);
             onSuccess(companies);
@@ -23,7 +23,7 @@ async function GetValveList() {
 }
 
 function onSuccess(Valves) {
-    if (Valves.length > 0) {
+    if (Valves) {
         if ($.fn.DataTable.isDataTable('#CompanyTable')) {
             // If initialized, destroy the DataTable first
             $('#CompanyTable').DataTable().destroy();
@@ -157,14 +157,13 @@ $('#btnSave').click(async function () {
                 contentType: 'application/x-www-form-urlencoded',
                 data: formData
             });
-
-            $('#modelCreate').modal('hide');
-            if (response === true) {
+            if (response.success === true && response.status === 200) {
                 // Show success message
                 $('#successMessage').text('Your Valve was successfully saved.');
                 $('#successMessage').show();
                 await GetValveList();
                 $('#CompanyForm')[0].reset();
+                $('#modelCreate').modal('hide');
             }
         } catch (error) {
             console.log('Error:', error);
@@ -221,8 +220,8 @@ async function updateCompany(id) {
                 data: formData
             });
 
-            $('#modelCreate').modal('hide');
-            if (response === true) {
+           
+            if (response.success === true && response.status === 200) {
                 // Show success message
                 $('#successMessage').text('Your Valve was successfully updated.');
                 $('#successMessage').show();
@@ -230,6 +229,7 @@ async function updateCompany(id) {
                 $('#CompanyForm')[0].reset();
                 // Update the company list
                 await GetValveList();
+                $('#modelCreate').modal('hide');
             }
         } catch (error) {
             console.log('Error:', error);

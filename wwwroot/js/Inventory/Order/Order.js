@@ -246,13 +246,14 @@ $('#btnSave').click(async function () {
                 data: formData
             });
 
-            $('#modelCreate').modal('hide');
-            if (response === true) {
+            
+            if (response.success === true && response.status === 200) {
                 // Show success message
                 $('#successMessage').text('Your Order was successfully saved.');
                 $('#successMessage').show();
                 await GetOrderList();
                 $('#CompanyForm')[0].reset();
+                $('#modelCreate').modal('hide');
             }
         } catch (error) {
             console.log('Error:', error);
@@ -394,8 +395,8 @@ async function updateCompany(id) {
                 data: formData
             });
 
-            $('#modelCreate').modal('hide');
-            if (response === true) {
+            
+            if (response.success === true && response.status === 200) {
                 // Show success message
                 $('#successMessage').text('Your Order was successfully updated.');
                 $('#successMessage').show();
@@ -403,6 +404,7 @@ async function updateCompany(id) {
                 $('#CompanyForm')[0].reset();
                 // Update the company list
                 await GetOrderList();
+                $('#modelCreate').modal('hide');
             }
         } catch (error) {
             console.log('Error:', error);
@@ -444,11 +446,13 @@ async function deleteCompany(id) {
                 type: 'POST',
                 data: { id: id }
             });
+            if (response.success === true && response.status === 200) {
 
             $('#deleteAndDetailsModel').modal('hide');
             $('#successMessage').text('Your Order was successfully Delete...');
             $('#successMessage').show();
             await GetOrderList();
+            }
         } catch (error) {
             console.log(error);
             $('#deleteAndDetailsModel').modal('hide');

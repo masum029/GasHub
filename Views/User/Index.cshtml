@@ -36,6 +36,10 @@
                         <strong>Holy guacamole!</strong>   Your company was successfully saved.
                         <button id="btnClose" type="button" class="btn-close" aria-label="Close"></button>
                     </div>
+                    <div id="errorMessage" class="alert alert-danger" role="alert" style="display: none;">
+                        <strong>Holy guacamole!</strong>   Your company was successfully saved.
+                        <button id="btnClose" type="button" class="btn-close" aria-label="Close"></button>
+                    </div>
 
                     <!-- /.card-header -->
 
@@ -69,8 +73,8 @@
 
 
 
-<div class="modal  fade " id="modelCreate" tabindex="-1" role="dialog" aria-labelledby="myModalLabelAddEmployee" aria-hidden="true">
-    <div class="modal-dialog modal-xl ">
+<div class="modal fade" id="modelCreate" tabindex="-1" role="dialog" aria-labelledby="myModalLabelAddEmployee" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
         <div class="modal-content w-auto">
             <div class="modal-header">
                 <h4 class="modal-title" id="myModalLabelAddEmployee">Add User</h4>
@@ -99,15 +103,20 @@
                                             <label asp-for="UserName" class="control-label"></label>
                                             <input asp-for="UserName" placeholder="Enter your User Name" class="form-control" name="UserName" />
                                             <span asp-validation-for="UserName" class="text-danger"></span>
+                                            <div id="UserError" class="text-danger" role="alert" style="display: none;">
+                                                Username is already taken.
+                                            </div>
                                         </div>
                                         <div class="form-group">
                                             <label asp-for="Email" class="control-label"></label>
                                             <input asp-for="Email" placeholder="Enter your Email" class="form-control" name="Email" />
                                             <span asp-validation-for="Email" class="text-danger"></span>
+                                            <div id="EmailError" class="text-danger" role="alert" style="display: none;">
+                                                Email is already taken.
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
-
                                         <div class="form-group">
                                             <label asp-for="PhoneNumber" class="control-label"></label>
                                             <input asp-for="PhoneNumber" placeholder="Enter your Phone Number" class="form-control" name="PhoneNumber" />
@@ -132,17 +141,6 @@
                                     </div>
                                 </div>
                             </div>
-                            @* <div class="col-md-6">
-                            <div class="row">
-                            <div class="col-md-6">
-
-
-                            </div>
-                            <div class="col-md-6">
-
-                            </div>
-                            </div>
-                            </div> *@
                         </div>
                     </div>
                 </form>
@@ -155,6 +153,11 @@
         </div>
     </div>
 </div>
+
+<div id="successMessage" style="display:none;" class="alert alert-success"></div>
+<div id="UserError" style="display:none;" class="alert alert-danger"></div>
+<div id="EmailError" style="display:none;" class="alert alert-danger"></div>
+<div id="GeneralError" style="display:none;" class="alert alert-danger"></div>
 
 
 
