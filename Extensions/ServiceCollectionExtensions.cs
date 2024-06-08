@@ -39,7 +39,7 @@ namespace GasHub.Extensions
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(options =>
                 {
-                    options.LoginPath = "/Authentication/Login";
+                    options.LoginPath = "/Public/Login";
                     options.ExpireTimeSpan = TimeSpan.FromDays(1);
                     options.ReturnUrlParameter = "ReturnUrl";
                 });
