@@ -83,6 +83,8 @@
                                             <label asp-for="Size" class="control-label"></label>
                                             <input asp-for="Size" placeholder="Enter Product Size" class="form-control" name="Size" />
                                             <span asp-validation-for="Size" class="text-danger"></span>
+                                            <div id="ProductSizeError" class="text-danger" role="alert" style="display: none;">
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="col-md-6">

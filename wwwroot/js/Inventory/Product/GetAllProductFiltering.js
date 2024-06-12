@@ -104,7 +104,7 @@ async function GetProductSizeList() {
                     .attr('id', 'size=' + size.id);
                 var label = $('<label></label>')
                     .attr('for', 'size-' + size.id)
-                    .text(size.size + " " + "Kg");
+                    .text(size.size + " " + size.unit );
 
                 filterDiv.append(checkbox).append(label);
                 sizeFilter.append(filterDiv);

@@ -79,8 +79,8 @@ function onSuccess(companys, products, productSize, productValv) {
                     id: product.id,
                     companyName: company.name,
                     productName: product.name,
-                    productSize: productSize.size,
-                    productValve: productValv.unit,
+                    productSize: productSize.size + " " + productSize.unit,
+                    productValve: productValv.name + " " + productValv.unit ,
                     productImages: product.prodImage,
                     productPrice : product.prodPrice,
                 };
@@ -296,7 +296,8 @@ $('#btnSave').click(async function () {
                 cache: false         // Disable caching for file uploads
             });
 
-            
+            $('#ProductNameError').text('Product Name  is already taken.').hide();
+            $('#ProductSizeError').text('Product Size  is already Exjist.').hide();
             if (response.success === true && response.status === 200) {
                 // Show success message
                 $('#successMessage').text('Your Product was successfully saved.');
@@ -304,6 +305,15 @@ $('#btnSave').click(async function () {
                 await GetProductList();
                 $('#CompanyForm')[0].reset();
                 $('#modelCreate').modal('hide');
+            } else if (response.errorMessage) {
+                // Display specific error messages
+                if (response.errorMessage.includes("DuplicateProductName")) {
+                    $('#ProductNameError').text('Product Name  is already Exjist.').show();
+                } else if (response.errorMessage.includes("DuplicateProductSize")) {
+                    $('#ProductSizeError').text('Product Size  is already Exjist.').show();
+                } else {
+                    $('#GeneralError').text('Failed to save the user: ').show();
+                }
             }
         } catch (error) {
             console.log('Error:', error);
@@ -359,7 +369,7 @@ async function popuprodValveDropdown() {
         // Add user options
         console.log(data.data);
         $.each(data.data, function (index, valv) {
-            $('#prodValveDropdown').append('<option value="' + valv.id + '">' + valv.unit + '</option>');
+            $('#prodValveDropdown').append('<option value="' + valv.id + '">' + valv.name + " " + valv.unit + '</option>');
         });
     } catch (error) {
         console.error(error);
@@ -407,7 +417,7 @@ async function populateprodSizeDropdown() {
         // Add user options
         console.log(data.data);
         $.each(data.data, function (index, ProductSize) {
-            $('#prodSizeDropdown').append('<option value="' + ProductSize.id + '">' + ProductSize.size + '</option>');
+            $('#prodSizeDropdown').append('<option value="' + ProductSize.id + '">' + ProductSize.size + " " + ProductSize.unit + '</option>');
         });
     } catch (error) {
         console.error(error);

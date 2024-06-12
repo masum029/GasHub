@@ -154,7 +154,7 @@ $('#btnSave').click(async function () {
                 data: formData
             });
 
-            
+            $('#ProductSizeError').text('Product Size is already Exjist.').hide();
             if (response.success === true && response.status === 200) {
                 // Show success message
                 $('#successMessage').text('Your Product Size was successfully saved.');
@@ -162,6 +162,13 @@ $('#btnSave').click(async function () {
                 await GetProductSizeList();
                 $('#CompanyForm')[0].reset();
                 $('#modelCreate').modal('hide');
+            } else if (response.errorMessage) {
+                // Display specific error messages
+                if (response.errorMessage.includes("DuplicateProductSize")) {
+                    $('#ProductSizeError').text('Product Size is already Exjist.').show();
+                } else {
+                    $('#GeneralError').text('Failed to save the user: ').show();
+                }
             }
         } catch (error) {
             console.log('Error:', error);

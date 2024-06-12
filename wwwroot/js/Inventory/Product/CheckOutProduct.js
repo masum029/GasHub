@@ -32,12 +32,13 @@ async function getLocalStorageList() {
         var discount = productDiscunMap[id];
         var discounted = discount ? discount.discountedPrice : 0; // Check if discountedPrice exists
         debugger
-        var productHtml = `
+        if (product) {
+            var productHtml = `
             <div class="d-flex justify-content-between mb-2" data-product-id="${id}">
                 <div class="d-flex gap-2">
                     <div class="rounded-pil">
             
-                        <img src="/images/${product.prodImage}" alt="product-img" style="width: 60px;">
+                        <img src="/images/${product?.prodImage}" alt="product-img" style="width: 60px;">
                     </div>
                     <div class="d-flex align-items-start flex-column">
                         <h5>${product.name}</h5>
@@ -55,6 +56,8 @@ async function getLocalStorageList() {
                     </div>
                 </div>
             </div>`;
+        }
+        
 
         $productList.append(productHtml);
     });

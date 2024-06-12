@@ -157,6 +157,7 @@ $('#btnSave').click(async function () {
                 contentType: 'application/x-www-form-urlencoded',
                 data: formData
             });
+            $('#ValveNameError').text('Valve Name  is already Exjist.').hide();
             if (response.success === true && response.status === 200) {
                 // Show success message
                 $('#successMessage').text('Your Valve was successfully saved.');
@@ -164,6 +165,13 @@ $('#btnSave').click(async function () {
                 await GetValveList();
                 $('#CompanyForm')[0].reset();
                 $('#modelCreate').modal('hide');
+            } else if (response.errorMessage) {
+                // Display specific error messages
+                if (response.errorMessage.includes("DuplicateValveName")) {
+                    $('#ValveNameError').text('Valve Name  is already Exjist.').show();
+                } else {
+                    $('#GeneralError').text('Failed to save the user: ').show();
+                }
             }
         } catch (error) {
             console.log('Error:', error);
