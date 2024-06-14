@@ -34,14 +34,37 @@
 <section class="section-padding section-bg">
     <div class="container">
         <div class="row g-3 p-3 mx-5">
-            <div class="col-md-8" id="product-list">
-                <!-- Product items will be dynamically inserted here -->
-                
+            <div class="col-md-8">
+                <h6>By Product</h6>
+                <div id="product-list">
+                    <!-- Product items will be dynamically inserted here -->
+                </div>
+
+                <h6 class="mt-4">Return Product</h6>
+                <div id="return-product-list">
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Size</th>
+                                    <th>Unit</th>
+                                    <th>Company Name</th>
+                                    <th>Quantity</th>
+                                </tr>
+                            </thead>
+                            <tbody id="return-product-table-body">
+                                <!-- Product items will be dynamically inserted here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
+
             <div class="col-md-4 px-5">
                 <div class="d-flex align-items-start flex-column">
                     <div class="w-100" id="address-container" data-user-id="@userId"></div>
-                   
+
                     <div class="mt-5 w-100">
                         <div class="d-flex justify-content-between">
                             <p>Subtotal</p>
@@ -52,7 +75,7 @@
                             <p>Tk <span id="discount">00</span></p>
                         </div>
                         <div class="d-flex justify-content-between">
-                            <p>Less Delivery </p>
+                            <p>Less Delivery</p>
                             <p>Tk <span id="delivery">00</span></p>
                         </div>
                         <hr />
@@ -62,13 +85,15 @@
                         </div>
                     </div>
                     <div class="mt-5 w-100">
-                        <a id="add-order-list" class="btn w-100 btn-dark" asp-action="ConfirmOrder" asp-controller="Home">Confirm Order</a>
+                        <button id="add-order-and-return-product" class="btn w-100 btn-dark" onclick="navigateToConfirmOrder()" disabled>Confirm Order</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </section>
+
+
 
 
  @section Scripts {

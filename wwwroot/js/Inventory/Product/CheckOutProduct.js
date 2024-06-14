@@ -1,11 +1,12 @@
 ﻿$(document).ready(async function () {
     await getLocalStorageList();
-    updateTotals();
-    addressOptions();
+    await updateTotals();
+    await addressOptions();
+    await ReturnProductList();
 });
 
 async function getLocalStorageList() {
-    debugger
+
     var storedProducts = JSON.parse(localStorage.getItem('productIds')) || {};
     var products = await getProduct();
     var productMap = {};
@@ -31,7 +32,7 @@ async function getLocalStorageList() {
         var quantity = storedProducts[id];
         var discount = productDiscunMap[id];
         var discounted = discount ? discount.discountedPrice : 0; // Check if discountedPrice exists
-        debugger
+       
         if (product) {
             var productHtml = `
             <div class="d-flex justify-content-between mb-2" data-product-id="${id}">
@@ -63,6 +64,7 @@ async function getLocalStorageList() {
     });
 
     updateTotals();
+    ReturnProductList();
 }
 
 async function getProduct() {
@@ -106,15 +108,16 @@ async function updateTotals() {
     // Calculate the subtotal
     Object.keys(storedProducts).forEach(function (id) {
         var product = productMap[id];
-        debugger
-        var discount = productDiscunMap[id];
-        if (discount) {
-            subtotal += (product.prodPrice - discount.discountedPrice )* storedProducts[id]; // Assuming the product price is stored in `product.price`
-            totalDiscount += discount.discountedPrice * storedProducts[id];
-        } else {
-            subtotal += product.prodPrice * storedProducts[id];
+        if (product) {
+            var discount = productDiscunMap[id];
+            if (discount) {
+                subtotal += (product.prodPrice - discount.discountedPrice) * storedProducts[id]; // Assuming the product price is stored in `product.price`
+                totalDiscount += discount.discountedPrice * storedProducts[id];
+            } else {
+                subtotal += product.prodPrice * storedProducts[id];
+            }
+            total = subtotal;
         }
-        total = subtotal;
     });
 
     // Update the HTML
@@ -127,7 +130,7 @@ async function updateTotals() {
 
 
 $(document).on('click', '.decrement-btn', async function () {
-    debugger
+    
     var $productDiv = $(this).closest('[data-product-id]');
     var productId = $productDiv.data('product-id');
     var storedProducts = JSON.parse(localStorage.getItem('productIds')) || {};
@@ -142,6 +145,7 @@ $(document).on('click', '.decrement-btn', async function () {
     localStorage.setItem('productIds', JSON.stringify(storedProducts));
     await getLocalStorageList();
     updateTotals();
+    ReturnProductList();
 });
 
 $(document).on('click', '.increment-btn', function () {
@@ -155,7 +159,7 @@ $(document).on('click', '.increment-btn', function () {
 });
 
 $(document).on('click', '.remove-btn', function () {
-    debugger
+    
     var $productDiv = $(this).closest('[data-product-id]');
     var productId = $productDiv.data('product-id');
     var storedProducts = JSON.parse(localStorage.getItem('productIds')) || {};
@@ -177,6 +181,7 @@ $(document).on('click', '.remove-btn', function () {
             localStorage.setItem('productIds', JSON.stringify(storedProducts));
             $productDiv.remove();
             updateTotals();
+            ReturnProductList();
 
             // Optionally, show success message
             Swal.fire(
@@ -190,7 +195,7 @@ $(document).on('click', '.remove-btn', function () {
 
 async function addressOptions() {
     try {
-        debugger
+        
         const userId = $('#address-container').data('user-id');
 
 
@@ -202,6 +207,7 @@ async function addressOptions() {
             const { mobile, address } = deliveryAddress;
 
             if (mobile && address) {
+                
                 $('#address-container').html(`
                         
                        <p>Delivery Address </p>
@@ -211,6 +217,7 @@ async function addressOptions() {
                             <span id="addressDetails" class="w-100">${address}</span>
                         </div>
                 `);
+                ConfirmOrderBtnActivity(true);
             } else if (mobile) {
                 $('#address-container').html(`
                     <p>Delivery Address </p>
@@ -220,6 +227,7 @@ async function addressOptions() {
                             <span id="addressDetails" class="w-50">${address}</span>
                         </div>
                 `);
+                ConfirmOrderBtnActivity(true);
             } else {
                 $('#address-container').html(`
                      <div class="d-flex w-100 flex-column justify-content-center" id="address-details">
@@ -247,7 +255,7 @@ $(document).on('click', '#add-address-btn', function (e) {
 
 
 async function getAddressList() {
-    debugger
+    
     try {
         const response = await $.ajax({
             url: '/DeliveryAddress/GetDeliveryAddressList',
@@ -263,7 +271,7 @@ async function getAddressList() {
     }
 }
 async function GetLoginUserById(id) {
-    debugger
+    
     try {
         const response = await $.ajax({
             url: '/User/GetById/' + id,
@@ -277,4 +285,121 @@ async function GetLoginUserById(id) {
         console.log('Error:', error);
         return [];
     }
+}
+
+
+async function ReturnProductList() {
+    try {
+        debugger;
+        var storedProducts = JSON.parse(localStorage.getItem('productIds')) || {};
+        var products = await getProduct();
+        var companyList = await getAllCompanyList();
+        var productSizeList = await getAllSizeList();
+        var productUnitList = await getAllValvList();
+
+        var $tableBody = $('#return-product-table-body');
+        $tableBody.empty();
+
+        Object.keys(storedProducts).forEach(productId => {
+            var quantity = storedProducts[productId];
+            var product = products.find(p => p.id == productId);
+            if (product) {
+                var prodSize = productSizeList.find(p => p.id == product.prodSizeId);
+                var prodUnit = productUnitList.find(p => p.id == product.prodValveId);
+                var DefoltCompany = companyList.find(c => c.id == product.companyId);
+
+                var $row = $('<tr>');
+
+                var $nameCell = $('<td>').text(product.name);
+                var $sizeCell = $('<td>').text(prodSize.size + " " + prodSize.unit); // Fixed size
+                var $unitCell = $('<td>').text(prodUnit.name + " " + prodUnit.unit); // Fixed unit
+
+                var $companyCell = $('<td>');
+                var $companyDropdown = $('<select>').addClass('form-control');
+
+                companyList.forEach(company => {
+                    var $option = $('<option>').val(company.id).text(company.name);
+                    if (company.id === DefoltCompany.id) {
+                        $option.attr('selected', 'selected');
+                    }
+                    $companyDropdown.append($option);
+                });
+
+                $companyCell.append($companyDropdown);
+
+                var $quantityCell = $('<td>').text(quantity);
+
+                $row.append($nameCell, $sizeCell, $unitCell, $companyCell, $quantityCell);
+                $tableBody.append($row);
+            }
+        });
+    } catch (error) {
+        console.error('Error fetching product list:', error);
+    }
+}
+
+async function getAllCompanyList() {
+    
+    try {
+        const response = await $.ajax({
+            url: '/Company/GetCompanyList',
+            type: 'get',
+            dataType: 'json',
+            contentType: 'application/json;charset=utf-8'
+        });
+
+        return response.data || [];
+    } catch (error) {
+        console.log('Error:', error);
+        return [];
+    }
+}
+async function getAllSizeList() {
+
+    try {
+        const response = await $.ajax({
+            url: '/ProductSize/GetallProductSize',
+            type: 'get',
+            dataType: 'json',
+            contentType: 'application/json;charset=utf-8'
+        });
+
+        return response.data || [];
+    } catch (error) {
+        console.log('Error:', error);
+        return [];
+    }
+}
+async function getAllValvList() {
+
+    try {
+        const response = await $.ajax({
+            url: '/Valve/GetallValve',
+            type: 'get',
+            dataType: 'json',
+            contentType: 'application/json;charset=utf-8'
+        });
+
+        return response.data || [];
+    } catch (error) {
+        console.log('Error:', error);
+        return [];
+    }
+}
+
+async function ConfirmOrderBtnActivity(isActive = false) {
+    var $button = $('#add-order-and-return-product');
+
+    if (isActive) {
+        $button.removeClass('bg-secondary').addClass('bg-success');
+        $button.prop('disabled', false);
+    } else {
+        $button.removeClass('bg-success').addClass('bg-secondary');
+        $button.prop('disabled', true);
+    }
+}
+
+function navigateToConfirmOrder() {
+    // Replace with your actual URL or logic to navigate to the ConfirmOrder page
+    window.location.href = '/Home/ConfirmOrder'; // Example URL
 }
