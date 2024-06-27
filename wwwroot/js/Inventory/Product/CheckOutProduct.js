@@ -290,32 +290,35 @@ async function GetLoginUserById(id) {
 
 async function ReturnProductList() {
     try {
-        debugger;
         var storedProducts = JSON.parse(localStorage.getItem('productIds')) || {};
         var products = await getProduct();
         var companyList = await getAllCompanyList();
-        var productSizeList = await getAllSizeList();
-        var productUnitList = await getAllValvList();
+        //var productSizeList = await getAllSizeList();
+        //var productUnitList = await getAllValvList();
 
-        var $tableBody = $('#return-product-table-body');
-        $tableBody.empty();
+        var $container = $('#return-product-container');
+        $container.empty();
 
         Object.keys(storedProducts).forEach(productId => {
             var quantity = storedProducts[productId];
             var product = products.find(p => p.id == productId);
             if (product) {
-                var prodSize = productSizeList.find(p => p.id == product.prodSizeId);
-                var prodUnit = productUnitList.find(p => p.id == product.prodValveId);
+                console.log(product);
+                //var prodSize = productSizeList.find(p => p.id == product.prodSizeId);
+                //var prodUnit = productUnitList.find(p => p.id == product.prodValveId);
                 var DefoltCompany = companyList.find(c => c.id == product.companyId);
 
-                var $row = $('<tr>');
+                var $row = $('<div>').addClass('row mb-3 p-2 border');
 
-                var $nameCell = $('<td>').text(product.name);
-                var $sizeCell = $('<td>').text(prodSize.size + " " + prodSize.unit); // Fixed size
-                var $unitCell = $('<td>').text(prodUnit.name + " " + prodUnit.unit); // Fixed unit
+                var $imgCell = $('<div>').addClass('col-auto');
+                var $img = $('<img>').attr('src', `/images/${product.prodImage}`).attr('alt', product.name).addClass('img-fluid').css({ width: '60px', height: 'auto' });                $imgCell.append($img);
 
-                var $companyCell = $('<td>');
-                var $companyDropdown = $('<select>').addClass('form-control');
+                var $nameCell = $('<div>').addClass('col').text(product.name);
+                //var $sizeCell = $('<div>').addClass('col').text(prodSize.size + " " + prodSize.unit);
+                //var $unitCell = $('<div>').addClass('col').text(prodUnit.name + " " + prodUnit.unit);
+
+                var $companyCell = $('<div>').addClass('col');
+                var $companyDropdown = $('<select>').addClass('form-control').css('background-color', '#00000');
 
                 companyList.forEach(company => {
                     var $option = $('<option>').val(company.id).text(company.name);
@@ -327,16 +330,18 @@ async function ReturnProductList() {
 
                 $companyCell.append($companyDropdown);
 
-                var $quantityCell = $('<td>').text(quantity);
+                var $quantityCell = $('<div>').addClass('col').text(quantity);
 
-                $row.append($nameCell, $sizeCell, $unitCell, $companyCell, $quantityCell);
-                $tableBody.append($row);
+                $row.append($imgCell, $nameCell, $quantityCell, $companyCell);
+                $container.append($row);
             }
         });
     } catch (error) {
         console.error('Error fetching product list:', error);
     }
 }
+
+
 
 async function getAllCompanyList() {
     
@@ -359,6 +364,22 @@ async function getAllSizeList() {
     try {
         const response = await $.ajax({
             url: '/ProductSize/GetallProductSize',
+            type: 'get',
+            dataType: 'json',
+            contentType: 'application/json;charset=utf-8'
+        });
+
+        return response.data || [];
+    } catch (error) {
+        console.log('Error:', error);
+        return [];
+    }
+}
+async function getAllReturnProductList() {
+
+    try {
+        const response = await $.ajax({
+            url: '/ProdReturn/GetallProdReturn',
             type: 'get',
             dataType: 'json',
             contentType: 'application/json;charset=utf-8'
@@ -399,7 +420,118 @@ async function ConfirmOrderBtnActivity(isActive = false) {
     }
 }
 
-function navigateToConfirmOrder() {
-    // Replace with your actual URL or logic to navigate to the ConfirmOrder page
-    window.location.href = '/Home/ConfirmOrder'; // Example URL
+async function navigateToConfirmOrder() {
+    debugger
+    try {
+        const userId = $('#address-container').data('user-id');
+        const storedProducts = JSON.parse(localStorage.getItem('productIds')) || {};
+        const products = await getProduct();
+        const loginUser = await GetLoginUserById(userId);
+
+        const returnProducts = [];
+
+        for (const productId of Object.keys(storedProducts)) {
+            const product = products.find(p => p.id == productId);
+            if (product) {
+                const returnProduct = {
+                    ProductId: product.id,
+                    Name: product.name,
+                    ProdSizeId: product.prodSizeId,
+                    ProdValveId: product.prodValveId,
+                };
+
+                console.log("Updating product:", returnProduct);
+
+                const responseReturnProduct = await $.ajax({
+                    url: '/ProdReturn/CreatebyUser',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(returnProduct),
+                    dataType: 'json'
+                });
+
+                if (responseReturnProduct.success && responseReturnProduct.status === 200) {
+                    returnProducts.push(returnProduct);
+                } else {
+                    console.error('Failed to update product:', returnProduct);
+                    return; // Exit the function if any return product update fails
+                }
+            }
+        }
+
+        // Proceed to create orders only if all return products are successfully updated
+        debugger
+        const TranjuctionNumber = await generateTransactionNumber();
+        for (const product of returnProducts) {
+            const productReturnList = await getAllReturnProductList();
+            const productReturn = productReturnList.find(p => p.productId == product.ProductId);
+
+            if (productReturn) {
+                
+                const order = {
+                    UserId: userId,
+                    ProductId: product.ProductId,
+                    ReturnProductId: productReturn.id,
+                    TransactionNumber: TranjuctionNumber,
+                    Comments: "This is a comment"
+                };
+                
+                debugger
+
+                const createOrderResponse = await $.ajax({
+                    url: '/Order/CreatebyUser',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(order),
+                    dataType: 'json'
+                });
+
+                if (!(createOrderResponse.success && createOrderResponse.status === 200)) {
+                    //console.error('Failed to create order:', order);
+                    return; // Exit the function if any order creation fails
+                }
+                console.log("Order created:", order);
+            } else {
+                console.error('No matching return product found for order creation:', product);
+                return; // Exit the function if no matching return product found
+            }
+        }
+
+        // Redirect to confirm order page only if all operations are successful
+        window.location.href = '/Home/ConfirmOrder';
+
+    } catch (error) {
+        console.error('Error navigating to confirm order:', error);
+    }
 }
+
+
+// Function to generate a random alphanumeric string of a given length
+function generateRandomString(length) {
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let result = '';
+    const charactersLength = characters.length;
+    for (let i = 0; i < length; i++) {
+        result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
+}
+
+// Function to generate TransactionNumber with date and time
+function generateTransactionNumber() {
+    const now = new Date();
+    const year = now.getFullYear().toString().slice(-2); // Last two digits of the year
+    const month = String(now.getMonth() + 1).padStart(2, '0'); // Month (zero-based)
+    const date = String(now.getDate()).padStart(2, '0'); // Date
+    const hours = String(now.getHours()).padStart(2, '0'); // Hours
+    const minutes = String(now.getMinutes()).padStart(2, '0'); // Minutes
+    const seconds = String(now.getSeconds()).padStart(2, '0'); // Seconds
+    const milliseconds = String(now.getMilliseconds()).padStart(3, '0'); // Milliseconds
+
+    const randomString = generateRandomString(5); // Random alphanumeric string
+
+    return `${year}${month}${date}${hours}${minutes}${seconds}${milliseconds}${randomString}`;
+}
+
+// Example usage
+console.log(generateTransactionNumber());

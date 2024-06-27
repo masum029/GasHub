@@ -24,6 +24,8 @@ namespace GasHub.Models
         public bool IsPlaced { get; set; }
         [DisplayName("Confirmed")]
         public bool IsConfirmed { get; set; }
+        public string TransactionNumber { get; set; }
+        public string Comments { get; set; }
         [DisplayName("Dispatched")]
         public bool IsDispatched { get; set; }
         public bool IsReadyToDispatch { get; set; }

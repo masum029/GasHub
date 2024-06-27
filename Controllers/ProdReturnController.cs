@@ -24,10 +24,17 @@ namespace GasHub.Controllers
             return Json(new { data = ProdReturn });
         }
         [HttpPost]
-        public async Task<IActionResult> Create(ProdReturn model)
+        public async Task<IActionResult> Create( ProdReturn model)
         {
             model.CreatedBy = "mamun";
             var ProdReturn = await _prodReturnServices.PostClientAsync( "ProdReturn/CreateProdReturn" , model);
+            return Json(ProdReturn);
+        }
+        [HttpPost]
+        public async Task<IActionResult> CreatebyUser( [FromBody] ProdReturn model)
+        {
+            model.CreatedBy = "mamun";
+            var ProdReturn = await _prodReturnServices.PostClientAsync("ProdReturn/CreateProdReturn", model);
             return Json(ProdReturn);
         }
         [HttpGet]

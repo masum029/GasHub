@@ -30,6 +30,13 @@ namespace GasHub.Controllers
             var orders = await _orderServices.PostClientAsync( "Order/CreateOrder", model);
             return Json(orders);
         }
+        [HttpPost]
+        public async Task<IActionResult> CreatebyUser([FromBody] Order model)
+        {
+            model.CreatedBy = "mamun";
+            var orders = await _orderServices.PostClientAsync( "Order/CreateOrder", model);
+            return Json(orders);
+        }
         [HttpGet]
         public async Task<IActionResult> GetById(Guid id)
         {

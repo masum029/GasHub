@@ -71,6 +71,7 @@ function onSuccess(orders, usersData, productsData, returnProductsData) {
             var user = usersMap[order.userId];
             var product = productsMap[order.productId];
             var returnProduct = returnProductsMap[order.returnProductId];
+          
             console.log('order:', order);
             console.log('user:', user);
             console.log('product:', product);
@@ -82,7 +83,8 @@ function onSuccess(orders, usersData, productsData, returnProductsData) {
                     phone: user ? user.phoneNumber : "No Number",
                     productOrder: product ? product.name : "No Order",
                     productReturn: returnProduct ? returnProduct.name : "No Return",
-                    isActive: order.isActive
+                    isActive: order.isActive,
+                    TransactionNumber: order.transactionNumber,
                 };
 
             }
@@ -107,7 +109,7 @@ function onSuccess(orders, usersData, productsData, returnProductsData) {
                     }
                 },
                 {
-                    data: 'phone',
+                    data: 'TransactionNumber',
                     render: function (data, type, row, meta) {
                         return data;
                     }
