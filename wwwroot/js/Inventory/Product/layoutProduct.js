@@ -124,3 +124,8 @@ $(document).on('click', '#clear_all_card_Item', async function (e) {
         await addToCard();
     }
 });
+
+$('#LogOutBtn').click(function () {
+    console.log("log Out");
+    localStorage.removeItem('productIds');
+});

@@ -78,8 +78,8 @@ function onSuccess(prodReturn, product, productSize, productValv) {
                 return {
                     id: preturn.id,
                     productName: product.name,
-                    productSize: productSize.size,
-                    productValve: productValv.unit,
+                    productSize: productSize.size + " " + productSize.unit,
+                    productValve: productValv.name + " " + productValv.unit,
                 };
 
             }
