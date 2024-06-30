@@ -9,7 +9,7 @@
     // Add event listener for company filter
     $('#category-list').on('click', 'a', function (e) {
         e.preventDefault();
-        debugger
+        
 
         // Get the selected company ID from the clicked link
         selectedCompanyId = $(this).data('company-id');
@@ -25,7 +25,7 @@
 
     // Event listener for size filter
     $('#size-filter').on('change', 'input[name="size-filter"]', function () {
-        debugger;
+        ;
         selectedSizes = $('input[name="size-filter"]:checked').map(function () {
             return $(this).attr('id').split('=')[1];
         }).get();
@@ -36,7 +36,7 @@
     // Reset selected company
     // Reset selected company and make "All Products" active
     $('#all-products-btn').on('click', function () {
-        debugger
+        
         selectedCompanyId = null; // Reset selected company
 
         // Remove success color from all company links
@@ -48,11 +48,13 @@
         // Fetch all products
         GetProductList(selectedCompanyId, selectedSizes);
     });
+
+    
 });
 // Add custom style to style the selected link
 
 async function GetCompanyList() {
-    debugger
+    
     try {
         const company = await $.ajax({
             url: '/Company/GetCompanyList',
@@ -118,7 +120,6 @@ async function GetProductSizeList() {
 
 
 async function GetProductList(companyId = null, sizeIds = []) {
-    debugger
     try {
         const products = await $.ajax({
             url: '/Product/GetAllProduct',
@@ -137,33 +138,35 @@ async function GetProductList(companyId = null, sizeIds = []) {
             productDiscunMap[discount.productId] = discount;
         });
 
-        if (products && products.data) {
-            var productSection = $('#product-section');
-            productSection.empty();
+        var productSection = $('#product-section');
+        productSection.empty();
 
-            let filteredProducts = products.data;
+        let filteredProducts = products.data;
 
-            if (companyId) {
-                filteredProducts = filteredProducts.filter(product => product.companyId === companyId);
-            }
+        if (companyId) {
+            filteredProducts = filteredProducts.filter(product => product.companyId === companyId);
+        }
 
-            if (sizeIds.length > 0) {
-                filteredProducts = filteredProducts.filter(product => sizeIds.includes(product.prodSizeId.toString()));
-            }
+        if (sizeIds.length > 0) {
+            filteredProducts = filteredProducts.filter(product => sizeIds.includes(product.prodSizeId.toString()));
+        }
 
-            $.each(filteredProducts, function (index, product) {
+        if (filteredProducts.length === 0) {
+            var noProductsMessage = $('<div></div>')
+                .addClass('font-weight-bold text-lg text-muted')
+                .text('No products available. Please check again later.');
+            productSection.append(noProductsMessage);
+            return;  // Exit function if no products are found
+        }
 
-
-                debugger
+        $.each(filteredProducts, async function (index, product) {
+            if (product) {
                 var discount = productDiscunMap[product.id];
-
 
                 var colDiv = $('<div></div>').addClass('col-xl-3 col-lg-3 col-md-3');
                 var cardDiv = $('<div></div>').addClass('catagory-product-card-2 shadow-style text-center');
                 var imgDiv = $('<div></div>').addClass('catagory-product-image');
-
                 var img = '<img src="/images/' + product.prodImage + '" alt="Image" style="width: 100%;" />';
-
                 var contentDiv = $('<div></div>').addClass('catagory-product-content');
                 var buttonDiv = $('<div></div>').addClass('catagory-button');
                 var button = $('<a></a>')
@@ -172,23 +175,34 @@ async function GetProductList(companyId = null, sizeIds = []) {
                     .attr('order-product-id', product.id)
                     .html('<i class="far fa-shopping-basket"></i>Order Now');
                 var priceDiv = $('<div></div>').addClass('info-price d-flex align-items-center justify-content-center');
-                buttonDiv.append(button);
+
+                function normalizeDate(date) {
+                    const normalizedDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+                    return normalizedDate;
+                }
+
+                const today = normalizeDate(new Date());
 
                 if (discount) {
-                    var discountedProce = product.prodPrice - discount.discountedPrice;
-                    var originalPriceText = product.prodPrice ? 'TK' + product.prodPrice : '00';
-                    var discountedPriceText = discountedProce ? 'TK' + discountedProce : '00';
-                    var originalPrice = $('<del></del>').text(originalPriceText);
-                    var discountedPrice = $('<span></span>').text(discountedPriceText);
-                    priceDiv.append(originalPrice).append(discountedPrice);
+                    const discountValidTill = normalizeDate(new Date(discount.validTill));
+
+                    if (discountValidTill >= today) {
+                        var discountedPrice = product.prodPrice - discount.discountedPrice;
+                        var originalPriceText = product.prodPrice ? 'TK' + product.prodPrice : '00';
+                        var discountedPriceText = discountedPrice ? 'TK' + discountedPrice : '00';
+                        var originalPrice = $('<del></del>').text(originalPriceText);
+                        var discountedPrice = $('<span></span>').text(discountedPriceText);
+                        priceDiv.append(originalPrice).append(discountedPrice);
+                    } else {
+                        var originalPriceText = product.prodPrice ? 'TK' + product.prodPrice : '00';
+                        var originalPrice = $('<h5></h5>').text(originalPriceText);
+                        priceDiv.append(originalPrice);
+                    }
                 } else {
                     var originalPriceText = product.prodPrice ? 'TK' + product.prodPrice : '00';
                     var originalPrice = $('<h5></h5>').text(originalPriceText);
                     priceDiv.append(originalPrice);
                 }
-
-                var originalPrice = $('<h6></h6>').text(originalPriceText);
-                var discountedPrice = $('<span></span>').text(discountedPriceText);
 
                 var title = $('<h4></h4>').append($('<a></a>').attr('href', 'shop-single.html').text(product.name));
                 var starDiv = $('<div></div>').addClass('star');
@@ -201,19 +215,22 @@ async function GetProductList(companyId = null, sizeIds = []) {
                     starDiv.append(star);
                 }
 
-
                 contentDiv.append(buttonDiv).append(priceDiv).append(title).append(starDiv);
                 cardDiv.append(imgDiv.append(img)).append(contentDiv);
                 colDiv.append(cardDiv);
                 productSection.append(colDiv);
-            });
-        }
+            }
+        });
+
     } catch (error) {
         console.log('Error fetching products:', error);
     }
 }
+
+
+
 async function GetProductList1() {
-    debugger
+    
     try {
         const products = await $.ajax({
             url: '/Product/GetAllProduct',
@@ -231,15 +248,15 @@ async function GetProductList1() {
         productDiscuns.data.forEach(function (discount) {
             productDiscunMap[discount.productId] = discount;
         });
-        if (products && products.data) { 
+        if (products && products.data) {
             var productSection = $('#product-section');
             productSection.empty(); // Clear any existing product cards
 
             $.each(products.data, function (index, product) {
+
+
+
                 
-
-
-                debugger
                 var discount = productDiscunMap[product.id];
 
 
@@ -247,7 +264,7 @@ async function GetProductList1() {
                 var colDiv = $('<div></div>').addClass('col-xl-3 col-lg-3 col-md-3');
                 var cardDiv = $('<div></div>').addClass('catagory-product-card-2 shadow-style text-center');
                 var imgDiv = $('<div></div>').addClass('catagory-product-image');
-                
+
                 // Create an image element and set its attributes
                 //var img = $('<img>').attr('src', '/images/' + product.prodImage).attr('alt', 'product-img');
                 var img = '<img src="/images/' + product.prodImage + '" alt="Image" style="width: 100%;" />';
@@ -264,19 +281,38 @@ async function GetProductList1() {
                 // Check for discount, original price, and discounted price
                 buttonDiv.append(button);
 
+                function normalizeDate(date) {
+                    const normalizedDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+                    return normalizedDate;
+                }
+
+                const today = normalizeDate(new Date());
+
                 if (discount) {
-                    var discountedProce = product.prodPrice - discount.discountedPrice;
-                    var originalPriceText = product.prodPrice ? 'TK' + product.prodPrice : '00';
-                    var discountedPriceText = discountedProce ? 'TK' + discountedProce : '00';
-                    var originalPrice = $('<del></del>').text(originalPriceText);
-                    var discountedPrice = $('<span></span>').text(discountedPriceText);
-                    priceDiv.append(originalPrice).append(discountedPrice);
+                    const discountValidTill = normalizeDate(new Date(discount.validTill));
+
+
+                    if (discountValidTill >= today) {
+                        var discountedPrice = product.prodPrice - discount.discountedPrice;
+                        var originalPriceText = product.prodPrice ? 'TK' + product.prodPrice : '00';
+                        var discountedPriceText = discountedPrice ? 'TK' + discountedPrice : '00';
+
+                        var originalPrice = $('<del></del>').text(originalPriceText);
+                        var discountedPrice = $('<span></span>').text(discountedPriceText);
+                        priceDiv.append(originalPrice).append(discountedPrice);
+                    } else {
+
+                        var originalPriceText = product.prodPrice ? 'TK' + product.prodPrice : '00';
+                        var originalPrice = $('<h5></h5>').text(originalPriceText);
+                        priceDiv.append(originalPrice);
+                    }
                 } else {
                     var originalPriceText = product.prodPrice ? 'TK' + product.prodPrice : '00';
                     var originalPrice = $('<h5></h5>').text(originalPriceText);
                     priceDiv.append(originalPrice);
                 }
-               
+
+
 
                 var title = $('<h4></h4>').append($('<a></a>').attr('href', 'shop-single.html').text(product.name));
                 var starDiv = $('<div></div>').addClass('star');
@@ -290,12 +326,15 @@ async function GetProductList1() {
                     starDiv.append(star);
                 }
 
-               
+
                 contentDiv.append(buttonDiv).append(priceDiv).append(title).append(starDiv);
                 cardDiv.append(imgDiv.append(img)).append(contentDiv);
                 colDiv.append(cardDiv);
                 productSection.append(colDiv);
             });
+        } else {
+            var noProductsMessage = $('<div></div>').addClass('no-products-message').text('No products available. Please check again later.');
+            productSection.append(noProductsMessage);
         }
     } catch (error) {
         console.log('Error fetching products:', error);

@@ -25,6 +25,7 @@ namespace GasHub.Models
         public int ProdPrice { get; set; }
         [DisplayName("Discount")]
         public decimal ? DiscountPrice { get; set; }
+        public DateTime ValidTill { get; set; }
         [DisplayName("Image")]
         public IFormFile ? FormFile { get; set; }
         [DisplayName("Status")]

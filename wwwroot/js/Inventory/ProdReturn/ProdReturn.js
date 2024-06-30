@@ -73,7 +73,7 @@ function onSuccess(prodReturn, product, productSize, productValv) {
             console.log('preturn:', preturn);
             console.log('productSize:', productSize);
             console.log('product:', product);
-            console.log('productValv:', productValv);
+            console.log('productValv:', productValv); 
             if (preturn) {
                 return {
                     id: preturn.id,

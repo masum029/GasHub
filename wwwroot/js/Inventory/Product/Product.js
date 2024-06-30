@@ -3,7 +3,7 @@
 });
 
 async function GetProductList() {
-    debugger
+    
     try {
         const product = await $.ajax({
             url: '/Product/GetAllProduct',
@@ -41,7 +41,7 @@ async function GetProductList() {
 
 
 function onSuccess(companys, products, productSize, productValv) {
-    debugger
+    
     console.log('company:', companys);
     console.log('product:', products);
     console.log('productSize:', productSize);
@@ -277,7 +277,7 @@ $('#modelCreate').on('keypress', 'input', handleEnterKey);
 //======================================================================
 $('#btnSave').click(async function () {
     console.log("Save");
-    debugger;
+    debugger
 
     // Check if the form is valid (including image file size and type)
     if ($('#CompanyForm').valid()) {
@@ -353,7 +353,7 @@ $('#btnSave').click(async function () {
 //});
 
 async function popuprodValveDropdown() {
-    debugger
+    
     try {
         const data = await $.ajax({
             url: '/Valve/GetallValve',
@@ -377,7 +377,7 @@ async function popuprodValveDropdown() {
     }
 }
 async function populateCompanyDropdown() {
-    debugger
+    
     try {
         const data = await $.ajax({
             url: '/Company/GetCompanyList',
@@ -401,7 +401,7 @@ async function populateCompanyDropdown() {
     }
 }
 async function populateprodSizeDropdown() {
-    debugger
+    
     try {
         const data = await $.ajax({
             url: '/ProductSize/GetallProductSize',
@@ -476,15 +476,19 @@ async function editCompany(id) {
 }
 
 async function updateCompany(id) {
+    debugger
     if ($('#CompanyForm').valid()) {
-        const formData = $('#CompanyForm').serialize();
+        var formData = new FormData($('#CompanyForm')[0]);
         console.log(formData);
         try {
             var response = await $.ajax({
                 url: '/Product/Update/' + id,
                 type: 'put',
                 contentType: 'application/x-www-form-urlencoded',
-                data: formData
+                data: formData,
+                processData: false, // Prevent jQuery from processing data (handled by FormData)
+                contentType: false,   // Set to false to allow FormData to set headers
+                cache: false         // Disable caching for file uploads
             });
 
             
@@ -508,26 +512,26 @@ async function updateCompany(id) {
 }
 
 // Details Company
-async function showDetails(id) {
-    $('#deleteAndDetailsModel').modal('show');
-    // Fetch company details and populate modal
-    try {
-        const response = await $.ajax({
-            url: '/Company/GetCompany',
-            type: 'GET',
-            data: { id: id }
-        });
+//async function showDetails(id) {
+//    $('#deleteAndDetailsModel').modal('show');
+//    // Fetch company details and populate modal
+//    try {
+//        const response = await $.ajax({
+//            url: '/Company/GetCompany',
+//            type: 'GET',
+//            data: { id: id }
+//        });
 
-        console.log(response);
-        // Assuming response contains company details
-        populateCompanyDetails(response);
-    } catch (error) {
-        console.log(error);
-    }
-}
+//        console.log(response);
+//        // Assuming response contains company details
+//        populateCompanyDetails(response);
+//    } catch (error) {
+//        console.log(error);
+//    }
+//}
 
 async function deleteCompany(id) {
-    debugger
+    
     $('#deleteAndDetailsModel').modal('show');
 
     $('#companyDetails').empty();

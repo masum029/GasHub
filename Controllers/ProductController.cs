@@ -46,11 +46,17 @@ namespace GasHub.Controllers
         {
             model.UpdatedBy = "mamun";
             var productbyId = await _productServices.GetClientByIdAsync($"Product/getProduct/{id}");
-            if (model.ProdImage != null)
+            
+            if(model.FormFile != null)
             {
-              model.ProdImage = model.ProdImage;
+                bool deleteImg = await _fileUploder.DeleteFile(productbyId.ProdImage);
+                model.ProdImage = await _fileUploder.ImgUploader(model.FormFile);
             }
-            model.ProdImage = productbyId.ProdImage;
+            else
+            {
+                model.ProdImage = productbyId.ProdImage;
+            }
+            
             var product = await _productServices.UpdateClientAsync($"Product/UpdateProduct/{id}", model);
             return Json(product);
         }

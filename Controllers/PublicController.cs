@@ -31,13 +31,33 @@ namespace GasHub.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateUser(Register model)
         {
-            model.Roles = ["User"];
-            var register = await _registerServices.PostClientAsync( "User/Create" , model);
+
+            model.Roles = new List<string> { "User" };
+            var register = await _registerServices.PostClientAsync("User/Create", model);
+
             if (register.Success)
             {
                 return RedirectToAction("Login");
             }
-            return View(model);
+
+            // Check for specific error messages and add model state errors
+            if (register.ErrorMessage.Contains("DuplicateUserName"))
+            {
+                ModelState.AddModelError("UserName", "Username is already taken.");
+            }
+            else if (register.ErrorMessage.Contains("DuplicateEmail"))
+            {
+                ModelState.AddModelError("Email", "Email is already taken.");
+            }else if (register.ErrorMessage.Contains("ConfirmationPassword"))
+            {
+                ModelState.AddModelError("ConfirmationPassword", "Password and confirmation password do not match.");
+            }
+            else
+            {
+                ModelState.AddModelError("", "Registration failed. Please try again.");
+            }
+
+            return View("Register", model);
         }
         [HttpGet]
         public IActionResult Login(string? ReturnUrl = null)
@@ -58,7 +78,7 @@ namespace GasHub.Controllers
 
             if (loginResponse.token == null)
             {
-                ModelState.AddModelError("", "Invalid login attempt.");
+                ModelState.AddModelError("", "Invalid username or password.");
                 ViewData["ReturnUrl"] = ReturnUrl;
                 return View("Login", model);
             }

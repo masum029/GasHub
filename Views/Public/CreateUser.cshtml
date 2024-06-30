@@ -22,7 +22,7 @@
                                 <div class="col-lg-6 wow " data-wow-delay=".3s">
 
                                     <div class="form-clt">
-                                        <input name="FirstName" asp-for="FirstName" placeholder="Enter Your First Name*" >
+                                        <input name="FirstName" asp-for="FirstName" placeholder="Enter Your First Name*">
                                         <div class="icon">
                                             <i class="fal fa-user"></i>
                                         </div>
@@ -100,12 +100,10 @@
                                 </div>
                             </div>
                         </form>
-                        @section Scripts {
-                            @{
-                                await Html.RenderPartialAsync("_ValidationScriptsPartial");
-                            }
+                        @{
+                            await Html.RenderPartialAsync("_ValidationScriptsPartial");
                         }
-
+                        
                     </div>
                 </div>
             </div>

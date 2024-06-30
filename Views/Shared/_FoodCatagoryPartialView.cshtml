@@ -8,14 +8,15 @@
         </div>
         <div class="row">
             @{
-                var products = Model.ProductList.Take(8);
-                var discounts = Model.productDiscunts.ToDictionary(d => d.ProductId, d => d.DiscountedPrice);
+                var products = Model.ProductList.Take(8);  // Assuming you're taking the first 8 products
+                var discounts = Model.productDiscunts.ToDictionary(d => d.ProductId, d => new { DiscountedPrice = d.DiscountedPrice, ValidTill = d.ValidTill });
 
                 foreach (var product in products)
                 {
-                    if (discounts.TryGetValue(product.Id, out var discountPrice))
+                    if (discounts.TryGetValue(product.Id, out var discountInfo))
                     {
-                        product.DiscountPrice =  discountPrice;
+                        product.DiscountPrice = discountInfo.DiscountedPrice;
+                        product.ValidTill = discountInfo.ValidTill;
                     }
 
                     <partial name="_PopularProductCard" model="product" />
