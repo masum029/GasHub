@@ -54,6 +54,12 @@ async function addToCard() {
         debugger
         var product = productMap[id];
         var discount = productDiscunMap[id];
+        function normalizeDate(date) {
+            const normalizedDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+            return normalizedDate;
+        }
+
+        const today = normalizeDate(new Date());
         if (product) {
             var count = storedProductIds[id];
             var cartItem = $('<li></li>').addClass('list-group-item d-flex justify-content-between align-items-center');
@@ -61,8 +67,16 @@ async function addToCard() {
             var cartProduct = $('<div></div>').addClass('cart-product ms-3');
             var productLink = $('<p></p>').text(product.name + ' x ' + count);
             if (discount) {
-                var productPrice = $('<span></span>').text(formatPrice((product.prodPrice - discount.discountedPrice) * count)).addClass('ms-3');
-                totalPrice += (product.prodPrice - discount.discountedPrice) * count;
+                const discountValidTill = normalizeDate(new Date(discount.validTill));
+
+                if (discountValidTill >= today) {
+                    var productPrice = $('<span></span>').text(formatPrice((product.prodPrice - discount.discountedPrice) * count)).addClass('ms-3');
+                    totalPrice += (product.prodPrice - discount.discountedPrice) * count;
+                } else {
+                    var productPrice = $('<span></span>').text(formatPrice(product.prodPrice * count)).addClass('ms-3');
+                    totalPrice += product.prodPrice * count;
+                }
+                
             } else {
                 var productPrice = $('<span></span>').text(formatPrice(product.prodPrice * count)).addClass('ms-3');
                 totalPrice += product.prodPrice * count;

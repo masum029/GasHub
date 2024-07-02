@@ -31,13 +31,21 @@ namespace GasHub.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateUser(Register model)
         {
-
+            var loginModel = new Login();
+            loginModel.UserName = model.UserName;
+            loginModel.Password = model.Password;
             model.Roles = new List<string> { "User" };
             var register = await _registerServices.PostClientAsync("User/Create", model);
 
             if (register.Success)
             {
-                return RedirectToAction("Login");
+                var loginResponse = await _authenticationService.Login(loginModel);
+                if(loginResponse.token != null)
+                {
+                    _tokenService.SaveToken(loginResponse.token);
+                    await UserLogin(loginResponse.token);
+                }
+                return RedirectToAction("Index", "Home");
             }
 
             // Check for specific error messages and add model state errors

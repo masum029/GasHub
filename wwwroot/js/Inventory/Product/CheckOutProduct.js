@@ -28,10 +28,17 @@ async function getLocalStorageList() {
         productDiscunMap[discount.productId] = discount;
     });
     Object.keys(storedProducts).forEach(function (id) {
+        function normalizeDate(date) {
+            const normalizedDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+            return normalizedDate;
+        }
+        const today = normalizeDate(new Date());
+
         var product = productMap[id];
         var quantity = storedProducts[id];
         var discount = productDiscunMap[id];
-        var discounted = discount ? discount.discountedPrice : 0; // Check if discountedPrice exists
+        const discountValidTill = normalizeDate(new Date(discount.validTill));
+        var discounted = discountValidTill >= today ? discount.discountedPrice : 0; // Check if discountedPrice exists
        
         if (product) {
             var productHtml = `
@@ -108,11 +115,24 @@ async function updateTotals() {
     // Calculate the subtotal
     Object.keys(storedProducts).forEach(function (id) {
         var product = productMap[id];
+        function normalizeDate(date) {
+            const normalizedDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+            return normalizedDate;
+        }
+
+        const today = normalizeDate(new Date());
         if (product) {
             var discount = productDiscunMap[id];
             if (discount) {
-                subtotal += (product.prodPrice - discount.discountedPrice) * storedProducts[id]; // Assuming the product price is stored in `product.price`
-                totalDiscount += discount.discountedPrice * storedProducts[id];
+                const discountValidTill = normalizeDate(new Date(discount.validTill));
+
+                if (discountValidTill >= today) {
+                    subtotal += (product.prodPrice - discount.discountedPrice) * storedProducts[id]; // Assuming the product price is stored in `product.price`
+                    totalDiscount += discount.discountedPrice * storedProducts[id];
+                } else {
+                    subtotal += product.prodPrice * storedProducts[id];
+                }
+                
             } else {
                 subtotal += product.prodPrice * storedProducts[id];
             }
