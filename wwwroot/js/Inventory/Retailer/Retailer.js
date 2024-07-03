@@ -303,23 +303,23 @@ async function updateCompany(id) {
 }
 
 // Details Company
-async function showDetails(id) {
-    $('#deleteAndDetailsModel').modal('show');
-    // Fetch company details and populate modal
-    try {
-        const response = await $.ajax({
-            url: '/Retailer/GetRetailer', // Assuming this is the endpoint to fetch company details
-            type: 'GET',
-            data: { id: id }
-        });
+//async function showDetails(id) {
+//    $('#deleteAndDetailsModel').modal('show');
+//    // Fetch company details and populate modal
+//    try {
+//        const response = await $.ajax({
+//            url: '/Retailer/GetRetailer', // Assuming this is the endpoint to fetch company details
+//            type: 'GET',
+//            data: { id: id }
+//        });
 
-        console.log(response);
-        // Assuming response contains company details
-        populateCompanyDetails(response);
-    } catch (error) {
-        console.log(error);
-    }
-}
+//        console.log(response);
+//        // Assuming response contains company details
+//        populateCompanyDetails(response);
+//    } catch (error) {
+//        console.log(error);
+//    }
+//}
 
 function deleteCompany(id) {
     $('#deleteAndDetailsModel').modal('show');

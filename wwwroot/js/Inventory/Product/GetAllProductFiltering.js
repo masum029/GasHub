@@ -163,18 +163,27 @@ async function GetProductList(companyId = null, sizeIds = []) {
             if (product) {
                 var discount = productDiscunMap[product.id];
 
+
+                // Create a new product card for each product
                 var colDiv = $('<div></div>').addClass('col-xl-3 col-lg-3 col-md-3');
                 var cardDiv = $('<div></div>').addClass('catagory-product-card-2 shadow-style text-center');
                 var imgDiv = $('<div></div>').addClass('catagory-product-image');
+
+                // Create an image element and set its attributes
+                //var img = $('<img>').attr('src', '/images/' + product.prodImage).attr('alt', 'product-img');
                 var img = '<img src="/images/' + product.prodImage + '" alt="Image" style="width: 100%;" />';
+
                 var contentDiv = $('<div></div>').addClass('catagory-product-content');
                 var buttonDiv = $('<div></div>').addClass('catagory-button');
                 var button = $('<a></a>')
-                    .attr('href', 'shop-cart.html')
+                    //.attr('href', 'shop-cart.html')
                     .addClass('theme-btn-2')
                     .attr('order-product-id', product.id)
                     .html('<i class="far fa-shopping-basket"></i>Order Now');
                 var priceDiv = $('<div></div>').addClass('info-price d-flex align-items-center justify-content-center');
+
+                // Check for discount, original price, and discounted price
+                buttonDiv.append(button);
 
                 function normalizeDate(date) {
                     const normalizedDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
@@ -186,14 +195,17 @@ async function GetProductList(companyId = null, sizeIds = []) {
                 if (discount) {
                     const discountValidTill = normalizeDate(new Date(discount.validTill));
 
+
                     if (discountValidTill >= today) {
                         var discountedPrice = product.prodPrice - discount.discountedPrice;
                         var originalPriceText = product.prodPrice ? 'TK' + product.prodPrice : '00';
                         var discountedPriceText = discountedPrice ? 'TK' + discountedPrice : '00';
+
                         var originalPrice = $('<del></del>').text(originalPriceText);
                         var discountedPrice = $('<span></span>').text(discountedPriceText);
                         priceDiv.append(originalPrice).append(discountedPrice);
                     } else {
+
                         var originalPriceText = product.prodPrice ? 'TK' + product.prodPrice : '00';
                         var originalPrice = $('<h5></h5>').text(originalPriceText);
                         priceDiv.append(originalPrice);
@@ -204,9 +216,12 @@ async function GetProductList(companyId = null, sizeIds = []) {
                     priceDiv.append(originalPrice);
                 }
 
-                var title = $('<h4></h4>').append($('<a></a>').attr('href', 'shop-single.html').text(product.name));
+
+
+                var title = $('<h4></h4>').append($('<a></a>').attr('href', '#').text(product.name));
                 var starDiv = $('<div></div>').addClass('star');
 
+                // Add star ratings
                 for (var i = 0; i < 5; i++) {
                     var star = $('<span></span>').addClass('fas fa-star');
                     if (i >= product.rating) {
@@ -214,6 +229,7 @@ async function GetProductList(companyId = null, sizeIds = []) {
                     }
                     starDiv.append(star);
                 }
+
 
                 contentDiv.append(buttonDiv).append(priceDiv).append(title).append(starDiv);
                 cardDiv.append(imgDiv.append(img)).append(contentDiv);
@@ -314,7 +330,7 @@ async function GetProductList1() {
 
 
 
-                var title = $('<h4></h4>').append($('<a></a>').attr('href', 'shop-single.html').text(product.name));
+                var title = $('<h4></h4>').append($('<a></a>').attr('href', '#').text(product.name));
                 var starDiv = $('<div></div>').addClass('star');
 
                 // Add star ratings
