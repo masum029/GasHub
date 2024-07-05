@@ -179,7 +179,7 @@ async function GetProductList(companyId = null, sizeIds = []) {
                     //.attr('href', 'shop-cart.html')
                     .addClass('theme-btn-2')
                     .attr('order-product-id', product.id)
-                    .html('<i class="far fa-shopping-basket"></i>Order Now');
+                    .html('<i class="far fa-shopping-basket"></i> Add To Cart');
                 var priceDiv = $('<div></div>').addClass('info-price d-flex align-items-center justify-content-center');
 
                 // Check for discount, original price, and discounted price
@@ -289,9 +289,9 @@ async function GetProductList1() {
                 var buttonDiv = $('<div></div>').addClass('catagory-button');
                 var button = $('<a></a>')
                     //.attr('href', 'shop-cart.html')
-                    .addClass('theme-btn-2')
+                    .addClass('theme-btn-2 w-100')
                     .attr('order-product-id', product.id)
-                    .html('<i class="far fa-shopping-basket"></i>Order Now');
+                    .html('<i class="far fa-shopping-basket"></i>Add To Cart');
                 var priceDiv = $('<div></div>').addClass('info-price d-flex align-items-center justify-content-center');
 
                 // Check for discount, original price, and discounted price

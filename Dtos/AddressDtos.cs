@@ -7,29 +7,17 @@ namespace GasHub.Dtos
     {
         [Required]
         public Guid UserId { get; set; }
-        [Required]
-        [DisplayName("Contact Number")]
+        [Required(ErrorMessage = "Phone Number is Required")]
+        [RegularExpression(@"^(?:\+88|88)?(01[3-9]\d{8})$", ErrorMessage = "Invalid  Phone Number . Must be 11 digits.")]
+        [DisplayName("Phone")]
         public string ContactNumber { get; set; }
-        [Required]
-        [DisplayName("Division")]
-        public string Division { get; set; }
-        [Required]
+         [Required]
         [DisplayName("District")]
         public string District { get; set; }
-        [Required]
-        [DisplayName("Sub-district (Upazilla)")]
-        public string Subdistrict { get; set; }
-        [Required]
-        [DisplayName("Area (Nearest area)")]
-        public string Area { get; set; }
-        [Required]
-        [DisplayName("House/Holding")]
-        public string HouseHolding { get; set; }
+
         [Required]
         [DisplayName("Street Address")]
         public string StreetAddress { get; set; }
-        [Required]
-        [DisplayName("Postal Code")]
-        public string postCode { get; set; }
+        
     }
 }

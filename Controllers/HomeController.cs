@@ -86,6 +86,17 @@ namespace GasHub.Controllers
         [Authorize]
         public async Task<IActionResult> AddAddressToDb(AddressDtos model)
         {
+            if (model.UserId == Guid.Empty)
+            {
+                ViewBag.errorMessage = " Pless Login Valid User ... .";
+                return View("AddAddress", model);
+            }
+            if (!ModelState.IsValid)
+            {
+
+                return View("AddAddress", model);
+            }
+            
             var deliveryAddress = new DeliveryAddress();
             deliveryAddress.UserId = model.UserId;
             deliveryAddress.CreatedBy = "";

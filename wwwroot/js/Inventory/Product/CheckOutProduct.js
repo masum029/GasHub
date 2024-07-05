@@ -6,7 +6,7 @@
 });
 
 async function getLocalStorageList() {
-
+    debugger
     var storedProducts = JSON.parse(localStorage.getItem('productIds')) || {};
     var products = await getProduct();
     var productMap = {};
@@ -37,8 +37,8 @@ async function getLocalStorageList() {
         var product = productMap[id];
         var quantity = storedProducts[id];
         var discount = productDiscunMap[id];
-        const discountValidTill = normalizeDate(new Date(discount.validTill));
-        var discounted = discountValidTill >= today ? discount.discountedPrice : 0; // Check if discountedPrice exists
+        const discountValidTill = normalizeDate(new Date(discount?.validTill));
+        var discounted = discountValidTill >= today ? discount?.discountedPrice : 0; // Check if discountedPrice exists
        
         if (product) {
             var productHtml = `
@@ -124,11 +124,11 @@ async function updateTotals() {
         if (product) {
             var discount = productDiscunMap[id];
             if (discount) {
-                const discountValidTill = normalizeDate(new Date(discount.validTill));
+                const discountValidTill = normalizeDate(new Date(discount?.validTill));
 
                 if (discountValidTill >= today) {
-                    subtotal += (product.prodPrice - discount.discountedPrice) * storedProducts[id]; // Assuming the product price is stored in `product.price`
-                    totalDiscount += discount.discountedPrice * storedProducts[id];
+                    subtotal += (product.prodPrice - discount?.discountedPrice) * storedProducts[id]; // Assuming the product price is stored in `product.price`
+                    totalDiscount += discount?.discountedPrice * storedProducts[id];
                 } else {
                     subtotal += product.prodPrice * storedProducts[id];
                 }
